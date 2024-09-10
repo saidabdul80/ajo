@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+
+    --ion-color-new-white: #fff;
+}
+
+.ion-color-white {
+    --ion-color-base : var(--ion-color-new-white);
+	--ion-color-base-rgb: var(--ion-color-new-white);;
+	--ion-color-contrast: #000;
+	--ion-color-contrast-rgb:#000;
+	--ion-color-shade: var(--ion-color-new-white);
+	--ion-color-tint: var(--ion-color-new-white);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ion-color-new-white: #1e1e1e !important;
+    }
+  }
