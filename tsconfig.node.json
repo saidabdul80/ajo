@@ -1,9 +1,25 @@
 {
   "compilerOptions": {
-    "composite": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true
+    "target": "ESNext",                     // Use latest ECMAScript features
+    "module": "ESNext",                     // Use ESNext module resolution
+    "moduleResolution": "Node",             // Use Node module resolution strategy
+    "allowSyntheticDefaultImports": true,  // Allow synthetic default imports
+    "esModuleInterop": true,               // Enables emit interoperability between CommonJS and ES Modules
+    "strict": true,                        // Enable all strict type-checking options
+    "jsx": "preserve",                     // Preserve JSX for Vue files
+    "baseUrl": ".",                        // Base directory to resolve non-relative module names
+    "paths": {
+      "@/*": ["src/*"]                     // Map @ to the src directory
+    },
+    "types": ["vite/client", "node"],       // Include types for Vite and Node
+    "lib": ["DOM", "ESNext"]               // Include DOM and ESNext libraries
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "src/**/*",                            // Include all files in the src directory
+    "vite.config.ts"                       // Include the Vite configuration file
+  ],
+  "exclude": [
+    "node_modules",                        // Exclude node_modules
+    "dist"                                 // Exclude dist folder if it exists
+  ]
 }

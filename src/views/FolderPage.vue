@@ -2,7 +2,7 @@
     
 <ion-content color="light">
 
-  <div id="container">
+  <div id="container">sdjksdsdjk
     <strong class="capitalize">{{ $route.params.id }}</strong>
     <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
   </div>

@@ -2,12 +2,14 @@
     <Button
       :label="label"
       :icon="loading ? 'pi pi-spin pi-spinner' : icon"
+      :outlined="outlined"
       :disabled="disabled"
         :severity="color"
-        :pt="{icon:{style:'font-size:12px'},label:{style:'font-size:12px'}}"
-         class="tw-h-[32px]"
+        :pt="{icon:{style:'font-size:12px'}}"
+     
       :loading="loading"
       @click="onClick"
+      :size="size"
     >
     </Button>
   </template>
@@ -21,6 +23,10 @@
       Button,
     },
     props: {
+      outlined:{
+        type:Boolean,
+        default:false,
+      },
       label: {
         type: String,
         default: '',
@@ -44,6 +50,10 @@
       color:{
         type:String,
         default:"contrast"
+      },
+      size:{
+        type:String,
+        default:"Normal"
       }
     },
     methods: {

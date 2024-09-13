@@ -46,8 +46,8 @@
             </ion-label>
           </ion-toolbar>
         </ion-header>
-        <ion-content :fullscreen="true" class="ion-padding" style="--padding-top: 0px !important">
-          <ion-router-outlet id="main-content"></ion-router-outlet>
+        <ion-content :fullscreen="true" class="ion-padding tw-h-[90vh]" style="--padding-top: 0px !important">
+            <ion-router-outlet id="main-content"></ion-router-outlet>
         </ion-content>
       </ion-page>
     </ion-split-pane>
@@ -93,8 +93,8 @@ export default {
       selectedIndex: 0,
       appPages: [
         {
-          title: "Inbox",
-          url: "/folder/Inbox",
+          title: "Template",
+          url: "/template",
           iosIcon: mailOutline,
           mdIcon: mailSharp,
         },
@@ -175,4 +175,8 @@ export default {
 </script>
 
 
-<style scoped></style>
+<style>
+body {
+    font-family: 'Aeonik' !important;
+}
+</style>

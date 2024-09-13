@@ -2,7 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'Aeonik';
+    src: url('/Aeonik/AeonikTRIAL-Regular.otf') format('opentype'),
+         url('/Aeonik/AeonikTRIAL-RegularItalic.otf') format('opentype'),
+         url('/Aeonik/AeonikTRIAL-Bold.otf') format('opentype'),
+         url('/Aeonik/AeonikTRIAL-BoldItalic.otf') format('opentype'),
+         url('/Aeonik/AeonikTRIAL-Light.otf') format('opentype'),
+         url('/Aeonik/AeonikTRIAL-LightItalic.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Aeonik';
+    src: url('/Aeonik/AeonikTRIAL-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Aeonik';
+    src: url('/Aeonik/AeonikTRIAL-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+  }
 
+  /* src/global.scss */
+
+  
 :root {
 
     --ion-color-new-white: #fff;
@@ -22,3 +50,7 @@
         --ion-color-new-white: #1e1e1e !important;
     }
   }
+
+body, div, p,i, span, h1,h2,h3,h4,h5,h6, b, button, input {
+    font-family: 'Aeonik', sans-serif;
+}
