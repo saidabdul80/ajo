@@ -9,11 +9,13 @@
                 <Counter />
             </div>
 
-            <div class="tw-mt-[30px] tw-p-[120px] tw-h-[840px] tw-bg-[#F8F9D7] tw-flex tw-items-cente">
+            <div class=" tw-flex tw-mt-[30px] tw-p-[120px] tw-min-h-[840px] tw-bg-[#F8F9D7] ">
                 <BodyContecnt />
             </div>
 
-
+                <div>
+                    <AjoGuide />
+                </div>
         </div>
     </div>
 </template>
@@ -21,9 +23,10 @@
 <script>
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import AjoLandContent from "@/components/AjoLandContent.vue"
-import Card from "@/components/Card.vue";
+import Card from "@/components/Card.vue"
 import BodyContecnt from "@/components/BodyContecnt.vue"
-import Counter from "@/components/Counter.vue";
+import Counter from "@/components/Counter.vue"
+import AjoGuide from "@/components/AjoGuide.vue"
     export default {
         components: {
             AjoLandContent,
@@ -31,6 +34,7 @@ import Counter from "@/components/Counter.vue";
             Card,
             Counter,
             BodyContecnt,
+            AjoGuide,
         },
     }
 
