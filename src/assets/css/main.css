@@ -4,26 +4,26 @@
 
 @font-face {
     font-family: 'Aeonik';
-    src: url('/Aeonik/AeonikTRIAL-Regular.otf') format('opentype'),
-         url('/Aeonik/AeonikTRIAL-RegularItalic.otf') format('opentype'),
-         url('/Aeonik/AeonikTRIAL-Bold.otf') format('opentype'),
-         url('/Aeonik/AeonikTRIAL-BoldItalic.otf') format('opentype'),
-         url('/Aeonik/AeonikTRIAL-Light.otf') format('opentype'),
-         url('/Aeonik/AeonikTRIAL-LightItalic.otf') format('opentype');
+    src: url('/icons/Aeonik/AeonikTRIAL-Regular.otf') format('opentype'),
+         url('/icons/Aeonik/AeonikTRIAL-RegularItalic.otf') format('opentype'),
+         url('/icons/Aeonik/AeonikTRIAL-Bold.otf') format('opentype'),
+         url('/icons/Aeonik/AeonikTRIAL-BoldItalic.otf') format('opentype'),
+         url('/icons/Aeonik/AeonikTRIAL-Light.otf') format('opentype'),
+         url('/icons/Aeonik/AeonikTRIAL-LightItalic.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
   }
   
   @font-face {
     font-family: 'Aeonik';
-    src: url('/Aeonik/AeonikTRIAL-Bold.otf') format('opentype');
+    src: url('/icons/Aeonik/AeonikTRIAL-Bold.otf') format('opentype');
     font-weight: bold;
     font-style: normal;
   }
   
   @font-face {
     font-family: 'Aeonik';
-    src: url('/Aeonik/AeonikTRIAL-Light.otf') format('opentype');
+    src: url('/icons/Aeonik/AeonikTRIAL-Light.otf') format('opentype');
     font-weight: 300;
     font-style: normal;
   }
@@ -53,4 +53,101 @@
 
 body, div, p,i, span, h1,h2,h3,h4,h5,h6, b, button, input {
     font-family: 'Aeonik', sans-serif;
+}
+
+.ajo-bell {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/bell.svg') no-repeat center center;
+    background-size: contain;
+}
+
+.ajo-pie {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/pie.svg') no-repeat center center;
+    background-size: contain;
+}
+
+.ajo-piggy {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/piggy.svg') no-repeat center center;
+    background-size: contain;
+}
+.ajo-settings {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/settings.svg') no-repeat center center;
+    background-size: contain;
+}
+
+.ajo-wallet {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/wallet.svg') no-repeat center center;
+    background-size: contain;
+}
+.ajo-question {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/question.svg') no-repeat center center;
+    background-size: contain;
+}
+
+
+.ajo-bell-white {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/bell-white.svg') no-repeat center center;
+    background-size: contain;
+}
+
+.ajo-pie-white {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/pie-white.svg') no-repeat center center;
+    background-size: contain;
+}
+
+.ajo-piggy-white {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/piggy-white.svg') no-repeat center center;
+    background-size: contain;
+}
+.ajo-settings-white {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/settings-white.svg') no-repeat center center;
+    background-size: contain;
+}
+
+.ajo-wallet-white {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/wallet-white.svg') no-repeat center center;
+    background-size: contain;
+}
+.ajo-question-white {
+    width: 24px; /* Adjust the size as needed */
+    height: 24px; /* Adjust the size as needed */
+    display: inline-block;
+    background: url('/icons/question-white.svg') no-repeat center center;
+    background-size: contain;
+}
+
+ion-content{
+    --offset-top: 0px !important;
 }

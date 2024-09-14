@@ -10,6 +10,7 @@
       :loading="loading"
       @click="onClick"
       :size="size"
+      v-bind="$props"
     >
     </Button>
   </template>

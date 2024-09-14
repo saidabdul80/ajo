@@ -1,28 +1,37 @@
 <template>
-    <div class="tw-relative tw-flex tw-items-center tw-rounded-[12px]">
-      <span v-if="icon" class="tw-absolute tw-text-gray-300 tw-left-2">
-        <i :class="icon"></i>
-      </span>
-      <InputText
-        v-model="internalValue"
+  
+      <Password    
         :placeholder="placeholder"
         :disabled="disabled"
-        class="!pl-10 !tw-rounded-xl tw-w-full"
+         :size="size"
+        class="!pl-10 !tw-rounded-xl !tw-w-full"
         :class="{'tw-h-[32px]':size=='normal','tw-h-[52px]':size=='large','tw-h-[45px]':size=='medium'}"
-        :size="size"
-        :pt="{root:{style:(icon!='')?'padding-left:1.8rem !important':''}}"
-        :type="type"
-      />
-    </div>
+        v-model="internalValue">
+            <template #header>
+                <div class="font-semibold text-xm mb-4">Pick a password</div>
+            </template>
+            <template #footer>
+                <Divider />
+                <ul class="pl-2 ml-2 my-0 leading-normal">
+                    <li>At least one lowercase</li>
+                    <li>At least one uppercase</li>
+                    <li>At least one numeric</li>
+                    <li>Minimum 8 characters</li>
+                </ul>
+            </template>
+        </Password>
+
   </template>
   
   <script>
-  import InputText from "primevue/inputtext";
+
+import Password from 'primevue/password';
+
   
   export default {
     name: "CustomInput",
     components: {
-      InputText,
+      Password,
     },
     props: {
       modelValue: {
@@ -69,6 +78,10 @@
   </script>
   
   <style>
+  .p-password-input{
+    width: 100%;
+    border-radius: 12px !important;
+  }
   .p-inputtext::placeholder {
     font-size: 12px; /* Adjust this value as needed */
     color:#eee;
