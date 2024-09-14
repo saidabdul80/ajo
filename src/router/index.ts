@@ -4,13 +4,9 @@ import { RouteRecordRaw } from 'vue-router';
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect:'/overview'
+    component: () => import('@/views/Home.vue')
   },
-  {
-    path: '/overview',
-    name: 'overview',
-    component: () => import('@/views/Overview.vue')
-  },
+ 
   {
     path: '/join',
     name: 'join',
@@ -20,6 +16,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/app',
     component: () => import('@/views/IndexPage.vue'),
     children: [
+      {
+        path: 'overview',
+        name: 'overview',
+        component: () => import('@/views/Overview.vue')
+      },
       {
         path: 'contributions',
         name: 'contributions',

@@ -1,58 +1,70 @@
-<template>
-  
-        <ion-content color="light">
-    <div >
-      <div id="container" class="tw-pt-5">
-        <AjoLandContent />
-  
-        <div class="tw-mt-[40px] tw-mb-[40px]">
-          <Card />
-        </div>
-  
-        <div class="tw-p-[80px] tw-bg-[#36454F] tw-min-h-[280px] tw-w-full tw-grid xl:tw-grid-cols-4 md:tw-grid-cols-2 tw-gap-8 tw-items-center">
-          <Counter v-for="x in 4" :key="x" />
-        </div>
-  
-        <div class="tw-mt-[30px] tw-px-[9%] tw-min-h-[840px] tw-bg-[#F8F9D7]">
-          <BodyContent />
-        </div>
-  
-        <div>
-          <AjoGuide />
+  <template>
+    
+          <ion-content color="light">
+      <div >
+        <div id="container" class="tw-pt-5">
+          <AjoLandContent />
+    
+          <div class="tw-mt-[40px] tw-mb-[40px]">
+            <Card />
+          </div>
+    
+          <div class="tw-p-[80px] tw-bg-[#36454F] tw-min-h-[280px] tw-w-full tw-grid xl:tw-grid-cols-4 md:tw-grid-cols-2 tw-gap-8 tw-items-center">
+            <Counter v-for="x in 4" :key="x" />
+          </div>
+    
+          <div class="tw-mt-[30px] tw-px-[9%] tw-min-h-[840px] tw-bg-[#F8F9D7]">
+            <BodyContent />
+          </div>
+    
+          <div class="tw-mt-[30px] tw-px-[9%] tw-min-h-[400px] tw-bg-[white]">
+            <AjoGuide />
+          </div>
+
+            <div class="tw-bg-[#36454F] tw-min-h-[280px] tw-mt-[30px] tw-px-[9%] ">
+              <joinAjoTradition />
+            </div>
+
+            <div class="tw-min-h-[48px] tw-bg-[#E1E1E1] tw-px-[8%]">
+              <AjoFooter />
+            </div>
+
         </div>
       </div>
-    </div>
-    </ion-content>
-  </template>
-  
-  <script>
-  import {
-    IonButtons,
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-  } from '@ionic/vue';
-  import AjoLandContent from '@/components/AjoLandContent.vue';
-  import Card from '@/components/Card.vue';
-  import BodyContent from '@/components/BodyContent.vue';
-  import Counter from '@/components/Counter.vue';
-  import AjoGuide from '@/components/AjoGuide.vue';
-  
-  export default {
-    components: {
-      AjoLandContent,
+      </ion-content>
+    </template>
+    
+    <script>
+    import {
+      IonButtons,
       IonContent,
-      Card,
-      Counter,
-      BodyContent,
-      AjoGuide,
-    },
-  };
-  </script>
-  
-  <style lang="scss" scoped>
-  </style>
-  
+      IonHeader,
+      IonMenuButton,
+      IonPage,
+      IonTitle,
+      IonToolbar,
+    } from '@ionic/vue';
+    import AjoLandContent from '@/components/AjoLandContent.vue';
+    import Card from '@/components/Card.vue';
+    import BodyContent from '@/components/BodyContent.vue';
+    import Counter from '@/components/Counter.vue';
+    import AjoGuide from '@/components/AjoGuide.vue';
+    import joinAjoTradition from "@/components/joinAJoTradition.vue";
+    import AjoFooter from '@/components/AjoFooter.vue'
+    export default {
+      components: {
+        AjoLandContent,
+        IonContent,
+        Card,
+        Counter,
+        BodyContent,
+        AjoGuide,
+        joinAjoTradition,
+        AjoFooter,
+      },
+    };
+    </script>
+    
+    <style lang="scss" scoped>
+    </style>
+    

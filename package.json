@@ -20,6 +20,7 @@
     "pinia": "^2.2.2",
     "primeicons": "^7.0.0",
     "primevue": "^4.0.6",
+    "swiper": "^11.1.14",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
   },

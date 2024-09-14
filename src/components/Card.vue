@@ -1,5 +1,5 @@
 <template>
-    <Card style="width: 382px; background-color: #FAF9F9; overflow: hidden; display: flex; justify-content: center;">
+    <Card style=" background-color: #FAF9F9; overflow: hidden; display: flex; justify-content: center;">
       <template #header>
         <img class="tw-w-full tw-h-auto tw-object-cover" :src="item.image_url" />
       </template>
@@ -38,17 +38,17 @@
   
       <template #footer>
         <div>
-          <div class="tw-flex tw-w-[338px] tw-justify-between">
-            <div class="tw-flex tw-w-[338px] tw-justify-between tw-text-[18px]">{{ $globals.toCurrency(item.total_contributed) }} contributed of 
+          <div class="tw-flex tw-justify-between">
+            <div class="tw-flex tw-w-[100%] tw-justify-between tw-text-[18px]">{{ $globals.toCurrency(item.total_contributed) }} contributed of 
                 <span class="tw-text-[#6A6A6A]">{{ $globals.toCurrency(item.total_contribution)}}%</span>
             </div>
           </div>
   
           <ProgressBar
-            :style="{ height: '9px', marginTop: '10px', Color: 'black', marginBottom: '16px', width: '338px' }">
+            :style="{ height: '9px', marginTop: '10px', Color: 'black', marginBottom: '16px', width: '100%' }">
           </ProgressBar>
   
-          <div class="tw-justify-between tw-w-[338px] tw-flex">
+          <div class="tw-justify-between tw-w-full tw-flex">
             <span class="tw-flex tw-items-center">
               <span class="tw-mr-[6px]"><img src="/images/time.png" /></span>
               <span class="tw-font-[400] tw-text-[14px]">{{item.remaining_days}}</span>
