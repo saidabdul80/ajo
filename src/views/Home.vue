@@ -3,30 +3,25 @@
     <ion-content color="white" :fullscreen="true">
 
         <div>
-            <div id="container" class="tw-pt-5 tw-px-20">
-                <div class="tw-grid tw-grid-cols-2 tw-gap-5  tw-mb-[20vh]">
+            <div id="container" class="tw-pt-5 md:tw-px-20 tw-px-4">
+                <div class="tw-grid tw-gap-5  tw-mb-[20vh]" :class="lg?'tw-grid-cols-2':''">
                     <AjoLandContent class="tw-mt-[14vh]" />
-                    <div class="tw-grid tw-grid-cols-2 tw-gap-2 tw-h-[100vh]">
-                            <div class="">
-                                <swiper :direction="'vertical'" :loop="true"
-                                    :autoplay="true" :speed="3000"
-                                    :space-between="0"
-                                    :slides-per-view="2" class="swiper-container">
-                                    <swiper-slide v-for="x in 10" :key="x">
-                                        <Card class="tw-mb-3" />
-                                    </swiper-slide>
-                                </swiper>
-                            </div>
-                            <div class="">
-                                <!-- automatic animate down 0.3s speed  delay 2.5sec -->
-                                <swiper :direction="'vertical'" :loop="true"
-                                    :autoplay="{ delay: 0, disableOnInteraction: false, reverseDirection: true }"
-                                    :speed="3000" :slides-per-view="2" class="swiper-container">
-                                    <swiper-slide v-for="x in 10" :key="'down-' + x">
-                                        <Card />
-                                    </swiper-slide>
-                                </swiper>
-                            </div>
+                    <div class="tw-grid tw-gap-2" :style="lg?'height:100vh':'height:143vh'" :class="lg?'tw-grid-cols-2':''">
+                        
+                        <div class="tw-overflow-y-hidden " >
+                            <vue3-marquee :gradien="true" :duration="110" :vertical="lg" pauseOnHover>
+                                <div v-for="x in 10" :key="x" class="tw-mb-3 tw-w-full" :class="lg?'':'tw-px-2'">
+                                    <Card class="tw-cursor-pointer" @click="handleAjoCard(x)"   :style="lg?'width:100%':'width: 95% !important'" />
+                                </div>
+                            </vue3-marquee>
+                        </div>
+                        <div class="tw-overflow-y-hidden tw-w-full">
+                            <vue3-marquee :duration="110" direction="reverse" :vertical="lg" pauseOnHover>
+                                <div v-for="x in 10" :key="'down-' + x" class="tw-mb-3 tw-w-full" :class="lg?'':'tw-px-2'">
+                                    <Card  class="tw-cursor-pointer" @click="handleAjoCard(x)"    :style="lg?'width:100%':'width: 95% !important'" />
+                                </div>
+                            </vue3-marquee>
+                        </div>
                     </div>
                 </div>
 
@@ -74,21 +69,13 @@ import AjoGuide from '@/components/AjoGuide.vue';
 import joinAjoTradition from "@/components/joinAJoTradition.vue";
 import AjoFooter from '@/components/AjoFooter.vue'
 import Nav from '@/components/Nav.vue'
-import { Swiper, SwiperSlide } from 'swiper/vue';
+//import { Swiper, SwiperSlide } from 'swiper/vue';
 
-import 'swiper/swiper-bundle.css';
-import 'swiper/css/autoplay';
-import SwiperCore from 'swiper/core';
-import { Autoplay, Pagination, Navigation } from 'swiper';
-
-// install Swiper modules
-SwiperCore.use([Autoplay,Pagination,Navigation]);
-
+import {Vue3Marquee} from 'vue3-marquee';
 
 export default {
     components: {
-        Swiper,
-        SwiperSlide,
+        Vue3Marquee,
         AjoLandContent,
         IonContent,
         Card,
@@ -97,8 +84,18 @@ export default {
         AjoGuide,
         joinAjoTradition,
         AjoFooter,
-        Nav
+        Nav,
     },
+    methods: {
+        handleAjoCard(x) {
+            alert(x)
+        }
+    },
+    computed:{
+        lg(){
+            return this.$vuetify.display.lgAndUp;
+        }
+    }
 };
 </script>
 <style scoped>
@@ -140,5 +137,8 @@ export default {
     /* Ensure this is applied to allow animation movement */
     height: 100vh;
     /* Ensure enough height to allow card movement */
+}
+.vue3-marquee.vertical{
+    width: 100% !important;
 }
 </style>

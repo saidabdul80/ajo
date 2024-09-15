@@ -11,8 +11,8 @@
   <script>
   import { IonTabBar, IonLoading, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
   import { defineComponent } from 'vue';
-//   import { useToast } from 'primevue/usetoast';
-//   import Toast from 'primevue/toast';
+ import { useToast } from 'primevue/usetoast';
+   import Toast from 'primevue/toast';
   
   export default {
     data(){

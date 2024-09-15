@@ -21,13 +21,23 @@
             <AjoGuide />
           </div>
 
-            <div class="tw-bg-[#36454F] tw-min-h-[280px] tw-mt-[30px] tw-px-[9%] ">
+            <div class="tw-bg-[#36454F] tw-min-h-[280px] tw-mt-[30px] tw-px-[8%] ">
               <joinAjoTradition />
             </div>
 
-            <div class="tw-min-h-[48px] tw-bg-[#E1E1E1] tw-px-[8%]">
+            <div class="tw-min-h-[48px] tw-bg-[#E1E1E1] tw-px-[8%] tw-py-[20px]">
               <AjoFooter />
             </div>
+
+            <div class="tw-py-6">
+              <AjoSignIn />
+            </div>
+
+            
+            <div class=" tw-mt-[10px]">
+              <AjoPageLoading />
+            </div>
+            
 
         </div>
       </div>
@@ -50,7 +60,10 @@
     import Counter from '@/components/Counter.vue';
     import AjoGuide from '@/components/AjoGuide.vue';
     import joinAjoTradition from "@/components/joinAJoTradition.vue";
-    import AjoFooter from '@/components/AjoFooter.vue'
+    import AjoFooter from '@/components/AjoFooter.vue';
+    import AjoSignIn from '@/components/AjoSignIn.vue';
+    import AjoPageLoading from '@/components/AjoPageLoading.vue'
+   
     export default {
       components: {
         AjoLandContent,
@@ -61,10 +74,13 @@
         AjoGuide,
         joinAjoTradition,
         AjoFooter,
+        AjoSignIn,
+        AjoPageLoading,
+        
       },
     };
     </script>
     
-    <style lang="scss" scoped>
+    <style  scoped>
     </style>
     

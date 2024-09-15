@@ -1,11 +1,11 @@
 <template>
-    <Card style=" background-color: #FAF9F9; overflow: hidden; display: flex; justify-content: center;">
+    <Card style=" background-color: #FAF9F9; overflow: hidden; width: 100%; display: flex; justify-content: center;">
       <template #header>
         <img class="tw-w-full tw-h-auto tw-object-cover" :src="item.image_url" />
       </template>
   
       <template #title>
-        <span class="tw-flex items-center tw-text-[#C4C4C4] tw-w-[338px] tw-flex tw-justify-between tw-text-gray tw-text-[16px]">
+        <span class="tw-flex items-center tw-text-[#C4C4C4] tw-w-full tw-flex tw-justify-between tw-text-gray tw-text-[16px]">
           {{ item.category }}
           <img class="tw-h-[16.63px]" :src="item.category_icon" />
         </span>

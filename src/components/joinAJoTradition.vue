@@ -1,6 +1,6 @@
 <template>
-    <div class="tw-flex  tw-gap-9 tw-py-4 tw-px-8 tw-items-center tw-justify-between tw-flex-col md:tw-flex-row tw-justify-between">
-        <div class="tw-font-[600] tw-text-[40px] tw-text-[#FFFFFF] ">Join the Tradition of Group Savings</div>
+    <div class="tw-flex  tw-gap-9 tw-py-4 tw-px-8 tw-items-center tw-justify-between tw-flex-col md:tw-flex-row tw-justify-between tw-text-center ">
+        <div class="tw-font-[600] tw-text-[35px] tw-text-[#FFFFFF] tw-pointer-events-none">Join the Tradition of Group Savings</div>
 
         <div>
             <Button
