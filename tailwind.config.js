@@ -15,10 +15,21 @@ export default {
   ],
   theme: {
     extend: {},
+    screens: {
+      'xs': '440px',
+      'sm': '640px',
+      'md': '960px',
+    }
   },
   plugins: [],
   safelist: [
-    ...arr
+    ...arr,
+    'tw-grid', 
+    'tw-grid-cols-7',
+    'tw-col-span-4',
+    'tw-px-8',
+    'tw-block',
+    'tw-hidden'
   ]
 }
 

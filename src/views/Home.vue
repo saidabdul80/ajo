@@ -1,11 +1,11 @@
 <template>
     <Nav />
-    <ion-content color="white" :fullscreen="true">
+    <ion-content class="scroller-body-inner" color="white" :fullscreen="true">
 
         <div>
-            <div id="container" class="tw-pt-5 md:tw-px-20 tw-px-4">
+            <div id="container" class="md:tw-pt-5 md:tw-px-20 tw-px-4">
                 <div class="tw-grid tw-gap-5  tw-mb-[20vh]" :class="lg?'tw-grid-cols-2':''">
-                    <AjoLandContent class="tw-mt-[14vh]" />
+                    <AjoLandContent class="md:tw-mt-[14vh]" />
                     <div class="tw-grid tw-gap-2" :style="lg?'height:100vh':'height:143vh'" :class="lg?'tw-grid-cols-2':''">
                         
                         <div class="tw-overflow-y-hidden " >
@@ -63,7 +63,7 @@ import {
 } from '@ionic/vue';
 import AjoLandContent from '@/components/AjoLandContent.vue';
 import Card from '@/components/Card.vue';
-import BodyContent from '@/components/BodyContent.vue';
+import BodyContent from '@/components/AboutAjo.vue';
 import Counter from '@/components/Counter.vue';
 import AjoGuide from '@/components/AjoGuide.vue';
 import joinAjoTradition from "@/components/joinAJoTradition.vue";

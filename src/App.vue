@@ -1,7 +1,14 @@
   <template>
     <ion-app>
-      <ion-content :fullscreen="true" class="ion-padding tw-w-full tw-h-[90vh] "  style="--padding-top: 0px !important">
-            <ion-router-outlet id="main-content"></ion-router-outlet>
+      <ion-content :fullscreen="true" class="ion-padding scroller-body tw-w-full tw-h-[90vh] "  style="--padding-top: 0px !important">
+        <transition
+          :name="$vuetify.display.mdAndDown? $globals.pageTransition.name:'show'"
+          :mode="$vuetify.display.mdAndDown? $globals.pageTransition.mode:'show'"
+          v-on:after-enter="afterEnter"
+          v-on:after-leave="afterLeave"
+        >
+            <ion-router-outlet class="transition" :key="$route.fullPath" id="main-content"></ion-router-outlet>
+            </transition>
       </ion-content>
     </ion-app>
   </template>
@@ -131,6 +138,12 @@
       isActive(page) {
         console.log(this.route,33)
         return this.route.name === page.name;
+      },
+      afterEnter() {
+        window.scrollTo(0, 0);
+      },
+      afterLeave(){
+        this.$globals.setPageTransition= "default";
       }
     },
     created() {
@@ -142,10 +155,51 @@
       }
     },
   });
-  </script>
+  </script> 
 
   <style>
   body {
     font-family: 'Aeonik' !important;
   }
+  
+.transition {
+  overflow: hidden;
+}
+.router-view,
+.router-view-back-enter-active,
+.router-view-back-leave-active {
+  position: fixed;
+  width: 100%;
+  background: white;
+  min-height: 100vh;
+  top: 0;
+}
+
+
+.router-view-enter-active {
+  transition: transform 0.5s ease-in-out;
+  z-index: 2;
+  transform: translateX(100%);
+}
+.router-view-enter-to {
+  z-index: 2;
+  transform: translateX(0%);
+}
+.router-view-leave-active {
+  z-index: -1;
+}
+.router-view-leave-to {
+  z-index: -1;
+}
+
+
+.router-view-back-leave-active {
+  transition: transform 0.5s ease-in-out;
+  z-index: 2;
+  transform: translateX(0%);
+}
+.router-view-back-leave-to {
+  z-index: 2;
+  transform: translateX(100%);
+}
   </style>

@@ -5,11 +5,12 @@ import { useNotificationStore } from "./notification";
 
 import ls from "./ls";
 
-import router from "@/router"; // Example of using an alias if configured
 
 import { useUserStore } from "./user";
+import router from "../router";
 export const useGlobalsStore = defineStore('globals', {
   state: () => ({
+    pageTransition:{name:"router-view",mode:'in-out'},
     pageLoading: false,
     subPageName: null,
     nameRules: ref({}),
@@ -56,6 +57,22 @@ export const useGlobalsStore = defineStore('globals', {
     current_fiscal_year:null
   }),
   actions: {
+    goBack(route) {
+      this.pageTransition.name = "router-view-back";
+      this.pageTransition.mode = "";
+      router.push(route);
+    },
+    to(route) {
+      this.pageTransition.name =  "router-view";
+      this.pageTransition.mode ="in-out"
+      router.push(route);
+    },
+    scrollTo( name ){
+        const scrollBody = document.querySelector(".scroller-body-inner");
+        const scrollTo = document.querySelector("."+name);
+        
+        scrollBody.scrollToPoint(0, scrollTo.offsetTop, 1000);
+    },
     // In useGlobalsStore
     hasAbility(ability){
       return this.abilities.includes(ability)

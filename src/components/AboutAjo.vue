@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-grid tw-grid-cols-1 custom-grid tw-gap-10 tw-items-start md:tw-grid-cols-7 md:tw-items-center tw-px-4 tw-py-8">
+  <div  class="about-ajo tw-grid tw-grid-cols-1 custom-grid tw-gap-10 tw-items-start md:tw-grid-cols-7 md:tw-items-center tw-px-4 tw-py-8">
 
     <div class="tw-col-span-1 md:tw-col-span-3 tw-mb-8 md:tw-mb-0 md:tw-mr-[56px] tw-w-full md:tw-w-[100%]">
       <img class="tw-w-full tw-h-auto" src="/images/bodycont.png" alt="Ajo Image" />
@@ -18,7 +18,7 @@
       </p>
 
 
-      <Button size="small" label="Join Ajo by Cowris" />
+      <Button @click="$globals.to('/join')" size="small" label="Join Ajo by Cowris" />
     </div>
   </div>
 </template>

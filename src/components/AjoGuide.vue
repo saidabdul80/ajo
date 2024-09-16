@@ -1,5 +1,5 @@
 <template>
-    <div class="tw-py-4 tw-px-8">
+    <div class="tw-py-4 tw-px-8 how-ajo-work" id="how-ajo-work">
     
       <div class="tw-mb-[64px]">
         <h1 class="tw-text-[26px] tw-font-[600] tw-mb-[20px]">How Ajo Works</h1>

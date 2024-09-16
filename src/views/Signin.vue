@@ -4,18 +4,19 @@
             <template #content>
                 <ion-content color="white" >
                     <div class="!tw-flex tw-flex-col tw-w-full md:tw-h-[100vh]  tw-mt-20 tw-items-center">
-                        <div class="md:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%] md:tw-mt-20">
-                            <H1 class="md:tw-text-left tw-text-center" text="Join Ajo by Cowris" />
-                            <span class="md:tw-text-left  tw-text-balance tw-text-center tw-text-sm tw-mb-8 tw-block tw-text-gray-500">Already have an account on Cowris? <a @click="$globals.to('/signin')" class="tw-underline tw-cursor-pointer tw-text-gray-800"> Sign in </a></span>
-                            <Input class="tw-mb-5" placeholder="Full Name" size="medium" />
+                        <div class="md:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]  tw-mt-20">
+                            <H1 class="md:tw-text-left tw-text-center" text="Welcome back" />
+                            <span class="md:tw-text-left tw-text-center tw-text-sm tw-mb-8 tw-block tw-text-gray-500">No Cowris account yet? 
+                                <a @click="$globals.to('/join')" class="tw-underline tw-cursor-pointer tw-text-gray-800">Sign up</a>
+                            </span>
                             <Input class="tw-mb-5" placeholder="Email Address" size="medium" />
                             <Password class="tw-mb-8" placeholder="Password" size="medium" />
-                            <div class="tw-flex tw-w-full tw-gap-1 tw-mb-8">
-                                <Checkbox :binary="true" v-model="form.accept"/>
-                                <p class="tw-text-sm -tw-mt-1 tw-block tw-text-gray-500 tw-text-balance">
-                                    I have read and agreed to the <a class="tw-underline tw-cursor-pointer tw-text-gray-800">Terms & Conditions</a> 
-                                    and <a class="tw-underline tw-cursor-pointer tw-text-gray-800">KYC Policy</a> and confirm that I am opening this account for my own personal use, and not for use by a third party.
-                                </p>
+                            <div class="tw-flex tw-w-full tw-justify-between md:tw-gap-1 tw-mb-8">
+                                <div class="tw-flex tw-gap-1 tw-items-center">
+                                    <Checkbox :binary="true" v-model="form.accept"/>
+                                    <span class="tw-text-sm -tw-mt-1 tw-block tw-text-gray-500">Remember me</span>
+                                </div>
+                                <a class="tw-text-sm tw-font-bold">Forgot password?</a>
                             </div>
                             <Button label="Sign up" size="medium" class="tw-w-full"/>
                         </div>

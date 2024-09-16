@@ -69,7 +69,7 @@
     } from '@ionic/vue';
     import AjoLandContent from '@/components/AjoLandContent.vue';
     import Card from '@/components/Card.vue';
-    import BodyContent from '@/components/BodyContent.vue';
+    import BodyContent from '@/components/AboutAjo.vue';
     import Counter from '@/components/Counter.vue';
     import AjoGuide from '@/components/AjoGuide.vue';
     import joinAjoTradition from "@/components/joinAJoTradition.vue";

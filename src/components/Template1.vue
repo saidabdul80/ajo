@@ -1,5 +1,8 @@
 <template>
-  <div class="tw-grid tw-grid-cols-7 tw-w-full">
+  <IonContent class="md:tw-hidden tw-block">
+        <slot name="content"></slot>
+  </IonContent>
+  <div class="md:tw-grid tw-grid-cols-7 tw-w-full tw-hidden  ">
     <div class="tw-col-span-3 tw-bg-black">
         <div class=" tw-px-8">
             <div class="tw-w-full tw-py-6 tw-mb-8">
@@ -21,11 +24,19 @@
     <div class="tw-col-span-4 ">
         <slot name="content"></slot>
     </div>
+    
   </div>
+  
 </template>
 
 <script>
-export default {};
+import { IonContent } from '@ionic/vue';
+
+export default {
+  components: {
+    IonContent,
+  },
+};
 </script>
 
 <style scoped>
