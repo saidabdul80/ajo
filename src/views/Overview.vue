@@ -35,8 +35,21 @@
 
             
             <div class=" tw-mt-[10px]">
-              <AjoPageLoading />
+              <AjoRecoverAcct />
             </div>
+
+            <div class=" tw-mt-[10px]">
+              <AjoverifyEmail />
+            </div>
+              
+            <div class=" tw-mt-[10px]">
+            <Newpassword />
+            </div>
+
+            <div class=" tw-mt-[10px]">
+            <Passwordset />
+            </div>
+
             
 
         </div>
@@ -62,8 +75,11 @@
     import joinAjoTradition from "@/components/joinAJoTradition.vue";
     import AjoFooter from '@/components/AjoFooter.vue';
     import AjoSignIn from '@/components/AjoSignIn.vue';
-    import AjoPageLoading from '@/components/AjoPageLoading.vue'
-   
+    import AjoRecoverAcct from "@/components/AjoRecoverAcct.vue";
+    import AjoverifyEmail from '@/components/AjoverifyEmail.vue';
+    import Newpassword from '@/components/Newpassword.vue';
+    import Passwordset from "@/components/Passwordset.vue"
+    
     export default {
       components: {
         AjoLandContent,
@@ -75,7 +91,10 @@
         joinAjoTradition,
         AjoFooter,
         AjoSignIn,
-        AjoPageLoading,
+        AjoverifyEmail,
+        AjoRecoverAcct,
+        Newpassword,
+        Passwordset,
         
       },
     };

@@ -5,8 +5,8 @@
                     <ion-content color="white">
                         <div class="!tw-flex tw-flex-col tw-w-full tw-h-[100vh] tw-mt-20 tw-items-center">
                             <div class="tw-w-[50%] tw-mt-20">
-                                <H1 text="Welcome back" />
-                                <span class="tw-text-sm tw-mb-8 tw-block tw-text-gray-500">
+                                <H1 class="tw-font-[600]"text="Welcome back" />
+                                <span class="tw-text-sm tw-mb-8 tw-mt-2 tw-block tw-text-gray-500">
                                     No Cowris account yet? 
                                     <a class="tw-underline tw-cursor-pointer tw-text-gray-800"> Sign up </a>
                                 </span>
