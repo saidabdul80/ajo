@@ -8,7 +8,7 @@
         :placeholder="placeholder"
         :disabled="disabled"
         class="!pl-10 !tw-rounded-xl tw-w-full"
-        :class="{'tw-h-[32px]':size=='normal','tw-h-[52px]':size=='large','tw-h-[45px]':size=='medium'}"
+        :class="{'tw-h-[35px]':size=='normal','tw-h-[52px]':size=='large','tw-h-[45px]':size=='medium'}"
         :size="size"
         :pt="{root:{style:(icon!='')?'padding-left:1.8rem !important':''}}"
         :type="type"

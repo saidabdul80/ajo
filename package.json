@@ -15,7 +15,10 @@
     "@ionic/vue": "^8.0.0",
     "@ionic/vue-router": "^8.0.0",
     "@primevue/themes": "^4.0.6",
+    "apexcharts": "^3.53.0",
     "axios": "^1.7.7",
+    "highcharts": "^11.4.8",
+    "highcharts-vue": "^2.0.1",
     "ionicons": "^7.0.0",
     "pinia": "^2.2.2",
     "primeicons": "^7.0.0",
@@ -23,6 +26,7 @@
     "swiper": "^11.1.14",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0",
+    "vue3-apexcharts": "^1.6.0",
     "vue3-marquee": "^4.2.2",
     "vuetify": "^3.7.1",
     "zxcvbn": "^4.4.2"

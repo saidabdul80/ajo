@@ -2,18 +2,20 @@
     <ion-app>
       <ion-content :fullscreen="true" class="ion-padding scroller-body tw-w-full tw-h-[90vh] "  style="--padding-top: 0px !important">
         <transition
-          :name="$vuetify.display.mdAndDown? $globals.pageTransition.name:'show'"
-          :mode="$vuetify.display.mdAndDown? $globals.pageTransition.mode:'show'"
-          v-on:after-enter="afterEnter"
-          v-on:after-leave="afterLeave"
-        >
-            <ion-router-outlet class="transition" :key="$route.fullPath" id="main-content"></ion-router-outlet>
-            </transition>
+            :name="$vuetify.display.mdAndDown? $globals.pageTransition.name:'show'"
+            :mode="$vuetify.display.mdAndDown? $globals.pageTransition.mode:'show'"
+            v-on:after-enter="afterEnter"
+            v-on:after-leave="afterLeave"
+          >
+            <!-- <router-view></router-view> -->
+            <ion-router-outlet  class="transition" :key="$route.fullPath" ></ion-router-outlet>
+        </transition>
       </ion-content>
     </ion-app>
   </template>
 
   <script lang="ts">
+  
   import {
     IonApp,
     IonContent,
@@ -45,12 +47,13 @@
     warningOutline,
     warningSharp,
   } from "ionicons/icons";
-  import { useRoute } from 'vue-router';
+  import { RouterView, useRoute } from 'vue-router';
   import PInput from '@/components/Input.vue'
   import PButton from '@/components/Button.vue'
 
   export default defineComponent({
     components: {
+      RouterView,
       PInput,
       PButton,
       archiveOutline,

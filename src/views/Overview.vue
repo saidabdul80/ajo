@@ -1,105 +1,146 @@
-  <template>
-    
-          <ion-content color="light">
-      <div >
-        <div id="container" class="tw-pt-5">
-          <AjoLandContent />
-    
-          <div class="tw-mt-[40px] tw-mb-[40px]">
-            <Card />
+<template>
+  <div class="tw-mb-3">
+    <Notify message="Verify your email address to explore Ajo by Cowris." type="warning" />
+  </div>
+  <ion-content color="transparent">
+    <div class="tw-grid md:tw-grid-cols-6">
+      <div class="md:tw-col-span-4">
+        <div class="tw-grid tw-grid-cols-2 tw-gap-2">
+          <div class="tw-bg-black tw-relative tw-h-[180px]">
+            <div class="tw-flex tw-p-3 tw-items-center tw-justify-between tw-text-white tw-text-sm">
+              <span>Wallet Balance</span>
+              <PButton label="Fund Wallet" outlined="" size="small" />
+            </div>
+            <span class="tw-text-2xl tw-block tw-p-3 tw-text-white">N0.00</span>
+            <div class="tw-absolute -tw-bottom-[1px] tw-h-[144px] tw-w-full">
+              <apexchart height="100%" width="100%" type="area" :options="chartOptions" :series="series"></apexchart>
+            </div>
+          
           </div>
-    
-          <div class="tw-p-[80px] tw-bg-[#36454F] tw-min-h-[280px] tw-w-full tw-grid xl:tw-grid-cols-4 md:tw-grid-cols-2 tw-gap-8 tw-items-center">
-            <Counter v-for="x in 4" :key="x" />
-          </div>
-    
-          <div class="tw-mt-[30px] tw-px-[9%] tw-min-h-[840px] tw-bg-[#F8F9D7]">
-            <BodyContent />
-          </div>
-    
-          <div class="tw-mt-[30px] tw-px-[9%] tw-min-h-[400px] tw-bg-[white]">
-            <AjoGuide />
-          </div>
-
-            <div class="tw-bg-[#36454F] tw-min-h-[280px] tw-mt-[30px] tw-px-[8%] ">
-              <joinAjoTradition />
-            </div>
-
-            <div class="tw-min-h-[48px] tw-bg-[#E1E1E1] tw-px-[8%] tw-py-[20px]">
-              <AjoFooter />
-            </div>
-
-            <div class="tw-py-6">
-              <AjoSignIn />
-            </div>
-
-            
-            <div class=" tw-mt-[10px]">
-              <AjoRecoverAcct />
-            </div>
-
-            <div class=" tw-mt-[10px]">
-              <AjoverifyEmail />
-            </div>
-              
-            <div class=" tw-mt-[10px]">
-            <Newpassword />
-            </div>
-
-            <div class=" tw-mt-[10px]">
-            <Passwordset />
-            </div>
-
-            
-
         </div>
       </div>
-      </ion-content>
-    </template>
+      <div class="md:tw-col-span-2">
     
-    <script>
-    import {
-      IonButtons,
-      IonContent,
-      IonHeader,
-      IonMenuButton,
-      IonPage,
-      IonTitle,
-      IonToolbar,
-    } from '@ionic/vue';
-    import AjoLandContent from '@/components/AjoLandContent.vue';
-    import Card from '@/components/Card.vue';
-    import BodyContent from '@/components/AboutAjo.vue';
-    import Counter from '@/components/Counter.vue';
-    import AjoGuide from '@/components/AjoGuide.vue';
-    import joinAjoTradition from "@/components/joinAJoTradition.vue";
-    import AjoFooter from '@/components/AjoFooter.vue';
-    import AjoSignIn from '@/components/AjoSignIn.vue';
-    import AjoRecoverAcct from "@/components/AjoRecoverAcct.vue";
-    import AjoverifyEmail from '@/components/AjoverifyEmail.vue';
-    import Newpassword from '@/components/Newpassword.vue';
-    import Passwordset from "@/components/Passwordset.vue"
-    
-    export default {
-      components: {
-        AjoLandContent,
-        IonContent,
-        Card,
-        Counter,
-        BodyContent,
-        AjoGuide,
-        joinAjoTradition,
-        AjoFooter,
-        AjoSignIn,
-        AjoverifyEmail,
-        AjoRecoverAcct,
-        Newpassword,
-        Passwordset,
-        
-      },
+      </div>
+    </div>
+  </ion-content>
+</template>
+
+<script>
+import PButton from '@/components/Button.vue';
+import Notify from '@/components/Notify.vue';
+import VueApexCharts from 'vue3-apexcharts';
+import {
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonMenuButton,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/vue';
+
+export default {
+  components: {
+    IonContent,
+    Notify,
+    PButton,
+    apexchart: VueApexCharts,
+  },
+  data() {
+    return {
+      series: [{
+        name: 'Balance',
+        data: [0, 1, 3, 2, 5, 4, 6]
+      }],
+      chartOptions: {
+        colors: ['#546E7A', '#E91E63'],
+        chart: {
+          type: 'area',
+          height:  'auto',
+          background: 'transparent',
+          sparkline: {
+            enabled: true
+          }
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        fill: {
+          type: 'gradient',
+          colors: ['#ccc'],
+ 
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.4,
+            opacityTo: 0.5,
+            stops: [0, 90, 100]
+          }
+        },
+        xaxis: {
+          labels: {
+            show: false
+          }
+        },
+        yaxis: {
+          labels: {
+            show: false
+          }
+        },
+        tooltip: {
+          enabled: true
+        }
+      }
     };
-    </script>
-    
-    <style  scoped>
-    </style>
-    
+  }
+};
+</script>
+
+<style scoped>
+.chart-card {
+  width: 350px;
+  padding: 20px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 10px;
+}
+.chart-container {
+    width: 100%;
+    height: 100px;
+    margin: 0 auto;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.balance-title {
+  font-size: 1.2em;
+}
+
+.fund-button {
+  padding: 5px 10px;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.card-balance {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 2em;
+}
+
+.currency-symbol {
+  margin-right: 5px;
+}
+
+.balance-amount {
+  font-weight: bold;
+}
+</style>

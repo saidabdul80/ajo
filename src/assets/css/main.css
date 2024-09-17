@@ -147,7 +147,9 @@ body, div, p,i, span, h1,h2,h3,h4,h5,h6, b, button, input {
     background: url('/icons/question-white.svg') no-repeat center center;
     background-size: contain;
 }
-
+.p-button-outlined.p-button-contrast{
+    background-color: white !important;
+}
 ion-content{
     --offset-top: 0px !important;
 }

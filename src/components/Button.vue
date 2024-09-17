@@ -6,11 +6,11 @@
       :disabled="disabled"
         :severity="color"
         :pt="{icon:{style:'font-size:12px'}}"
-     
       :loading="loading"
       @click="onClick"
       :size="size"
       v-bind="$props"
+      class="!tw-rounded-[12px]"
     >
     </Button>
   </template>

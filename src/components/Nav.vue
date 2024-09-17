@@ -1,9 +1,6 @@
 <template>
     <ion-header mode="ios">
           <ion-toolbar color="white" class="tw-py-0">
-            <ion-buttons slot="end">
-              <ion-menu-button></ion-menu-button>
-            </ion-buttons>
             <ion-label color="dark" slot="start" class="tw-px-[22px] tw-py-[0px] tw-hidden md:tw-block">
                 <img width="68%" src="@/assets/images/logo-name.svg" />
             </ion-label>

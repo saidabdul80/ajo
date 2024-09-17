@@ -38,11 +38,11 @@
                     <AjoGuide />
                 </div>
 
-                <div class="tw-bg-[#36454F] tw-min-h-[280px] tw-mt-[30px] tw-px-[9%] ">
+                <div class="tw-bg-[#36454F]  tw-mt-[30px] tw-px-[9%] tw-py-10 ">
                     <joinAjoTradition />
                 </div>
 
-                <div class="tw-min-h-[48px] tw-bg-[#E1E1E1] tw-px-[8%]">
+                <div class="tw-min-h-[48px] tw-bg-[#E1E1E1] tw-px-[8%] tw-mb-10">
                     <AjoFooter />
                 </div>
 
