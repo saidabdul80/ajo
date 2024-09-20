@@ -178,8 +178,5 @@ input {
 }
 
 ion-content {
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 96px);
   --offset-top: 0px !important;
 }
