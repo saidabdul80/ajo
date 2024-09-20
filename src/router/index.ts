@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   
   {
-    path: '/Verify',
+    path: '/verify',
     name: 'Verify',
     component: () => import('@/views/VerifyEmail.vue')
   },
