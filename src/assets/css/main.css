@@ -3,153 +3,183 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'Aeonik';
-    src: url('/icons/Aeonik/AeonikTRIAL-Regular.otf') format('opentype'),
-         url('/icons/Aeonik/AeonikTRIAL-RegularItalic.otf') format('opentype'),
-         url('/icons/Aeonik/AeonikTRIAL-Bold.otf') format('opentype'),
-         url('/icons/Aeonik/AeonikTRIAL-BoldItalic.otf') format('opentype'),
-         url('/icons/Aeonik/AeonikTRIAL-Light.otf') format('opentype'),
-         url('/icons/Aeonik/AeonikTRIAL-LightItalic.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  
-  @font-face {
-    font-family: 'Aeonik';
-    src: url('/icons/Aeonik/AeonikTRIAL-Bold.otf') format('opentype');
-    font-weight: bold;
-    font-style: normal;
-  }
-  
-  @font-face {
-    font-family: 'Aeonik';
-    src: url('/icons/Aeonik/AeonikTRIAL-Light.otf') format('opentype');
-    font-weight: 300;
-    font-style: normal;
-  }
-
-  /* src/global.scss */
-
-  
-:root {
-
-    --ion-color-new-white: #fff;
+  font-family: "Aeonik";
+  src: url("/icons/Aeonik/AeonikTRIAL-Regular.otf") format("opentype"),
+    url("/icons/Aeonik/AeonikTRIAL-RegularItalic.otf") format("opentype"),
+    url("/icons/Aeonik/AeonikTRIAL-Bold.otf") format("opentype"),
+    url("/icons/Aeonik/AeonikTRIAL-BoldItalic.otf") format("opentype"),
+    url("/icons/Aeonik/AeonikTRIAL-Light.otf") format("opentype"),
+    url("/icons/Aeonik/AeonikTRIAL-LightItalic.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
 }
 
-.ion-color-white {
-    --ion-color-base : var(--ion-color-new-white);
-	--ion-color-base-rgb: var(--ion-color-new-white);;
-	--ion-color-contrast: #000;
-	--ion-color-contrast-rgb:#000;
-	--ion-color-shade: var(--ion-color-new-white);
-	--ion-color-tint: var(--ion-color-new-white);
+@font-face {
+  font-family: "Aeonik";
+  src: url("/icons/Aeonik/AeonikTRIAL-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Aeonik";
+  src: url("/icons/Aeonik/AeonikTRIAL-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* src/global.scss */
+
+:root {
+  --ion-background-color: #fff;
+  --ion-background-color-rgb: 18, 18, 18;
+
+  /* --ion-text-color-rgb: 255, 255, 255;
+  --ion-text-color-step-50: #f3f3f3;
+  --ion-text-color-step-100: #e7e7e7;
+  --ion-text-color-step-150: #dbdbdb;
+  --ion-text-color-step-200: #d0d0d0;
+  --ion-text-color-step-250: #c4c4c4;
+  --ion-text-color-step-300: #b8b8b8;
+  --ion-text-color-step-350: #acacac;
+  --ion-text-color-step-400: #a0a0a0;
+  --ion-text-color-step-450: #949494;
+  --ion-text-color-step-500: #898989;
+  --ion-text-color-step-550: #7d7d7d;
+  --ion-text-color-step-600: #717171;
+  --ion-text-color-step-650: #656565;
+  --ion-text-color-step-700: #595959;
+  --ion-text-color-step-750: #4d4d4d;
+  --ion-text-color-step-800: #414141;
+  --ion-text-color-step-850: #363636;
+  --ion-text-color-step-900: #2a2a2a;
+  --ion-text-color-step-950: #1e1e1e;
+  --ion-item-background: #1e1e1e;
+  --ion-toolbar-background: #1f1f1f;
+  --ion-tab-bar-background: #1f1f1f;
+  --ion-card-background: #1e1e1e; */
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --ion-color-new-white: #1e1e1e !important;
-    }
+  :root.ios,
+  :root.md {
+    --ion-background-color: #ffff;
+    --ion-text-color: #000;
   }
+}
 
-body, div, p,i, span, h1,h2,h3,h4,h5,h6, b, button, input {
-    font-family: 'Aeonik', sans-serif;
+body,
+div,
+p,
+i,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+button,
+input {
+  font-family: "Aeonik", sans-serif;
 }
 
 .ajo-bell {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/bell.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/bell.svg") no-repeat center center;
+  background-size: contain;
 }
 
 .ajo-pie {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/pie.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/pie.svg") no-repeat center center;
+  background-size: contain;
 }
 
 .ajo-piggy {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/piggy.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/piggy.svg") no-repeat center center;
+  background-size: contain;
 }
 .ajo-settings {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/settings.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/settings.svg") no-repeat center center;
+  background-size: contain;
 }
 
 .ajo-wallet {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/wallet.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/wallet.svg") no-repeat center center;
+  background-size: contain;
 }
 .ajo-question {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/question.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/question.svg") no-repeat center center;
+  background-size: contain;
 }
 
-
 .ajo-bell-white {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/bell-white.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/bell-white.svg") no-repeat center center;
+  background-size: contain;
 }
 
 .ajo-pie-white {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/pie-white.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/pie-white.svg") no-repeat center center;
+  background-size: contain;
 }
 
 .ajo-piggy-white {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/piggy-white.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/piggy-white.svg") no-repeat center center;
+  background-size: contain;
 }
 .ajo-settings-white {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/settings-white.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/settings-white.svg") no-repeat center center;
+  background-size: contain;
 }
 
 .ajo-wallet-white {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/wallet-white.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/wallet-white.svg") no-repeat center center;
+  background-size: contain;
 }
 .ajo-question-white {
-    width: 24px; /* Adjust the size as needed */
-    height: 24px; /* Adjust the size as needed */
-    display: inline-block;
-    background: url('/icons/question-white.svg') no-repeat center center;
-    background-size: contain;
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/question-white.svg") no-repeat center center;
+  background-size: contain;
 }
-.p-button-outlined.p-button-contrast{
-    background-color: white !important;
-}
-ion-content{
-    --offset-top: 0px !important;
+
+ion-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 96px);
+  --offset-top: 0px !important;
 }
