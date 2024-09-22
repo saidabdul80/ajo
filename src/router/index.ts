@@ -17,6 +17,33 @@ const routes: Array<RouteRecordRaw> = [
     name: "signin",
     component: () => import("@/views/Signin.vue"),
   },
+  
+  {
+    path: '/verify',
+    name: 'Verify',
+    component: () => import('@/views/VerifyEmail.vue')
+  },
+
+  {
+    path: '/newpassword',
+    name: 'newpassword',
+    component: () => import('@/views/CreatNewPassword.vue')
+  },
+
+  {
+    path: '/Passwordset',
+    name: 'Passwordset',
+    component: () => import('@/views/Passwordset.vue')
+  },
+
+
+  {
+    path: '/recovery',
+    name: 'recovery',
+    component: () => import('@/views/Recovery.vue')
+  },
+  
+  
   {
     path: "/recover-account",
     name: "recover-account",
