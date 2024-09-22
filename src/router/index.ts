@@ -17,52 +17,34 @@ const routes: Array<RouteRecordRaw> = [
     name: "signin",
     component: () => import("@/views/Signin.vue"),
   },
-  
-  {
-    path: '/verify',
-    name: 'Verify',
-    component: () => import('@/views/VerifyEmail.vue')
-  },
 
   {
-    path: '/newpassword',
-    name: 'newpassword',
-    component: () => import('@/views/CreatNewPassword.vue')
-  },
-
-  {
-    path: '/Passwordset',
-    name: 'Passwordset',
-    component: () => import('@/views/Passwordset.vue')
-  },
-
-
-  {
-    path: '/recovery',
-    name: 'recovery',
-    component: () => import('@/views/Recovery.vue')
-  },
-  
-  
-  {
-    path: "/recover-account",
-    name: "recover-account",
-    component: () => import("@/views/RecoverAccount.vue"),
-  },
-  {
-    path: "/verify-email",
-    name: "verify-email",
+    path: "/verify",
+    name: "Verify",
     component: () => import("@/views/VerifyEmail.vue"),
   },
+
   {
-    path: "/new-password",
-    name: "new-password",
-    component: () => import("@/views/NewPassword.vue"),
+    path: "/newpassword",
+    name: "newpassword",
+    component: () => import("@/views/CreatNewPassword.vue"),
+  },
+
+  {
+    path: "/Passwordset",
+    name: "Passwordset",
+    component: () => import("@/views/Passwordset.vue"),
+  },
+
+  {
+    path: "/recovery",
+    name: "recovery",
+    component: () => import("@/views/Recovery.vue"),
   },
   {
     path: "/password-set",
     name: "password-set",
-    component: () => import("@/views/PasswordSet.vue"),
+    component: () => import("@/views/Passwordset.vue"),
   },
   {
     path: "/app",
