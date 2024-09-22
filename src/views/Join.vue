@@ -18,12 +18,18 @@
                   Sign in
                 </a></span
               >
-              <Input class="tw-mb-5" placeholder="Full Name" size="medium" />
+              <Input
+                class="tw-mb-5"
+                placeholder="Full Name"
+                v-model="form.fullName" />
               <Input
                 class="tw-mb-5"
                 placeholder="Email Address"
-                size="medium" />
-              <Password class="tw-mb-8" placeholder="Password" size="medium" />
+                v-model="form.email" />
+              <Password
+                class="tw-mb-8"
+                placeholder="Password"
+                v-model="form.password" />
 
               <div
                 class="tw-flex tw-w-full tw-justify-between tw-gap-3 tw-mb-8">
@@ -44,22 +50,7 @@
                   use, and not for use by a third party.
                 </p>
               </div>
-              <!-- <div class="tw-flex tw-gap-1 tw-mb-8">
-                <Checkbox :binary="true" v-model="form.accept" />
-                <p
-                  class="tw-text-base -tw-mt-1 tw-block tw-text-gray-500 tw-text-balance">
-                  I have read and agreed to the
-                  <a class="tw-underline tw-cursor-pointer tw-text-gray-800"
-                    >Terms & Conditions</a
-                  >
-                  and
-                  <a class="tw-underline tw-cursor-pointer tw-text-gray-800"
-                    >KYC Policy</a
-                  >
-                  and confirm that I am opening this account for my own personal
-                  use, and not for use by a third party.
-                </p>
-              </div> -->
+
               <Button label="Sign up" size="large" class="tw-w-full" />
             </div>
           </div>
@@ -89,7 +80,12 @@ export default {
   },
   data() {
     return {
-      form: {},
+      form: {
+        accept: false,
+        password: "",
+        email: "",
+        fullName: "",
+      },
     };
   },
 };

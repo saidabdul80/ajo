@@ -19,11 +19,10 @@
               <Input
                 class="tw-mb-5"
                 placeholder="Email Address"
-                size="medium" />
+                v-model="form.email" />
               <Password
                 class="tw-mb-8"
                 placeholder="Password"
-                size="medium"
                 v-model="form.password" />
               <div
                 class="tw-flex tw-w-full tw-justify-between md:tw-gap-1 tw-mb-8">
@@ -69,7 +68,9 @@ export default {
   data() {
     return {
       form: {
+        email: "",
         password: "",
+        accept: false,
       },
     };
   },

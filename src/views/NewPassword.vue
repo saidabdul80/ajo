@@ -21,7 +21,7 @@
               <Password
                 class="tw-mb-8"
                 placeholder="Confirm password"
-                v-model="form.password" />
+                v-model="form.confirmmPassword" />
 
               <Button label="Set password" size="large" class="tw-w-full" />
             </div>
@@ -51,7 +51,8 @@ export default {
   data() {
     return {
       form: {
-        email: "",
+        password: "",
+        confirmmPassword: "",
       },
     };
   },
