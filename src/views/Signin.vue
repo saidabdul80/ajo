@@ -4,11 +4,11 @@
       <template #content>
         <ion-content color="white">
           <div
-            class="!tw-flex tw-flex-col tw-w-full tw-pt-20 md:tw-pt-40 tw-items-center">
-            <div class="md:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%] tw-mt-20">
+            class="tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-20 md:tw-py-0">
+            <div class="md:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]">
               <H1 class="md:tw-text-left tw-text-center" text="Welcome back" />
               <span
-                class="md:tw-text-left tw-text-center tw-text-sm tw-mb-8 tw-block tw-text-gray-500"
+                class="md:tw-text-left tw-text-center tw-text-lg tw-mb-8 tw-block tw-text-gray-500"
                 >No Cowris account yet?
                 <a
                   @click="$globals.to('/join')"
@@ -20,18 +20,26 @@
                 class="tw-mb-5"
                 placeholder="Email Address"
                 size="medium" />
-              <Password class="tw-mb-8" placeholder="Password" size="medium" />
+              <Password
+                class="tw-mb-8"
+                placeholder="Password"
+                size="medium"
+                v-model="form.password" />
               <div
                 class="tw-flex tw-w-full tw-justify-between md:tw-gap-1 tw-mb-8">
-                <div class="tw-flex tw-gap-1 tw-items-center">
+                <div class="tw-flex tw-gap-3 tw-items-center">
                   <Checkbox :binary="true" v-model="form.accept" />
-                  <span class="tw-text-sm -tw-mt-1 tw-block tw-text-gray-500"
+                  <span class="tw-text-base tw-block tw-text-gray-500"
                     >Remember me</span
                   >
                 </div>
-                <a class="tw-text-sm tw-font-bold">Forgot password?</a>
+                <a
+                  @click="$globals.to('/recover-account')"
+                  class="tw-text-base tw-font-medium tw-cursor-pointer"
+                  >Forgot password?</a
+                >
               </div>
-              <Button label="Sign up" size="medium" class="tw-w-full" />
+              <Button label="Sign in" size="large" class="tw-w-full" />
             </div>
           </div>
         </ion-content>
@@ -60,10 +68,12 @@ export default {
   },
   data() {
     return {
-      form: {},
+      form: {
+        password: "",
+      },
     };
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style></style>

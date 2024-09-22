@@ -5,12 +5,11 @@
     :outlined="outlined"
     :disabled="disabled"
     :severity="color"
-    :pt="{ icon: { style: 'font-size:12px' } }"
     :loading="loading"
     @click="onClick"
-    :size="size"
     v-bind="$props"
-    class="!tw-rounded-[12px] !tw-px-6 !tw-py-3">
+    class="!tw-px-4"
+    :class="computedClass">
   </Button>
 </template>
 
@@ -53,7 +52,24 @@ export default {
     },
     size: {
       type: String,
-      default: "Normal",
+      default: "medium", // Default size is "medium"
+    },
+    rounded: {
+      type: Boolean,
+      default: true, // Default to rounded corners
+    },
+  },
+  computed: {
+    computedClass() {
+      return [
+        this.class,
+        {
+          "!tw-rounded-[12px]": this.rounded, // Applies rounded corners if true
+          "!tw-py-2": this.size === "small",
+          "!tw-py-3 !tw-text-base": this.size === "medium", // Default padding for medium
+          "!tw-py-3 md:!tw-py-5 !tw-text-lg": this.size === "large",
+        },
+      ];
     },
   },
   methods: {
@@ -64,6 +80,4 @@ export default {
 };
 </script>
 
-<style>
-/* Custom styles for button if needed */
-</style>
+<style></style>

@@ -4,28 +4,28 @@
 
 @font-face {
   font-family: "Aeonik";
-  src: url("/icons/Aeonik/AeonikTRIAL-Regular.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-RegularItalic.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-Bold.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-BoldItalic.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-Light.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-LightItalic.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
+  src: url("/Aeonik/AeonikTRIAL-Regular.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-RegularItalic.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-Bold.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-BoldItalic.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-Light.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-LightItalic.otf") format("opentype");
+  font-weight: normal; /* Default weight */
+  font-style: normal; /* Default style */
 }
 
 @font-face {
   font-family: "Aeonik";
-  src: url("/icons/Aeonik/AeonikTRIAL-Bold.otf") format("opentype");
-  font-weight: bold;
-  font-style: normal;
+  src: url("/Aeonik/AeonikTRIAL-Bold.otf") format("opentype");
+  font-weight: bold; /* Bold weight */
+  font-style: normal; /* Regular style */
 }
 
 @font-face {
   font-family: "Aeonik";
-  src: url("/icons/Aeonik/AeonikTRIAL-Light.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
+  src: url("/Aeonik/AeonikTRIAL-Light.otf") format("opentype");
+  font-weight: 300; /* Light weight */
+  font-style: normal; /* Regular style */
 }
 
 /* src/global.scss */
@@ -179,4 +179,23 @@ input {
 
 ion-content {
   --offset-top: 0px !important;
+}
+
+.p-inputtext:enabled:focus {
+  border-color: black !important;
+  border-width: 2px !important;
+}
+
+.p-checkbox {
+  height: 24px !important;
+  width: 24px !important;
+}
+.p-checkbox-box {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.p-checkbox-icon {
+  width: 16px !important;
+  height: 16px !important;
 }

@@ -4,13 +4,13 @@
       <template #content>
         <ion-content color="white">
           <div
-            class="!tw-flex tw-flex-col tw-w-full tw-pt-20 md:tw-pt-40 tw-items-center">
-            <div class="md:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%] md:tw-mt-20">
+            class="!tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-12 md:tw-py-0">
+            <div class="md:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]">
               <H1
                 class="md:tw-text-left tw-text-center"
                 text="Join Ajo by Cowris" />
               <span
-                class="md:tw-text-left tw-text-balance tw-text-center tw-text-sm tw-mb-8 tw-block tw-text-gray-500"
+                class="md:tw-text-left tw-text-balance tw-text-center tw-text-lg tw-mb-8 tw-block tw-text-gray-500"
                 >Already have an account on Cowris?
                 <a
                   @click="$globals.to('/signin')"
@@ -24,10 +24,14 @@
                 placeholder="Email Address"
                 size="medium" />
               <Password class="tw-mb-8" placeholder="Password" size="medium" />
-              <div class="tw-flex tw-w-full tw-gap-1 tw-mb-8">
-                <Checkbox :binary="true" v-model="form.accept" />
+
+              <div
+                class="tw-flex tw-w-full tw-justify-between tw-gap-3 tw-mb-8">
+                <div class="tw-flex tw-gap-1">
+                  <Checkbox :binary="true" v-model="form.accept" />
+                </div>
                 <p
-                  class="tw-text-sm -tw-mt-1 tw-block tw-text-gray-500 tw-text-balance">
+                  class="tw-text-base -tw-mt-1 tw-block tw-text-gray-500 tw-text-balance">
                   I have read and agreed to the
                   <a class="tw-underline tw-cursor-pointer tw-text-gray-800"
                     >Terms & Conditions</a
@@ -40,7 +44,23 @@
                   use, and not for use by a third party.
                 </p>
               </div>
-              <Button label="Sign up" size="medium" class="tw-w-full" />
+              <!-- <div class="tw-flex tw-gap-1 tw-mb-8">
+                <Checkbox :binary="true" v-model="form.accept" />
+                <p
+                  class="tw-text-base -tw-mt-1 tw-block tw-text-gray-500 tw-text-balance">
+                  I have read and agreed to the
+                  <a class="tw-underline tw-cursor-pointer tw-text-gray-800"
+                    >Terms & Conditions</a
+                  >
+                  and
+                  <a class="tw-underline tw-cursor-pointer tw-text-gray-800"
+                    >KYC Policy</a
+                  >
+                  and confirm that I am opening this account for my own personal
+                  use, and not for use by a third party.
+                </p>
+              </div> -->
+              <Button label="Sign up" size="large" class="tw-w-full" />
             </div>
           </div>
         </ion-content>
@@ -75,4 +95,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style></style>

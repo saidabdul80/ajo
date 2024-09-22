@@ -10,7 +10,6 @@
       <Button
         @click="$globals.to('/join')"
         class="tw-whitespace-nowrap"
-        size="small"
         label="Join Ajo by Cowris" />
     </div>
   </div>
