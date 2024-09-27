@@ -26,8 +26,7 @@
                 :router-link="p.url"
                 lines="none"
                 :detail="false"
-                class="hydrated tw-w-[75%] tw-mx-auto tw-block tw-my-3 tw-rounded-xl tw-me-10"
-                :class="{ selected: selectedIndex === i }">
+                class="hydrated tw-w-[75%] tw-mx-auto tw-block tw-my-3 tw-rounded-xl tw-me-10">
                 <ion-label
                   class="!tw-flex tw-gap-4 !tw-text-base tw-items-center">
                   <span
@@ -55,7 +54,7 @@
         mode="ios"
         class="tw-w-full"
         style="padding-top: 0px !important">
-        <ion-header>
+        <!-- <ion-header>
           <ion-toolbar
             color="white"
             class="tw-h-[104px] tw-flex tw-px-8 tw-border-b !tw-border-[#E8EBEF]">
@@ -89,16 +88,14 @@
               </div>
             </ion-label>
           </ion-toolbar>
-        </ion-header>
-        <ion-content
-          color="light"
+        </ion-header> -->
+        <!-- <ion-content
+          color="white"
           :fullscreen="true"
           class="tw-w-full tw-h-[90vh]"
-          style="--padding-top: 0px !important">
-          <ion-router-outlet
-            color="light"
-            class="tw-px-5 tw-py-4"></ion-router-outlet>
-        </ion-content>
+          style="--padding-top: 0px !important"> -->
+        <ion-router-outlet></ion-router-outlet>
+        <!-- </ion-content> -->
       </ion-page>
     </ion-split-pane>
   </ion-content>
@@ -156,6 +153,7 @@ export default {
   },
   data() {
     return {
+      currentRoutePath: null,
       selectedIndex: 0,
       appPages: [
         {
@@ -165,6 +163,7 @@ export default {
           iosIcon: "ajo-pie",
           mdIcon: "ajo-pie",
         },
+
         {
           title: "Contributions",
           url: "/app/contributions",
@@ -206,7 +205,10 @@ export default {
   },
   methods: {
     isActive(page) {
-      return this.route.name === page.name;
+      return (
+        this.route.name === page.name ||
+        (this.route.name == "start" && page.name == "overview")
+      );
     },
   },
   created() {
@@ -216,6 +218,10 @@ export default {
         (page) => page.title.toLowerCase() === path.toLowerCase()
       );
     }
+  },
+
+  mounted() {
+    this.currentRoutePath = this.$route.path;
   },
 };
 </script>

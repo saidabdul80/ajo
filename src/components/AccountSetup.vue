@@ -24,7 +24,7 @@
           </span>
           <span
             :class="[
-              'tw-text-xl ',
+              'tw-text-xl tw-text-left',
               item.isCompleted
                 ? 'tw-text-[#36454F] tw-line-through'
                 : ' tw-text-[#000000]',

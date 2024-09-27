@@ -213,3 +213,18 @@ ion-content {
 .p-radiobutton-checked .p-radiobutton-box .p-radiobutton-icon {
   transform: translateZ(0) scale(1) !important;
 }
+
+.p-select-label {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.p-datepicker-input {
+  border-radius: 16px !important;
+}
+
+.p-datepicker-input-icon-container {
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  margin-right: 0.45rem !important;
+}

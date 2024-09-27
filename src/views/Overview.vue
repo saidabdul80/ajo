@@ -1,11 +1,11 @@
 <template>
-  <div class="tw-mb-7">
-    <Notify
-      message="Verify your email address to explore Ajo by Cowris."
-      type="warning" />
-  </div>
-  <ion-content color="transparent" class="container">
-    <div class="xl:tw-grid xl:tw-grid-cols-6 tw-h-full tw-gap-8">
+  <DefaultLayout>
+    <div class="tw-mb-7">
+      <Notify
+        message="Verify your email address to explore Ajo by Cowris."
+        type="warning" />
+    </div>
+    <div class="xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
       <div
         class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full tw-pb-6 xl:tw-pb-0">
         <div
@@ -34,51 +34,37 @@
           title="Complete account setup"
           description="Finish setting up your account to fully enjoy Ajo by Cowris."
           :steps="steps" />
-        <div class="tw-bg-white tw-flex tw-flex-col tw-basis-full">
-          <div
-            class="tw-flex tw-justify-between tw-items-center tw-px-6 tw-py-4 tw-text-[#0F1419] tw-border-b">
-            <h4 class="tw-font-medium tw-text-xl">Ajo Groups</h4>
-            <span class="tw-font-bold tw-text-lg">See all</span>
-          </div>
-          <div
-            class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full">
-            <div>
-              <img src="/images/groups.svg" alt="icon" />
-            </div>
-            <h5 class="tw-text-2xl tw-text-[#0F1419] tw-font-medium tw-pb-2">
-              No Ajo group yet
-            </h5>
-            <p class="tw-max-w-[30ch] tw-text-center tw-text-[#333333]">
-              You will find the ajo groups you have joined here
-            </p>
-          </div>
-        </div>
+        <AjoGroupList />
       </div>
     </div>
-  </ion-content>
+  </DefaultLayout>
 </template>
 
 <script>
 import { ref } from "vue";
 import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
+import Header from "@/components/Header.vue";
 import Notify from "@/components/Notify.vue";
+import AjoGroupList from "@/components/AjoGroupList.vue";
 import WalletBalanceCard from "@/components/WalletBalanceCard.vue";
 import RecentTransactionTable from "@/components/RecentTransactionTable.vue";
+import DefaultLayout from "@/components/DefaultLayout.vue";
 import AccountSetup from "@/components/AccountSetup.vue";
 import PendingVerificationDialog from "@/components/Dialog/PendingVerificationDialog.vue";
-import { IonContent } from "@ionic/vue";
 
 export default {
   name: "Overview",
   components: {
-    IonContent,
+    DefaultLayout,
+    AjoGroupList,
     Notify,
     PButton,
     WalletBalanceCard,
     RecentTransactionTable,
     AccountSetup,
     PendingVerificationDialog,
+    Header,
   },
   data() {
     return {
@@ -165,9 +151,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  height: calc(100% - 92px);
-}
 .chart-card {
   width: 350px;
   padding: 20px;
