@@ -29,7 +29,8 @@
       <Button
         @click="$globals.to('/join')"
         size="small"
-        label="Join Ajo by Cowris" />
+        label="Join Ajo by Cowris"
+        :is-full-width="false" />
     </div>
   </div>
 </template>
