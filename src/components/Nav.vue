@@ -5,7 +5,7 @@
         color="dark"
         slot="start"
         class="tw-px-[22px] tw-py-[0px] tw-hidden md:tw-block">
-        <img width="100%" src="@/assets/images/logo-name.svg" />
+        <img width="80%" src="@/assets/images/logo-name.svg" />
       </ion-label>
       <div slot="secondary" class="tw-ms-[10%] tw-hidden md:tw-block">
         <a

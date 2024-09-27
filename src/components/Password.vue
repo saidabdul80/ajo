@@ -2,7 +2,7 @@
   <Password
     :placeholder="placeholder"
     :disabled="disabled"
-    class="tw-h-14 md:tw-h-16 !tw-text-base"
+    class="tw-h-[48px] !tw-text-sm"
     v-model="internalValue">
     <template #header>
       <div class="font-semibold text-xm mb-4">Pick a password</div>

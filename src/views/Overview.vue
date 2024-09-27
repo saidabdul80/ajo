@@ -5,7 +5,8 @@
         message="Verify your email address to explore Ajo by Cowris."
         type="warning" />
     </div>
-    <div class="xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
+    <div
+      class="tw-flex tw-flex-col-reverse xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
       <div
         class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full tw-pb-6 xl:tw-pb-0">
         <div

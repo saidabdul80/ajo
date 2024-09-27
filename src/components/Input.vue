@@ -55,7 +55,7 @@ export default {
     },
     size: {
       type: String,
-      default: "large",
+      default: "medium",
     },
   },
   computed: {
@@ -71,9 +71,8 @@ export default {
       return [
         this.class,
         {
-          "!tw-py-1 tw-h-[50px]": this.size === "small",
-          "!tw-py-3 !tw-text-base tw-h-[54px]": this.size === "medium", // Default padding for medium
-          "!tw-py-3 md:!tw-py-5 !tw-text-lg tw-h-16": this.size === "large",
+          "!tw-py-1 tw-h-[42px]": this.size === "small",
+          "!tw-py-3 !tw-h-[48px]": this.size === "medium",
         },
       ];
     },
