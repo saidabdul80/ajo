@@ -22,7 +22,10 @@
       <ion-label slot="end">
         <div class="tw-hidden tw-gap-8 tw-pe-8 md:tw-flex tw-items-center">
           <p-button outlined label="Sign in" @click="$router.push('/signin')" />
-          <p-button label="Join Ajo by Cowris" @click="$router.push('/join')" />
+          <p-button
+            label="Join Ajo by Cowris"
+            @click="$router.push('/join')"
+            class="tw-shrink-0 !tw-w-fit" />
         </div>
         <div class="tw-p-4 tw-block md:tw-hidden">
           <PButton icon="pi pi-bars" @click="visibleRight = true" outlined />
