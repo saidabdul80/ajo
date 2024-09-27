@@ -24,8 +24,7 @@
             <PButton
               @click="$globals.to('/app/start')"
               icon="pi pi-plus"
-              label="Start new Ajo"
-              size="small" />
+              label="Start new Ajo" />
           </div>
         </div>
       </ion-label>

@@ -7,12 +7,8 @@
         Please, confirm your email address before verification. A code will be
         sent to confirm you own the email.
       </p>
-      <div class="tw-space-y-8">
-        <Input
-          class="tw-mb-5"
-          placeholder="Email Address"
-          v-model="form.email"
-          size="medium" />
+      <div class="tw-space-y-8 tw-pt-4">
+        <Input placeholder="Email Address" v-model="form.email" size="medium" />
         <Button
           label="Continue"
           size="medium"
@@ -28,7 +24,7 @@
         We sent a 6-digit code to {{ form.email }}. Please enter the code to
         verify your email address.
       </p>
-      <div class="tw-space-y-8">
+      <div class="tw-space-y-8 tw-pt-4">
         <Input
           placeholder="Your 6-digit code"
           v-model="form.otp"

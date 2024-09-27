@@ -7,16 +7,11 @@
         Add your phone number to complete account set-up. A code will be sent to
         confirm you own the phone number.
       </p>
-      <div class="tw-space-y-8">
-        <!-- <Input
-          class="tw-mb-5"
-          placeholder="Email Address" 
-          v-model="form.phone"
-          size="medium" /> -->
+      <div class="tw-space-y-8 tw-pt-4">
         <vue-tel-input
           :dropdownOptions="{ showSearchBox: true, showFlags: true }"
           :inputOptions="{ showDialCode: true }"
-          class="tw-w-full !tw-rounded-2xl tw-text-base tw-py-3 tw-h-[54px]">
+          class="tw-w-full !tw-rounded-2xl tw-text-base tw-py-3 tw-h-[48px]">
           <template #arrow-icon>
             <img src="/images/arrow-down.svg" alt="Custom Icon" />
           </template>
@@ -37,7 +32,7 @@
         code to {{ form.phone }}. Please enter the code to verify your phone
         number.
       </p>
-      <div class="tw-space-y-8">
+      <div class="tw-space-y-8 tw-pt-4">
         <Input
           placeholder="Your 6-digit code"
           v-model="form.otp"

@@ -69,10 +69,8 @@ export default {
         this.isFullWidth ? "tw-w-full" : "tw-w-fit",
         {
           "!tw-rounded-[12px]": this.rounded,
-          "!tw-px-[10px] tw-h-[30px] tw-text-sm": this.size === "xsmall",
-          "!tw-py-1 tw-h-[50px]": this.size === "small",
-          "!tw-py-3 !tw-text-base tw-h-[54px]": this.size === "medium",
-          "!tw-py-3 md:!tw-py-5 !tw-text-lg tw-h-16": this.size === "large",
+          "!tw-px-[10px] tw-h-[30px]": this.size === "xsmall",
+          "!tw-py-1 !tw-px-4 tw-h-[48px]": this.size === "medium",
         },
       ];
     },

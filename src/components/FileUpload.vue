@@ -27,17 +27,24 @@
       <p>{{ uploadDocumentName ? uploadDocumentName : "No file added" }}</p>
     </div>
 
-    <button
+    <Button
+      label="Remove"
       @click="clearUpload"
       v-if="uploadDocumentName"
-      class="tw-text-[#D80027]">
-      Remove
-    </button>
+      class="!tw-text-[#D80027]"
+      icon="pi pi-times"
+      iconPos="right"
+      :is-full-width="false"
+      color="link" />
   </div>
 </template>
 
 <script>
+import Button from "@/components/Button.vue";
 export default {
+  components: {
+    Button,
+  },
   data() {
     return {
       uploadDocumentName: "",
