@@ -4,28 +4,28 @@
 
 @font-face {
   font-family: "Aeonik";
-  src: url("/icons/Aeonik/AeonikTRIAL-Regular.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-RegularItalic.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-Bold.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-BoldItalic.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-Light.otf") format("opentype"),
-    url("/icons/Aeonik/AeonikTRIAL-LightItalic.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
+  src: url("/Aeonik/AeonikTRIAL-Regular.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-RegularItalic.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-Bold.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-BoldItalic.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-Light.otf") format("opentype"),
+    url("/Aeonik/AeonikTRIAL-LightItalic.otf") format("opentype");
+  font-weight: normal; /* Default weight */
+  font-style: normal; /* Default style */
 }
 
 @font-face {
   font-family: "Aeonik";
-  src: url("/icons/Aeonik/AeonikTRIAL-Bold.otf") format("opentype");
-  font-weight: bold;
-  font-style: normal;
+  src: url("/Aeonik/AeonikTRIAL-Bold.otf") format("opentype");
+  font-weight: bold; /* Bold weight */
+  font-style: normal; /* Regular style */
 }
 
 @font-face {
   font-family: "Aeonik";
-  src: url("/icons/Aeonik/AeonikTRIAL-Light.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
+  src: url("/Aeonik/AeonikTRIAL-Light.otf") format("opentype");
+  font-weight: 300; /* Light weight */
+  font-style: normal; /* Regular style */
 }
 
 /* src/global.scss */
@@ -178,8 +178,53 @@ input {
 }
 
 ion-content {
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 96px);
   --offset-top: 0px !important;
+}
+
+.p-checkbox {
+  height: 24px !important;
+  width: 24px !important;
+}
+.p-checkbox-box {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.p-checkbox-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.p-radiobutton-box {
+  background-color: white !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.p-radiobutton-icon {
+  font-size: initial !important;
+  background-color: black !important;
+  width: 0.8em !important;
+  height: 0.8em !important;
+  transform: translateZ(0) scale(0) !important;
+}
+
+.p-radiobutton-checked .p-radiobutton-box .p-radiobutton-icon {
+  transform: translateZ(0) scale(1) !important;
+}
+
+.p-select-label {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.p-datepicker-input {
+  border-radius: 16px !important;
+}
+
+.p-datepicker-input-icon-container {
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  margin-right: 0.45rem !important;
 }

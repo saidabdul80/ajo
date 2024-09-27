@@ -155,6 +155,12 @@ export default {
 };
 </script>
 <style scoped>
+ion-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 96px);
+}
+
 @keyframes move-up {
   0% {
     transform: translateY(-50%);

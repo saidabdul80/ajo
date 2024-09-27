@@ -1,15 +1,11 @@
 <template>
-   <p class="h1">{{ text }}</p>
+  <h1 class="tw-text-4xl md:tw-text-[40px]">{{ text }}</h1>
 </template>
 
 <script>
-    export default {
-        props: ['text'],     
-    }
+export default {
+  props: ["text"],
+};
 </script>
 
-<style scoped>
-.h1{
-    font-size: 28px;
-}
-</style>
+<style scoped></style>

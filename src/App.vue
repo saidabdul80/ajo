@@ -20,6 +20,8 @@
       </transition>
     </ion-content>
   </ion-app>
+
+  <CustomDialog />
 </template>
 
 <script lang="ts">
@@ -57,6 +59,7 @@ import {
 import { RouterView, useRoute } from "vue-router";
 import PInput from "@/components/Input.vue";
 import PButton from "@/components/Button.vue";
+import CustomDialog from "@/components/CustomDialog.vue";
 
 export default defineComponent({
   components: {
@@ -89,6 +92,7 @@ export default defineComponent({
     IonNote,
     IonRouterOutlet,
     IonSplitPane,
+    CustomDialog,
   },
   setup() {
     const route = useRoute();
@@ -97,6 +101,7 @@ export default defineComponent({
   data() {
     return {
       selectedIndex: 0,
+      slotContent: {},
       appPages: [
         {
           title: "Overview",
@@ -156,6 +161,7 @@ export default defineComponent({
       this.$globals.setPageTransition = "default";
     },
   },
+
   created() {
     const path = window.location.pathname.split("folder/")[1];
     if (path !== undefined) {
