@@ -8,7 +8,6 @@
     :loading="loading"
     @click="onClick"
     v-bind="$props"
-    class="!tw-px-4"
     :class="computedClass">
   </Button>
 </template>
@@ -52,22 +51,28 @@ export default {
     },
     size: {
       type: String,
-      default: "medium", // Default size is "medium"
+      default: "medium",
     },
     rounded: {
       type: Boolean,
-      default: true, // Default to rounded corners
+      default: true,
+    },
+    isFullWidth: {
+      type: Boolean,
+      default: true,
     },
   },
   computed: {
     computedClass() {
       return [
         this.class,
+        this.isFullWidth ? "tw-w-full" : "tw-w-fit",
         {
-          "!tw-rounded-[12px]": this.rounded, // Applies rounded corners if true
-          "!tw-py-2": this.size === "small",
-          "!tw-py-3 !tw-text-base": this.size === "medium", // Default padding for medium
-          "!tw-py-3 md:!tw-py-5 !tw-text-lg": this.size === "large",
+          "!tw-rounded-[12px]": this.rounded,
+          "!tw-px-[10px] tw-h-[30px] tw-text-sm": this.size === "xsmall",
+          "!tw-py-1 tw-h-[50px]": this.size === "small",
+          "!tw-py-3 !tw-text-base tw-h-[54px]": this.size === "medium",
+          "!tw-py-3 md:!tw-py-5 !tw-text-lg tw-h-16": this.size === "large",
         },
       ];
     },

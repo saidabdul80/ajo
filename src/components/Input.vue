@@ -1,13 +1,17 @@
 <template>
   <div class="tw-relative tw-flex tw-items-center tw-rounded-[12px]">
-    <span v-if="icon" class="tw-absolute tw-text-gray-300 tw-left-2">
+    <span v-if="icon" class="tw-absolute tw-text-gray-300 tw-left-5">
       <i :class="icon"></i>
     </span>
     <InputText
       v-model="internalValue"
       :placeholder="placeholder"
       :disabled="disabled"
-      class="tw-w-full tw-h-14 md:tw-h-16 !tw-px-5 !tw-rounded-2xl !tw-text-base"
+      :class="[
+        'tw-w-full !tw-rounded-2xl !tw-text-base',
+        { '!tw-pl-10': icon },
+        computedClass,
+      ]"
       :type="type" />
   </div>
 </template>
@@ -33,6 +37,10 @@ export default {
       type: String,
       default: "",
     },
+    class: {
+      type: String,
+      default: "",
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -47,7 +55,7 @@ export default {
     },
     size: {
       type: String,
-      default: "normal",
+      default: "large",
     },
   },
   computed: {
@@ -58,6 +66,16 @@ export default {
       set(val) {
         this.$emit("update:modelValue", val);
       },
+    },
+    computedClass() {
+      return [
+        this.class,
+        {
+          "!tw-py-1 tw-h-[50px]": this.size === "small",
+          "!tw-py-3 !tw-text-base tw-h-[54px]": this.size === "medium", // Default padding for medium
+          "!tw-py-3 md:!tw-py-5 !tw-text-lg tw-h-16": this.size === "large",
+        },
+      ];
     },
   },
 };
