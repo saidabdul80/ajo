@@ -1,5 +1,5 @@
 <template>
-  <div :class="[currentStep !== 'verified' && 'tw-pt-28']">
+  <div :class="[currentStep !== 'verified' && 'md:tw-pt-28']">
     <!-- Select Documnent -->
     <div v-if="currentStep === 'confirm'" class="tw-space-y-2 tw-pb-12">
       <h5 class="tw-text-[28px] tw-text-black">
@@ -69,9 +69,12 @@
     </div>
 
     <!-- Document Uploaded -->
-    <div v-if="currentStep === 'verified'" class="tw-pt-10 tw-text-center">
+    <div v-if="currentStep === 'verified'" class="md:tw-pt-10 tw-text-center">
       <div class="tw-space-y-2 tw-pb-12 tw-text-center">
-        <img src="/images/account-set.svg" alt="icon" class="tw-inline-block" />
+        <img
+          src="/images/account-set.svg"
+          alt="icon"
+          class="tw-inline-block tw-w-4/5 md:tw-w-full" />
         <h5 class="tw-text-[28px] tw-text-black">Account set-up completed!</h5>
         <p class="tw-text-[#586283] tw-max-w-[40ch]">
           You’re done! You have successfully completed all verifications. You

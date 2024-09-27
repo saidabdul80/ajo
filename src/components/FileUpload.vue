@@ -5,7 +5,7 @@
     @dragenter.prevent
     @drop="handleDrop"
     @click="triggerFileInput">
-    <div class="tw-text-center tw-space-y-2">
+    <div class="tw-text-center tw-space-y-2 tw-p-5">
       <img
         src="/images/cloud-add.svg"
         alt="upload icon"

@@ -3,7 +3,7 @@
     <div v-if="isDialogOpen" class="dialog-overlay" @click="closeDialog">
       <div
         :class="[
-          'custom-dialog tw-max-w-[480px] tw-w-full',
+          'custom-dialog tw-max-w-[480px] tw-w-4/5 md:tw-w-full',
           position,
           position === 'right' && 'slide-in',
         ]"

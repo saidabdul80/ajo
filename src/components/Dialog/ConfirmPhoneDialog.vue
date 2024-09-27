@@ -1,5 +1,5 @@
 <template>
-  <div :class="[currentStep !== 'verified' && 'tw-pt-28']">
+  <div :class="[currentStep !== 'verified' && 'md:tw-pt-28']">
     <!-- Confirm Phone -->
     <div v-if="currentStep === 'confirm'" class="tw-space-y-2 tw-pb-12">
       <h5 class="tw-text-[28px] tw-text-black">Enter phone number</h5>
@@ -56,12 +56,12 @@
     </div>
 
     <!-- Phone Verified -->
-    <div v-if="currentStep === 'verified'" class="tw-pt-10 tw-text-center">
+    <div v-if="currentStep === 'verified'" class="md:tw-pt-10 tw-text-center">
       <div class="tw-space-y-2 tw-pb-12 tw-text-center">
         <img
           src="/images/confirm-phone.svg"
           alt="icon"
-          class="tw-inline-block" />
+          class="tw-inline-block tw-w-4/5 md:tw-w-full" />
         <h5 class="tw-text-[28px] tw-text-black">Number verified!</h5>
         <p class="tw-text-[#586283] tw-max-w-[40ch]">
           You have successfully verified your phone number. You can proceed to
