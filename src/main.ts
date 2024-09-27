@@ -43,7 +43,29 @@ import { useGlobalsStore } from "@/stores/globals";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import { definePreset } from "@primevue/themes";
+import VueTelInput from "vue-tel-input";
+import "vue-tel-input/vue-tel-input.css";
+
 const pinia = createPinia();
+
+const MyPreset = definePreset(Aura, {
+  semantic: {
+    primary: {
+      50: "#ffffff",
+      100: "#e0e0e0",
+      200: "#bdbdbd",
+      300: "#9e9e9e",
+      400: "#757575",
+      500: "#424242",
+      600: "#212121",
+      700: "#000000",
+      800: "#000000",
+      900: "#000000",
+      950: "#000000",
+    },
+  },
+});
 
 const app = createApp(App).use(IonicVue).use(router);
 app.use(pinia);
@@ -54,13 +76,14 @@ const vuetify = createVuetify({
 app.use(vuetify);
 app.use(PrimeVue, {
   theme: {
-    preset: Aura,
+    preset: MyPreset,
     options: {
       darkModeSelector: "false",
       cssLayer: false,
     },
   },
 });
+app.use(VueTelInput);
 router.isReady().then(() => {
   app.mount("#app");
 });

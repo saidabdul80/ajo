@@ -1,102 +1,173 @@
 <template>
-  <div class="tw-mb-3">
-    <Notify message="Verify your email address to explore Ajo by Cowris." type="warning" />
+  <div class="tw-mb-7">
+    <Notify
+      message="Verify your email address to explore Ajo by Cowris."
+      type="warning" />
   </div>
-  <ion-content color="transparent">
-    <div class="tw-grid md:tw-grid-cols-6">
-      <div class="md:tw-col-span-4">
-        <div class="tw-grid tw-grid-cols-2 tw-gap-2">
-          <div class="tw-bg-black tw-relative tw-h-[180px]">
-            <div class="tw-flex tw-p-3 tw-items-center tw-justify-between tw-text-white tw-text-sm">
-              <span>Wallet Balance</span>
-              <PButton label="Fund Wallet" outlined="" size="small" />
-            </div>
-            <span class="tw-text-2xl tw-block tw-p-3 tw-text-white">N0.00</span>
-            <div class="tw-absolute -tw-bottom-[1px] tw-h-[144px] tw-w-full">
-              <apexchart height="100%" width="100%" type="area" :options="chartOptions" :series="series"></apexchart>
-            </div>
-          
-          </div>
+  <ion-content color="transparent" class="container">
+    <div class="xl:tw-grid xl:tw-grid-cols-6 tw-h-full tw-gap-8">
+      <div
+        class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full tw-pb-6 xl:tw-pb-0">
+        <div
+          class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
+          <WalletBalanceCard
+            title="Wallet Balance"
+            balance="&#x20A6; 5,000.00"
+            buttonLabel="Fund Wallet"
+            :chartOptions="chartOptions"
+            :series="series"
+            @button-click="handleButtonClick" />
+          <WalletBalanceCard
+            title="Total contribution"
+            balance="&#x20A6; 0.00"
+            :chartOptions="chartOptions"
+            :series="series"
+            background-color="#C1B2F2"
+            @button-click="handleButtonClick" />
+        </div>
+        <div class="tw-h-full">
+          <RecentTransactionTable />
         </div>
       </div>
-      <div class="md:tw-col-span-2">
-    
+      <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
+        <AccountSetup
+          title="Complete account setup"
+          description="Finish setting up your account to fully enjoy Ajo by Cowris."
+          :steps="steps" />
+        <div class="tw-bg-white tw-flex tw-flex-col tw-basis-full">
+          <div
+            class="tw-flex tw-justify-between tw-items-center tw-px-6 tw-py-4 tw-text-[#0F1419] tw-border-b">
+            <h4 class="tw-font-medium tw-text-xl">Ajo Groups</h4>
+            <span class="tw-font-bold tw-text-lg">See all</span>
+          </div>
+          <div
+            class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full">
+            <div>
+              <img src="/images/groups.svg" alt="icon" />
+            </div>
+            <h5 class="tw-text-2xl tw-text-[#0F1419] tw-font-medium tw-pb-2">
+              No Ajo group yet
+            </h5>
+            <p class="tw-max-w-[30ch] tw-text-center tw-text-[#333333]">
+              You will find the ajo groups you have joined here
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </ion-content>
 </template>
 
 <script>
-import PButton from '@/components/Button.vue';
-import Notify from '@/components/Notify.vue';
-import VueApexCharts from 'vue3-apexcharts';
-import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/vue';
+import { ref } from "vue";
+import eventBus from "@/eventBus";
+import PButton from "@/components/Button.vue";
+import Notify from "@/components/Notify.vue";
+import WalletBalanceCard from "@/components/WalletBalanceCard.vue";
+import RecentTransactionTable from "@/components/RecentTransactionTable.vue";
+import AccountSetup from "@/components/AccountSetup.vue";
+import PendingVerificationDialog from "@/components/Dialog/PendingVerificationDialog.vue";
+import { IonContent } from "@ionic/vue";
 
 export default {
+  name: "Overview",
   components: {
     IonContent,
     Notify,
     PButton,
-    apexchart: VueApexCharts,
+    WalletBalanceCard,
+    RecentTransactionTable,
+    AccountSetup,
+    PendingVerificationDialog,
   },
   data() {
     return {
-      series: [{
-        name: 'Balance',
-        data: [0, 1, 3, 2, 5, 4, 6]
-      }],
+      series: [
+        {
+          name: "Balance",
+          data: [0, 1, 3, 2, 7, 4, 6],
+        },
+      ],
       chartOptions: {
-        colors: ['#546E7A', '#E91E63'],
+        colors: ["#546E7A", "#E91E63"],
         chart: {
-          type: 'area',
-          height:  'auto',
-          background: 'transparent',
+          type: "area",
+          height: "auto",
+          background: "transparent",
           sparkline: {
-            enabled: true
-          }
+            enabled: true,
+          },
         },
         stroke: {
-          curve: 'smooth'
+          curve: "smooth",
         },
         fill: {
-          type: 'gradient',
-          colors: ['#ccc'],
- 
+          type: "gradient",
+          colors: ["#ccc"],
           gradient: {
             shadeIntensity: 1,
             opacityFrom: 0.4,
             opacityTo: 0.5,
-            stops: [0, 90, 100]
-          }
+            stops: [0, 90, 100],
+          },
         },
         xaxis: {
           labels: {
-            show: false
-          }
+            show: false,
+          },
         },
         yaxis: {
           labels: {
-            show: false
-          }
+            show: false,
+          },
         },
         tooltip: {
-          enabled: true
-        }
-      }
+          enabled: true,
+        },
+      },
+      steps: [
+        {
+          name: "signup",
+          text: "Sign up to Cowris",
+          isCompleted: true,
+        },
+        {
+          name: "email",
+          text: "Verify your email",
+          isCompleted: false,
+        },
+        {
+          name: "phone",
+          text: "Add and verify phone number",
+          isCompleted: false,
+        },
+        {
+          name: "document",
+          text: "Upload means of identification",
+          isCompleted: false,
+        },
+      ],
     };
-  }
+  },
+  methods: {
+    handleButtonClick() {
+      console.log("Button clicked");
+    },
+  },
+  mounted() {
+    eventBus.emit("open-dialog", {
+      default: PendingVerificationDialog,
+      title: "Pending verifications...",
+      position: "center",
+    });
+  },
 };
 </script>
 
 <style scoped>
+.container {
+  height: calc(100% - 92px);
+}
 .chart-card {
   width: 350px;
   padding: 20px;
@@ -105,9 +176,9 @@ export default {
   border-radius: 10px;
 }
 .chart-container {
-    width: 100%;
-    height: 100px;
-    margin: 0 auto;
+  width: 100%;
+  height: 100px;
+  margin: 0 auto;
 }
 
 .card-header {

@@ -181,11 +181,6 @@ ion-content {
   --offset-top: 0px !important;
 }
 
-.p-inputtext:enabled:focus {
-  border-color: black !important;
-  border-width: 2px !important;
-}
-
 .p-checkbox {
   height: 24px !important;
   width: 24px !important;
@@ -198,4 +193,23 @@ ion-content {
 .p-checkbox-icon {
   width: 16px !important;
   height: 16px !important;
+}
+
+.p-radiobutton-box {
+  background-color: white !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.p-radiobutton-icon {
+  font-size: initial !important;
+  background-color: black !important;
+  width: 0.8em !important;
+  height: 0.8em !important;
+  transform: translateZ(0) scale(0) !important;
+}
+
+.p-radiobutton-checked .p-radiobutton-box .p-radiobutton-icon {
+  transform: translateZ(0) scale(1) !important;
 }

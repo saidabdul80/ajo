@@ -26,25 +26,20 @@ const routes: Array<RouteRecordRaw> = [
 
   {
     path: "/newpassword",
-    name: "newpassword",
+    name: "NewPassword",
     component: () => import("@/views/CreatNewPassword.vue"),
   },
 
   {
-    path: "/Passwordset",
-    name: "Passwordset",
+    path: "/passwordset",
+    name: "PasswordSet",
     component: () => import("@/views/Passwordset.vue"),
   },
 
   {
     path: "/recovery",
-    name: "recovery",
+    name: "Recovery",
     component: () => import("@/views/Recovery.vue"),
-  },
-  {
-    path: "/password-set",
-    name: "password-set",
-    component: () => import("@/views/Passwordset.vue"),
   },
   {
     path: "/app",
