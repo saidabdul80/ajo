@@ -27,7 +27,6 @@
                 <Select
                   v-model="form.category"
                   :options="categories"
-                  optionLabel="name"
                   placeholder="Select a Category"
                   class="tw-w-full tw-h-[48px] !tw-rounded-2xl" />
 
@@ -63,7 +62,6 @@
                 <Select
                   v-model="form.contributionFrequency"
                   :options="contributionFrequencies"
-                  optionLabel="name"
                   placeholder="Select Contribution Frequency"
                   class="tw-w-full tw-h-[48px] !tw-rounded-2xl" />
 
@@ -246,7 +244,7 @@ export default {
   },
   data() {
     return {
-      currentStep: 2,
+      currentStep: 1,
       newEmail: "",
       searchString: "",
       filteredRules: [],
@@ -262,8 +260,26 @@ export default {
         selectedAjoRules: [],
         isPublic: null,
       },
-      categories: [{ name: "Group" }, { name: "Single" }],
-      contributionFrequencies: [{ name: "Monthly" }, { name: "Daily" }],
+      categories: [
+        "Personal savings",
+        "Education",
+        "Housing",
+        "Business",
+        "Health",
+        "Trips or vacations",
+        "Event",
+        "Charity",
+        "Investment",
+        "Emergency fund",
+      ],
+      contributionFrequencies: [
+        "Daily",
+        "Weekly",
+        "Monthly",
+        "Once in 2 months",
+        "3 months",
+        "6 months",
+      ],
       currentStepTitle: {
         1: { name: "Fill in Basic Details" },
         2: {
@@ -343,11 +359,12 @@ export default {
 
     nextStep() {
       if (this.isFormValid && this.currentStep <= 2) {
+        this.steps[this.currentStep - 1].isCompleted = true;
         this.currentStep += 1;
-      } else {
       }
 
       if (this.currentStep == 3 && this.isFormValid) {
+        this.steps[this.currentStep - 1].isCompleted = true;
         eventBus.emit("open-dialog", {
           default: AjoGroupDialog,
           title: "All done!",

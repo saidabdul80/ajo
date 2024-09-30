@@ -1,7 +1,7 @@
 <template>
   <div class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-9">
     <div class="tw-text-center">
-      <img class="tw-inline-block" src="/images/sand-clock.svg" alt="icon" />
+      <img class="tw-inline-block" src="/images/piggy-savings.svg" alt="icon" />
     </div>
     <div class="tw-text-center tw-max-w-[40ch] tw-space-y-2">
       <h4 class="tw-text-lg tw-text-black">
