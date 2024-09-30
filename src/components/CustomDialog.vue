@@ -12,7 +12,7 @@
           class="tw-flex tw-justify-between tw-items-center tw-p-5 tw-border-b">
           <h4
             v-if="title"
-            class="tw-text-xl tw-text-black tw-text-center tw-w-full">
+            class="tw-text-xl tw-text-black tw-text-left tw-w-full">
             {{ title }}
           </h4>
           <button @click="closeDialog" class="tw-ml-auto tw-flex-shrink-0">
@@ -20,7 +20,9 @@
           </button>
         </div>
         <div class="content tw-p-8">
-          <component :is="slotContent.default"></component>
+          <component
+            :is="slotContent.default"
+            v-bind="slotContent.props"></component>
         </div>
       </div>
     </div>
@@ -38,6 +40,7 @@ export default {
       isDialogOpen: false,
       slotContent: {
         default: null,
+        props: null,
       },
       position: "center",
       title: "",
@@ -57,6 +60,7 @@ export default {
       this.isDialogOpen = true;
       this.position = content.position || "center";
       this.title = content.title;
+      this.slotContent.props = content.props || {};
     },
     closeDialog() {
       this.isDialogOpen = false;

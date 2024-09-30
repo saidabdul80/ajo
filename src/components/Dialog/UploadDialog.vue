@@ -83,7 +83,7 @@
       </div>
       <div class="tw-space-y-8">
         <Button
-          @click="openDialogWithContent"
+          @click="closeDialog"
           label="Alright"
           size="medium"
           class="tw-w-full" />
@@ -93,10 +93,10 @@
 </template>
 
 <script>
+import eventBus from "@/eventBus";
 import Button from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import FileUpload from "@/components/FileUpload.vue";
-import eventBus from "@/eventBus";
 import RadioButton from "primevue/radiobutton";
 
 export default {
@@ -127,7 +127,7 @@ export default {
       this.currentStep = "verified";
     },
 
-    openDialogWithContent() {
+    closeDialog() {
       eventBus.emit("close-dialog");
     },
   },

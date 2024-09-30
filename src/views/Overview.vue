@@ -17,7 +17,7 @@
             buttonLabel="Fund Wallet"
             :chartOptions="chartOptions"
             :series="series"
-            @button-click="handleButtonClick" />
+            @button-click="handleFundWallet" />
           <WalletBalanceCard
             title="Total contribution"
             balance="&#x20A6; 0.00"
@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
 import Header from "@/components/Header.vue";
@@ -53,6 +52,7 @@ import RecentTransactionTable from "@/components/RecentTransactionTable.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import AccountSetup from "@/components/AccountSetup.vue";
 import PendingVerificationDialog from "@/components/Dialog/PendingVerificationDialog.vue";
+import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 
 export default {
   name: "Overview",
@@ -66,6 +66,7 @@ export default {
     AccountSetup,
     PendingVerificationDialog,
     Header,
+    FundWalletDialog,
   },
   data() {
     return {
@@ -137,8 +138,12 @@ export default {
     };
   },
   methods: {
-    handleButtonClick() {
-      console.log("Button clicked");
+    handleFundWallet() {
+      eventBus.emit("open-dialog", {
+        default: FundWalletDialog,
+        title: "Fund wallet",
+        position: "right",
+      });
     },
   },
   mounted() {

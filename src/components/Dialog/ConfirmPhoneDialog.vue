@@ -65,7 +65,7 @@
       </div>
       <div class="tw-space-y-8">
         <Button
-          @click="handlerUpload"
+          @click="openUploadVerification"
           label="Upload means of identification"
           size="medium"
           class="tw-w-full" />
@@ -84,11 +84,13 @@
 import Button from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import eventBus from "@/eventBus";
+import UploadDialog from "@/components/Dialog/UploadDialog.vue";
 
 export default {
   components: {
     Button,
     Input,
+    UploadDialog,
   },
 
   data() {
@@ -114,8 +116,11 @@ export default {
       eventBus.emit("close-dialog");
     },
 
-    handlerUpload() {
-      this.$emit("change-view", "upload");
+    openUploadVerification() {
+      eventBus.emit("open-dialog", {
+        default: UploadDialog,
+        position: "right",
+      });
     },
   },
 };
