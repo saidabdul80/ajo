@@ -18,15 +18,13 @@
         </div>
         <div class="tw-flex tw-gap-4 tw-w-full">
           <Select
-            v-model="selectedCity"
-            :options="cities"
-            optionLabel="name"
+            v-model="searchStatus"
+            :options="status"
             placeholder="Status: All"
             class="tw-w-full lg:tw-w-fit" />
           <Select
-            v-model="selectedCity"
-            :options="cities"
-            optionLabel="name"
+            v-model="searchFilter"
+            :options="filters"
             placeholder="Filter"
             class="tw-w-full lg:tw-w-fit" />
         </div>
@@ -60,14 +58,10 @@ export default {
   },
   data() {
     return {
-      selectedCity: null,
-      cities: [
-        { name: "New York", code: "NY" },
-        { name: "Rome", code: "RM" },
-        { name: "London", code: "LDN" },
-        { name: "Istanbul", code: "IST" },
-        { name: "Paris", code: "PRS" },
-      ],
+      searchStatus: null,
+      searchFilter: null,
+      status: ["All", "None"],
+      filters: ["Date", "Time"],
     };
   },
 };

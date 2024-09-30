@@ -1,7 +1,7 @@
 <template>
   <div
     :class="' tw-bg-yellow-400/35 tw-border tw-border-yellow-500'"
-    class="tw-w-full tw-py-2 tw-px-3 tw-flex tw-justify-between tw-h-16">
+    class="tw-w-full tw-py-2 tw-px-3 tw-flex tw-justify-between tw-h-16 tw-items-center">
     <div class="tw-flex tw-items-center tw-gap-2 tw-text-base">
       <img
         :src="warning"

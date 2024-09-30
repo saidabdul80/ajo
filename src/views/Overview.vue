@@ -3,7 +3,14 @@
     <div class="tw-mb-7">
       <Notify
         message="Verify your email address to explore Ajo by Cowris."
-        type="warning" />
+        type="warning">
+        <template #end>
+          <PButton
+            label="verify email"
+            size="small"
+            @click="verifyEmailDialog" />
+        </template>
+      </Notify>
     </div>
     <div
       class="tw-flex tw-flex-col-reverse xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
@@ -53,6 +60,7 @@ import DefaultLayout from "@/components/DefaultLayout.vue";
 import AccountSetup from "@/components/AccountSetup.vue";
 import PendingVerificationDialog from "@/components/Dialog/PendingVerificationDialog.vue";
 import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
+import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
 
 export default {
   name: "Overview",
@@ -67,6 +75,7 @@ export default {
     PendingVerificationDialog,
     Header,
     FundWalletDialog,
+    ConfirmEmailDialog,
   },
   data() {
     return {
@@ -138,6 +147,13 @@ export default {
     };
   },
   methods: {
+    verifyEmailDialog() {
+      eventBus.emit("open-dialog", {
+        default: ConfirmEmailDialog,
+        position: "right",
+      });
+    },
+
     handleFundWallet() {
       eventBus.emit("open-dialog", {
         default: FundWalletDialog,
