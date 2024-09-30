@@ -91,12 +91,12 @@
                   <Input
                     placeholder="Enter email address of participant"
                     v-model="newEmail"
-                    class="!tw-pr-28 !tw-h-16" />
+                    class="!tw-pr-28" />
                   <div
                     class="tw-inline-block tw-absolute tw-top-1/2 -tw-translate-y-1/2 tw-right-2">
                     <Button
                       label="Add email"
-                      size="medium"
+                      size="small"
                       @click="addEmail"
                       :is-full-width="false"
                       :disabled="!isValidEmail(newEmail)" />
@@ -118,7 +118,7 @@
                       </div>
                       <Button
                         label="Remove"
-                        @click="removeEmail(index)"
+                        @click="removeEmail(email)"
                         class="!tw-text-[#D80027]"
                         icon="pi pi-times"
                         iconPos="right"
@@ -128,22 +128,71 @@
                   </ul>
                 </div>
 
-                <div
-                  v-if="participantsEmail.length"
-                  class="tw-inline-flex tw-gap-3 tw-bg-[#FFF7E9] tw-p-5 tw-rounded-lg tw-border tw-border-[#E0C9A5]">
-                  <i class="pi pi-exclamation-circle tw-text-[#F0B149]"></i>
-                  <div class="tw-text-sm">
-                    <p
-                      class="tw-text-black tw-font-semibold tw-leading-none tw-pb-2">
-                      Withdrawal slot is as numbered - You can drag to adjust.
-                    </p>
-                    <p class="tw-text-[#333333]">
-                      Participants will be be able to withdraw their
-                      contribution in the order of number assigned above. You
-                      can adjust the order by dragging the numbers to fit what
-                      you want.
-                    </p>
+                <div v-if="participantsEmail.length">
+                  <div
+                    class="tw-inline-flex tw-gap-3 tw-bg-[#FFF7E9] tw-p-5 tw-rounded-lg tw-border tw-border-[#E0C9A5]">
+                    <i class="pi pi-exclamation-circle tw-text-[#F0B149]"></i>
+                    <div class="tw-text-sm">
+                      <p
+                        class="tw-text-black tw-font-semibold tw-leading-none tw-pb-2">
+                        Withdrawal slot is as numbered - You can drag to adjust.
+                      </p>
+                      <p class="tw-text-[#333333]">
+                        Participants will be be able to withdraw their
+                        contribution in the order of number assigned above. You
+                        can adjust the order by dragging the numbers to fit what
+                        you want.
+                      </p>
+                    </div>
                   </div>
+
+                  <div class="tw-inline-flex tw-items-center tw-gap-8 tw-pt-8">
+                    <p class="tw-text-lg tw-text-[#333333] tw-font-medium">
+                      Do you want to make this Ajo group public?
+                    </p>
+                    <div class="tw-flex tw-items-center tw-gap-3">
+                      <RadioButton
+                        v-model="form.isPublic"
+                        inputId="ajoState1"
+                        name="No"
+                        value="No" />
+                      <label for="ajoState1" class="ml-2">No</label>
+                      <RadioButton
+                        v-model="form.isPublic"
+                        inputId="ajoState2"
+                        name="No"
+                        value="Yes" />
+                      <label for="ajoState2" class="ml-2">Yes</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="currentStep === 3">
+              <div class="tw-space-y-8 tw-pt-8">
+                <Input
+                  size="medium"
+                  placeholder="Search for rule"
+                  icon="pi pi-search"
+                  v-model="searchString"
+                  @input="searchRules" />
+
+                <div v-if="filteredRules.length > 0" class="tw-space-y-6">
+                  <p
+                    v-for="(rule, index) in filteredRules"
+                    :key="index"
+                    class="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-text-gray-500">
+                    <Checkbox
+                      v-model="form.selectedAjoRules"
+                      :value="rule"
+                      :inputId="`rule${index}`" />
+                    <label
+                      :for="`rule${index}`"
+                      class="ml-2 tw-text-base tw-text-black">
+                      {{ rule }}
+                    </label>
+                  </p>
                 </div>
               </div>
             </div>
@@ -151,7 +200,6 @@
               <Button
                 label="Continue"
                 @click="nextStep"
-                size="large"
                 class="tw-w-full tw-mt-auto"
                 :disabled="!isFormValid" />
             </div>
@@ -170,6 +218,7 @@
 </template>
 
 <script>
+import eventBus from "@/eventBus";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import AjoGroupList from "@/components/AjoGroupList.vue";
 import Input from "@/components/Input.vue";
@@ -177,6 +226,9 @@ import Select from "primevue/select";
 import DatePicker from "primevue/datepicker";
 import Button from "@/components/Button.vue";
 import AccountSetup from "@/components/AccountSetup.vue";
+import Checkbox from "@/components/Checkbox.vue";
+import AjoGroupDialog from "@/components/Dialog/AjoGroupDialog.vue";
+import RadioButton from "primevue/radiobutton";
 
 export default {
   name: "StartAjo",
@@ -188,11 +240,17 @@ export default {
     DatePicker,
     Button,
     AccountSetup,
+    Checkbox,
+    AjoGroupDialog,
+    RadioButton,
   },
   data() {
     return {
       currentStep: 2,
       newEmail: "",
+      searchString: "",
+      filteredRules: [],
+
       form: {
         startDate: "",
         groupName: "",
@@ -201,6 +259,8 @@ export default {
         totalAmount: "",
         amountPerPerson: "",
         contributionFrequency: "",
+        selectedAjoRules: [],
+        isPublic: null,
       },
       categories: [{ name: "Group" }, { name: "Single" }],
       contributionFrequencies: [{ name: "Monthly" }, { name: "Daily" }],
@@ -216,9 +276,7 @@ export default {
           subTitle: "You can search and select from the rules below.",
         },
       },
-
       participantsEmail: [],
-
       steps: [
         {
           text: "Fill in basic details",
@@ -232,6 +290,11 @@ export default {
           text: "Set rules",
           isCompleted: false,
         },
+      ],
+      rules: [
+        "No member can quit when contribution starts.",
+        "All members must make their contributions by set date, with no exceptions.",
+        "Early withdrawal is not allowed.",
       ],
     };
   },
@@ -253,10 +316,8 @@ export default {
       if (this.currentStep == 2) {
         return this.participantsEmail.length > 0;
       }
-    },
 
-    continueButtonLabel() {
-      return this.isFormValid ? "Continue" : "Fill in all fields";
+      return this.form.selectedAjoRules.length > 0;
     },
   },
 
@@ -270,8 +331,10 @@ export default {
         this.newEmail = "";
       }
     },
-    removeEmail(index) {
-      this.participantsEmail.splice(index, 1);
+    removeEmail(email) {
+      this.participantsEmail = this.participantsEmail.filter(
+        (item) => item !== email
+      );
     },
     isValidEmail(email) {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -279,8 +342,33 @@ export default {
     },
 
     nextStep() {
-      console.log(this.currentStep);
+      if (this.isFormValid && this.currentStep <= 2) {
+        this.currentStep += 1;
+      } else {
+      }
+
+      if (this.currentStep == 3 && this.isFormValid) {
+        eventBus.emit("open-dialog", {
+          default: AjoGroupDialog,
+          title: "All done!",
+          position: "center",
+          props: {
+            title: this.form.groupName,
+          },
+        });
+      }
     },
+
+    searchRules() {
+      const lowerSearch = this.searchString.toLowerCase();
+      this.filteredRules = this.rules.filter((rule) =>
+        rule.toLowerCase().startsWith(lowerSearch)
+      );
+    },
+  },
+
+  mounted() {
+    this.filteredRules = this.rules;
   },
 };
 </script>

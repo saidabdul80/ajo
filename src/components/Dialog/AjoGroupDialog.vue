@@ -5,38 +5,38 @@
     </div>
     <div class="tw-text-center tw-max-w-[40ch] tw-space-y-2">
       <h4 class="tw-text-lg tw-text-black">
-        Complete account set-up to start Ajo
+        The {{ title }} group has been created!
       </h4>
       <p class="tw-text-[#333333]">
-        Hi Rhoda, you cannot start Ajo yet as you have not verified your email
-        address and phone number.
+        Your Ajo group has been successfully created. Invites has been sent to
+        the emails of other participants and you will be notified when
+        aparticipant accepts your invite.
       </p>
     </div>
     <Button
-      @click="openDialogWithContent"
-      label="Complete account set-up"
+      @click="closeDialog"
+      label="Alright!"
       size="medium"
       class="tw-w-full" />
   </div>
 </template>
 
 <script>
-import Button from "@/components/Button.vue";
 import eventBus from "@/eventBus";
-import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
+import Button from "@/components/Button.vue";
 
 export default {
   components: {
     Button,
-    ConfirmEmailDialog,
+  },
+
+  props: {
+    title: String,
   },
 
   methods: {
-    openDialogWithContent() {
-      eventBus.emit("open-dialog", {
-        default: ConfirmEmailDialog,
-        position: "right",
-      });
+    closeDialog() {
+      eventBus.emit("close-dialog");
     },
   },
 };

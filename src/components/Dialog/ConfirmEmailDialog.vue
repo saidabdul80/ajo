@@ -56,7 +56,11 @@
         </p>
       </div>
       <div class="tw-space-y-8">
-        <Button label="Verify phone number" size="medium" class="tw-w-full" />
+        <Button
+          @click="openPhoneVerification"
+          label="Verify phone number"
+          size="medium"
+          class="tw-w-full" />
         <Button
           @click="openDialogWithContent"
           label="I’ll do it later."
@@ -72,10 +76,12 @@
 import Button from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import eventBus from "@/eventBus";
+import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
 
 export default {
   components: {
     Button,
+    ConfirmPhoneDialog,
     Input,
   },
 
@@ -100,6 +106,13 @@ export default {
 
     openDialogWithContent() {
       eventBus.emit("close-dialog");
+    },
+
+    openPhoneVerification() {
+      eventBus.emit("open-dialog", {
+        default: ConfirmPhoneDialog,
+        position: "right",
+      });
     },
   },
 };
