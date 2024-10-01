@@ -2,7 +2,7 @@
   <main class="tw-h-full tw-flex tw-flex-col">
     <Header :title="HeaderTitle" :description="HeaderDescription" />
     <ion-content color="light">
-      <div class="tw-px-5 tw-py-4 tw-h-full tw-flex tw-flex-col">
+      <div class="tw-px-5 tw-py-4 tw-flex tw-flex-col">
         <slot></slot>
       </div>
     </ion-content>
