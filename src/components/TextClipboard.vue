@@ -1,6 +1,8 @@
 <template>
   <div class="tw-flex tw-items-center tw-gap-2">
-    <p class="tw-tex-base tw-text-black tw-font-semibold">{{ text }}</p>
+    <p v-if="isText" class="tw-tex-base tw-text-black tw-font-semibold">
+      {{ text }}
+    </p>
 
     <button @click="copyToClipboard" v-if="!copySuccess" class="tw-w-8 tw-h-8">
       <img src="/images/copy.svg" class="tw-inline-block" alt="copy" />
@@ -27,6 +29,11 @@ export default {
     text: {
       type: String,
       require: true,
+    },
+
+    isText: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {

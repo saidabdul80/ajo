@@ -40,11 +40,13 @@
                     class="tw-inline-block tw-absolute tw-z-40 tw-w-4 tw-h-3 tw-top-1/2 -tw-translate-y-1/2 tw-left-3"
                     src="/images/naira.svg"
                     alt="currency-icon" />
-                  <Input
+
+                  <InputNumber
+                    ref="inputField"
+                    v-model="form.totalAmount"
                     placeholder="Total Contribution Amount"
-                    size="medium"
-                    icon=" "
-                    v-model="form.totalAmount" />
+                    inputId="integeronly"
+                    fluid />
                 </div>
 
                 <div class="tw-relative">
@@ -52,11 +54,12 @@
                     class="tw-inline-block tw-absolute tw-z-40 tw-w-3 tw-h-3 tw-top-1/2 -tw-translate-y-1/2 tw-left-3"
                     src="/images/naira.svg"
                     alt="currency-icon" />
-                  <Input
+
+                  <InputNumber
+                    v-model="form.amountPerPerson"
                     placeholder="Contribution Per Person"
-                    size="medium"
-                    icon=" "
-                    v-model="form.amountPerPerson" />
+                    inputId="integeronly"
+                    fluid />
                 </div>
 
                 <Select
@@ -227,6 +230,7 @@ import AccountSetup from "@/components/AccountSetup.vue";
 import Checkbox from "@/components/Checkbox.vue";
 import AjoGroupDialog from "@/components/Dialog/AjoGroupDialog.vue";
 import RadioButton from "primevue/radiobutton";
+import InputNumber from "primevue/inputnumber";
 
 export default {
   name: "StartAjo",
@@ -241,6 +245,7 @@ export default {
     Checkbox,
     AjoGroupDialog,
     RadioButton,
+    InputNumber,
   },
   data() {
     return {
@@ -386,8 +391,16 @@ export default {
 
   mounted() {
     this.filteredRules = this.rules;
+    const numberInputs = document.querySelectorAll(".p-inputnumber-input");
+    numberInputs.forEach((input) => (input.value = ""));
   },
 };
 </script>
 
-<style></style>
+<style>
+.p-inputnumber-input {
+  height: 48px !important;
+  padding-left: 30px !important;
+  border-radius: 16px !important;
+}
+</style>
