@@ -62,7 +62,7 @@
           size="medium"
           class="tw-w-full" />
         <Button
-          @click="openDialogWithContent"
+          @click="closeDialog"
           label="I’ll do it later."
           size="medium"
           class="tw-w-full !tw-text-black"
@@ -104,7 +104,7 @@ export default {
       this.currentStep = "verified";
     },
 
-    openDialogWithContent() {
+    closeDialog() {
       eventBus.emit("close-dialog");
     },
 
