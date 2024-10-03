@@ -1,20 +1,21 @@
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '../stores/auth'
 import ls from '@/stores/ls'
-import { useGlobalsStore } from '@/stores/globals'
-import { useNotificationStore } from '@/stores/notification'
+import { useGlobalsStore } from '../stores/globals'
+import { useNotificationStore } from '../stores/notification'
 
 export const handleError = (err) => {
   const authStore = useAuthStore()
   const notificationStore = useNotificationStore()
   
   if (!err.response) {
-    window.dispatchEvent(new CustomEvent('offNetwork'));
+   // window.dispatchEvent(new CustomEvent('offNetwork'));
     notificationStore.showNotification({
       type: 'error',
       message:
         'Please check your internet connection or wait until servers are back online.',
     })
   } else {
+  
     if (
       err.response.data &&  (err.response.statusText === 'Unauthorized' ||
       err.response.data === ' Unauthorized.')

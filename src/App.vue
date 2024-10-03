@@ -20,11 +20,12 @@
       </transition>
     </ion-content>
   </ion-app>
-
+  <NotificationRoot />
   <CustomDialog />
 </template>
 
 <script lang="ts">
+import NotificationRoot from "@/components/notifications/NotificationRoot.vue";
 import {
   IonApp,
   IonContent,
@@ -63,6 +64,7 @@ import CustomDialog from "@/components/CustomDialog.vue";
 
 export default defineComponent({
   components: {
+    NotificationRoot,
     RouterView,
     PInput,
     PButton,
