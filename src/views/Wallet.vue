@@ -29,13 +29,16 @@ import DataTable from "@/components/Table/Table.vue"
                         { account: "Account 8", date: "2024-10-01", transactionId: "TXN8", transactionType: "Debit", amount: "$800.00", status: "Pending" },
                         { account: "Account 9", date: "2024-10-01", transactionId: "TXN9", transactionType: "Credit", amount: "$900.00", status: "Completed" },
                         { account: "Account 10", date: "2024-10-01", transactionId: "TXN10", transactionType: "Debit", amount: "$1000.00", status: "Pending" },
-                        // Add more dummy data as needed
                     ],
                     meta: {
                         current_page: 1,
                         from: 1,
                         last_page: 5,
                         path: "/transactions",
+                        links:{
+                            prev:null,
+                            next: "/transactions?page=2"
+                        },
                         per_page: 10,
                         to: 10,
                         total: 50
