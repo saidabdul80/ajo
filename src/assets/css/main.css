@@ -85,6 +85,11 @@ input {
   font-family: "Aeonik", sans-serif;
 }
 
+input,
+Select {
+  font-weight: 300;
+}
+
 .ajo-bell {
   width: 24px; /* Adjust the size as needed */
   height: 24px; /* Adjust the size as needed */
@@ -227,4 +232,10 @@ ion-content {
   transform: translateY(-50%) !important;
   margin: 0 !important;
   margin-right: 0.45rem !important;
+}
+
+.p-inputnumber-input {
+  height: 48px !important;
+  padding-left: 30px !important;
+  border-radius: 16px !important;
 }

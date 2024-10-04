@@ -28,7 +28,7 @@
                   v-model="form.category"
                   :options="categories"
                   placeholder="Select a Category"
-                  class="tw-w-full tw-h-[48px] !tw-rounded-2xl" />
+                  class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
                 <Input
                   placeholder="Goal of Contribution / Description"
@@ -66,7 +66,7 @@
                   v-model="form.contributionFrequency"
                   :options="contributionFrequencies"
                   placeholder="Select Contribution Frequency"
-                  class="tw-w-full tw-h-[48px] !tw-rounded-2xl" />
+                  class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
                 <DatePicker
                   v-model="form.startDate"
@@ -397,10 +397,4 @@ export default {
 };
 </script>
 
-<style>
-.p-inputnumber-input {
-  height: 48px !important;
-  padding-left: 30px !important;
-  border-radius: 16px !important;
-}
-</style>
+<style></style>

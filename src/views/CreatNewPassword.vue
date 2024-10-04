@@ -23,7 +23,11 @@
                 placeholder="Confirm password"
                 v-model="form.confirmmPassword" />
 
-              <Button label="Set password" size="large" class="tw-w-full" />
+              <Button
+                @click="$globals.to('/passwordset')"
+                label="Set password"
+                size="large"
+                class="tw-w-full" />
             </div>
           </div>
         </ion-content>

@@ -20,7 +20,11 @@
                 v-model="form.email" />
 
               <div class="tw-flex tw-flex-col tw-gap-4">
-                <Button label="Submit" size="large" class="tw-w-full" />
+                <Button
+                  @click="$globals.to('/newpassword')"
+                  label="Submit"
+                  size="large"
+                  class="tw-w-full" />
                 <Button
                   label="Resend code"
                   size="large"

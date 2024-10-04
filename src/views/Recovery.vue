@@ -19,7 +19,11 @@
                 placeholder="Email Address"
                 v-model="form.email" />
 
-              <Button label="Continue" size="large" class="tw-w-full" />
+              <Button
+                @click="$globals.to('/verify')"
+                label="Continue"
+                size="large"
+                class="tw-w-full" />
             </div>
           </div>
         </ion-content>
