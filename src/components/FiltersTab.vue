@@ -13,7 +13,7 @@
       </div>
 
       <Pills
-        :ButtonsTitle="['Newest', 'Oldest']"
+        :buttonsTitle="['Newest', 'Oldest']"
         @pill-selected="handlePillSelection" />
     </div>
   </div>
@@ -40,7 +40,6 @@
       :value="contributors"
       paginator
       :rows="3"
-      :rowsPerPageOptions="[5, 10, 20, 50]"
       tableStyle="min-width: 60rem">
       <Column field="name" header="Account Name">
         <template #body="slotProps">

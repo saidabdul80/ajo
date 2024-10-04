@@ -28,7 +28,7 @@
           @button-click="handleButtonClick" />
       </div>
 
-      <FiltersTab contentType="card" />
+      <FiltersTab contentType="table" />
     </div>
   </DefaultLayout>
 </template>

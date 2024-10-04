@@ -2,7 +2,7 @@
   <div
     class="tw-inline-flex tw-w-fit tw-items-center tw-h-[40px] tw-rounded-2xl tw-bg-[#E8EBEF] tw-overflow-hidden">
     <button
-      v-for="(title, idx) in ButtonsTitle"
+      v-for="(title, idx) in buttonsTitle"
       :key="title"
       :class="[
         'tw-px-3 tw-h-full tw-inline-flex tw-items-center tw-transition-all',
@@ -18,7 +18,7 @@
 export default {
   name: "Pills",
   props: {
-    ButtonsTitle: {
+    buttonsTitle: {
       type: Array,
       required: true,
     },
