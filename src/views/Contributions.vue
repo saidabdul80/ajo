@@ -28,15 +28,7 @@
           @button-click="handleButtonClick" />
       </div>
 
-      <div>
-        <div>
-          <h4>Your contributions</h4>
-          <div></div>
-        </div>
-        <div>
-          <AjoCard />
-        </div>
-      </div>
+      <FiltersTab contentType="card" />
     </div>
   </DefaultLayout>
 </template>
@@ -45,8 +37,10 @@
 import AjoCard from "@/components/AjoCard.vue";
 import Button from "@/components/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
+import FiltersTab from "@/components/FiltersTab.vue";
 import Notify from "@/components/Notify.vue";
 import WalletBalanceCard from "@/components/WalletBalanceCard.vue";
+
 export default {
   components: {
     DefaultLayout,
@@ -54,6 +48,7 @@ export default {
     Button,
     WalletBalanceCard,
     AjoCard,
+    FiltersTab,
   },
 
   data() {

@@ -1,20 +1,23 @@
 <template>
-  <div class="tw-max-w-full md:tw-max-w-[440px] tw-bg-white tw-p-6 tw-rounded">
+  <div
+    @click="$globals.to(`/contributions/${ajoId}`)"
+    class="tw-max-w-full tw-bg-white tw-p-6 tw-rounded tw-shrink-0 tw-cursor-pointer">
     <div class="tw-space-y-2">
       <div class="tw-flex tw-justify-between tw-items-center">
-        <p class="tw-text-[#C4C4C4]">BUSINESS</p>
+        <p class="tw-text-[#C4C4C4]">{{ ajoType }}</p>
         <img class="tw-inline-block" src="/images/cart.svg" alt="icon" />
       </div>
-      <h5 class="tw-font-medium tw-text-[22px]">NNPC Techies</h5>
+      <h5 class="tw-font-medium tw-text-[22px]">{{ ajoName }}</h5>
     </div>
 
     <div class="tw-py-5">
       <AvatarGroup>
-        <Avatar image="/images/avatar.png" size="large" shape="circle" />
-        <Avatar image="/images/avatar.png" size="large" shape="circle" />
-        <Avatar image="/images/avatar.png" size="large" shape="circle" />
-        <Avatar image="/images/avatar.png" size="large" shape="circle" />
-        <Avatar image="/images/avatar.png" size="large" shape="circle" />
+        <Avatar
+          v-for="(image, index) in images"
+          :key="index"
+          :image="image"
+          size="large"
+          shape="circle" />
       </AvatarGroup>
     </div>
 
@@ -22,22 +25,24 @@
       <div
         class="tw-flex tw-items-center tw-justify-between tw-text-base md:tw-text-lg tw-text-[#6A6A6A]">
         <p>
-          <span class="tw-text-black">₦8.5M contributed </span>
-          <span>of ₦12M</span>
+          <span class="tw-text-black"
+            >{{ formatNumber(ajoContributedAmount) }} contributed
+          </span>
+          <span>of {{ formatNumber(ajoTotalAmount) }}</span>
         </p>
-        <p>70.83%</p>
+        <p>{{ amountPercentage }} %</p>
       </div>
       <ProgressBar
-        :value="50"
+        :value="amountPercentage"
         style="height: 9px"
         :show-value="false"></ProgressBar>
       <div
         class="tw-flex tw-justify-between tw-items-center tw-text-sm tw-text-[#6A6A6A]">
         <p class="tw-inline-flex tw-item-center tw-gap-2">
           <img class="tw-inline-block" src="/images/clock.svg" alt="icon" />
-          <span class="">3 months left</span>
+          <span class="">{{ ajoTimeline }} left</span>
         </p>
-        <p>Last contribution 56m ago</p>
+        <p>Last contribution {{ ajoLastUpate }} ago</p>
       </div>
     </div>
   </div>
@@ -52,6 +57,77 @@ export default {
     ProgressBar,
     Avatar,
     AvatarGroup,
+  },
+
+  props: {
+    ajoId: {
+      type: String,
+      required: true,
+    },
+
+    ajoType: {
+      type: String,
+      required: true,
+    },
+
+    ajoName: {
+      type: String,
+      required: true,
+    },
+
+    ajoContributedAmount: {
+      type: Number,
+      required: true,
+      default: 8000,
+    },
+
+    ajoTotalAmount: {
+      type: Number,
+      required: true,
+      default: 12000,
+    },
+
+    ajoTimeline: {
+      type: String,
+      required: true,
+    },
+
+    ajoLastUpate: {
+      type: String,
+      required: true,
+    },
+
+    images: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  methods: {
+    formatNumber(value) {
+      if (value >= 1000000) {
+        return parseInt(value / 1000000) + "M";
+      } else if (value >= 1000) {
+        return parseInt(value / 1000) + "K";
+      } else {
+        return value.toString();
+      }
+    },
+
+    handleCardDetails(id) {
+      alert(id);
+    },
+  },
+
+  computed: {
+    amountPercentage() {
+      if (this.ajoTotalAmount === 0) {
+        return 0;
+      }
+      const percentage =
+        (this.ajoContributedAmount / this.ajoTotalAmount) * 100;
+      return percentage.toFixed(2);
+    },
   },
 };
 </script>

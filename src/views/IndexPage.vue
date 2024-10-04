@@ -205,10 +205,7 @@ export default {
   },
   methods: {
     isActive(page) {
-      return (
-        this.route.name === page.name ||
-        (this.route.name == "start" && page.name == "overview")
-      );
+      return this.route.name === page.name;
     },
   },
   created() {
