@@ -38,7 +38,7 @@
                   >Forgot password?</a
                 >
               </div>
-              <Button @click="login()" label="Sign in" size="large" class="tw-w-full" />
+              <Button :loading="authStore.loading" @click="authStore.login(form)" label="Sign in" size="large" class="tw-w-full" />
             </div>
           </div>
         </ion-content>
@@ -56,6 +56,7 @@ import Checkbox from "@/components/Checkbox.vue";
 import H1 from "@/components/H1.vue";
 import Button from "@/components/Button.vue";
 import {useAuthStore} from "@/stores/auth"
+import { mapState } from "pinia";
 export default {
   components: {
     IonContent,
@@ -66,10 +67,8 @@ export default {
     Checkbox,
     Button,
   },
-  methods: {
-    login() {
-        this.authStore.login(this.form)
-    }
+  computed: {
+    ...mapState(useAuthStore, ['loading'])
   },
   data() {
     return {

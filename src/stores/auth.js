@@ -5,12 +5,10 @@ import { useNotificationStore } from '@/stores/notification'
 import {useLocalStorage } from "@vueuse/core"
 import { useClient } from '@/stores/client'
 import router from '@/router'
-export const useAuthStore = (useWindow = false) => {
-    const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
-
-    return defineStoreFunc({
-        id: 'auth',
+import ls from '../services/ls'
+export const useAuthStore = defineStore("auth-store",{
         state: () => ({
+            user: useLocalStorage('user',{}),
             user: useLocalStorage('user',{}),
             status: '',
             loginData: {
@@ -22,11 +20,14 @@ export const useAuthStore = (useWindow = false) => {
                 idNumber: ''
             },
             loadingMFA: false,
+            loading:false,
             qrcode:null,
         }),
         actions: {
             async login(data) {
+                this.loading = true
                 const response = await useClient().http({ method: 'post', path: '/login', data })                
+                this.loading = false
                 if (response) {
                     const password = data.password;
                     this.handlePassed(response);
@@ -49,7 +50,7 @@ export const useAuthStore = (useWindow = false) => {
                 // return is_mfa;
             },
             handlePassed(response){
-                
+                ls.set('auth.token', response.access_token)
                 const allPermissions = []; // Extract permissions from roles
                 
                 // response.user.roles.forEach(role => {
@@ -137,5 +138,4 @@ export const useAuthStore = (useWindow = false) => {
             },
 
         },
-    })()
-}
+    })
