@@ -6,7 +6,10 @@
         type="overlay"
         class="lg:tw-w-[200px] tw-w-full">
         <ion-content>
-          <ion-list id="inbox-list" style="padding-top: 0px !important">
+          <ion-list
+            id="inbox-list"
+            style="padding-top: 0px !important"
+            class="tw-h-full tw-flex tw-flex-col">
             <ion-list-header
               ><img
                 width="68%"
@@ -37,13 +40,21 @@
                 </ion-label>
               </ion-item>
             </ion-menu-toggle>
-          </ion-list>
 
-          <ion-list id="labels-list">
-            <!-- Additional content can go here if needed -->
-            <div
-              class="md:tw-hidden tw-w-[80%] tw-h-[30vh] tw-mx-auto tw-flex tw-justify-center tw-place-items-center md:tw-grid-cols-3 tw-gap-5">
-              <p-button size="small" icon="pi pi-plus" label="Start new Ajo" />
+            <div class="tw-mt-auto tw-w-[80%] tw-mx-auto">
+              <!-- <div class="lg:tw-hidden tw-pb-8">
+                <p-button
+                  size="medium"
+                  icon="pi pi-plus"
+                  label="Start new Ajo" />
+              </div> -->
+              <p-button
+                size="medium"
+                class="!tw-bg-transparent !tw-text-[#D80027] !tw-border-none !tw-justify-start"
+                icon="pi pi-sign-out"
+                label="Logout"
+                :is-full-width="false"
+                @click="handleLogout" />
             </div>
           </ion-list>
         </ion-content>
@@ -102,6 +113,7 @@
 </template>
 
 <script lang="ts">
+import eventBus from "@/eventBus";
 import {
   IonPage,
   IonContent,
@@ -124,6 +136,7 @@ import {
 import { useRoute } from "vue-router";
 import PButton from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
+import LogoutDialog from "@/components/Dialog/LogoutDialog.vue";
 
 export default {
   components: {
@@ -146,6 +159,7 @@ export default {
     IonToolbar,
     PButton,
     Input,
+    LogoutDialog,
   },
   setup() {
     const route = useRoute();
@@ -205,10 +219,14 @@ export default {
   },
   methods: {
     isActive(page) {
-      return (
-        this.route.name === page.name ||
-        (this.route.name == "start" && page.name == "overview")
-      );
+      return this.route.name === page.name;
+    },
+
+    handleLogout() {
+      eventBus.emit("open-dialog", {
+        default: LogoutDialog,
+        position: "center",
+      });
     },
   },
   created() {

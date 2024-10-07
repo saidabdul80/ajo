@@ -75,6 +75,12 @@ const routes: Array<RouteRecordRaw> = [
          meta: { requiresAuth: true},
       },
       {
+        path: "/contributions/:id", // Dynamic route parameter for Ajo details
+        name: "AjoDetail",
+        component: () => import("@/views/ContributionDetails.vue"),
+        props: true, // Pass route params as props
+      },
+      {
         path: "wallet",
         name: "wallet",
         component: () => import("@/views/Wallet.vue"),

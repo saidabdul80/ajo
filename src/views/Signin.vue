@@ -33,7 +33,7 @@
                   >
                 </div>
                 <a
-                  @click="$globals.to('/recover-account')"
+                  @click="$globals.to('/recovery')"
                   class="tw-text-base tw-font-medium tw-cursor-pointer"
                   >Forgot password?</a
                 >
