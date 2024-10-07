@@ -28,5 +28,30 @@
         </p>
       </li>
     </ul>
+
+    <div class="tw-pt-5">
+      <Button @click="handleSwapSlot" label="Request to swap slot" />
+    </div>
   </div>
 </template>
+
+<script>
+import eventBus from "@/eventBus";
+import Button from "@/components/Button.vue";
+import SwapSlotDialog from "@/components/Dialog/SwapSlotDialog.vue";
+
+export default {
+  components: {
+    Button,
+  },
+
+  methods: {
+    handleSwapSlot() {
+      eventBus.emit("open-dialog", {
+        default: SwapSlotDialog,
+        position: "right",
+      });
+    },
+  },
+};
+</script>

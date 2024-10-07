@@ -26,9 +26,9 @@
         class="tw-flex tw-items-center tw-justify-between tw-text-base md:tw-text-lg tw-text-[#6A6A6A]">
         <p>
           <span class="tw-text-black"
-            >{{ formatNumber(ajoContributedAmount) }} contributed
+            >{{ globalStore.toCurrency(ajoContributedAmount) }} contributed
           </span>
-          <span>of {{ formatNumber(ajoTotalAmount) }}</span>
+          <span>of {{ globalStore.toCurrency(ajoTotalAmount) }}</span>
         </p>
         <p>{{ amountPercentage }} %</p>
       </div>
@@ -48,6 +48,7 @@
   </div>
 </template>
 <script>
+import { useGlobalsStore } from "@/stores/globals.js";
 import ProgressBar from "primevue/progressbar";
 import Avatar from "primevue/avatar";
 import AvatarGroup from "primevue/avatargroup";
@@ -57,6 +58,12 @@ export default {
     ProgressBar,
     Avatar,
     AvatarGroup,
+  },
+
+  data() {
+    return {
+      globalStore: useGlobalsStore(),
+    };
   },
 
   props: {
@@ -104,16 +111,6 @@ export default {
   },
 
   methods: {
-    formatNumber(value) {
-      if (value >= 1000000) {
-        return parseInt(value / 1000000) + "M";
-      } else if (value >= 1000) {
-        return parseInt(value / 1000) + "K";
-      } else {
-        return value.toString();
-      }
-    },
-
     handleCardDetails(id) {
       alert(id);
     },

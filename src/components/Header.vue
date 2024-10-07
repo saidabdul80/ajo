@@ -14,18 +14,20 @@
 
       <ion-label slot="end" v-if="!isValidLink">
         <div class="tw-hidden min-[992px]:tw-flex tw-items-center tw-gap-10">
-          <div class="xl:tw-w-[400px]">
-            <Input
-              size="medium"
-              placeholder="Search for group..."
-              icon="pi pi-search" />
-          </div>
-          <div class="tw-w-[170px] tw-shrink-0">
-            <PButton
-              @click="$globals.to('/app/start')"
-              icon="pi pi-plus"
-              label="Start new Ajo" />
-          </div>
+          <slot name="headerRightContent">
+            <div class="xl:tw-w-[400px]">
+              <Input
+                size="medium"
+                placeholder="Search for group..."
+                icon="pi pi-search" />
+            </div>
+            <div class="tw-w-[170px] tw-shrink-0">
+              <PButton
+                @click="handleStartAjo"
+                icon="pi pi-plus"
+                label="Start new Ajo" />
+            </div>
+          </slot>
         </div>
       </ion-label>
     </ion-toolbar>
@@ -33,11 +35,16 @@
 </template>
 
 <script>
+import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
+import PendingVerificationDialog from "./Dialog/PendingVerificationDialog.vue";
 
 export default {
   name: "Header",
+  components: {
+    PendingVerificationDialog,
+  },
   props: {
     title: {
       type: String,
@@ -56,6 +63,17 @@ export default {
   components: {
     PButton,
     Input,
+  },
+
+  methods: {
+    handleStartAjo() {
+      // TODO: If profile setup is completed
+      eventBus.emit("open-dialog", {
+        default: PendingVerificationDialog,
+        title: "Pending verifications...",
+        position: "center",
+      });
+    },
   },
 
   mounted() {

@@ -58,7 +58,6 @@ import WalletBalanceCard from "@/components/WalletBalanceCard.vue";
 import RecentTransactionTable from "@/components/RecentTransactionTable.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import AccountSetup from "@/components/AccountSetup.vue";
-import PendingVerificationDialog from "@/components/Dialog/PendingVerificationDialog.vue";
 import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
 
@@ -72,7 +71,6 @@ export default {
     WalletBalanceCard,
     RecentTransactionTable,
     AccountSetup,
-    PendingVerificationDialog,
     Header,
     FundWalletDialog,
     ConfirmEmailDialog,
@@ -161,13 +159,6 @@ export default {
         position: "right",
       });
     },
-  },
-  mounted() {
-    eventBus.emit("open-dialog", {
-      default: PendingVerificationDialog,
-      title: "Pending verifications...",
-      position: "center",
-    });
   },
 };
 </script>

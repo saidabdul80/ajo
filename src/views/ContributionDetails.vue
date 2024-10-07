@@ -1,5 +1,19 @@
 <template>
-  <DefaultLayout>
+  <DefaultLayout
+    HeaderTitle="NNPC Techies"
+    HeaderDescription="Starting on September 23, 2024">
+    <template #rightContent>
+      <div class="tw-flex tw-item-center tw-gap-2">
+        <Button
+          @click="handleContributionDialog"
+          label="Make Contribution"
+          class="tw-shrink-0 !tw-w-fit" />
+        <Button
+          label="Leave Ajo"
+          color="danger"
+          class="tw-shrink-0 !tw-w-fit" />
+      </div>
+    </template>
     <div class="tw-flex tw-flex-col-reverse xl:tw-grid tw-grid-cols-3 tw-gap-6">
       <div class="tw-col-span-2 tw-space-y-7">
         <div
@@ -64,7 +78,9 @@
             </ul>
           </div>
         </div>
-        <div>World</div>
+        <div>
+          <RecentTransactionTable title="Group activities" />
+        </div>
       </div>
       <div class="tw-col-span-1">
         <ParticipantsCard />
@@ -74,13 +90,35 @@
 </template>
 
 <script>
+import eventBus from "@/eventBus";
+import Button from "@/components/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import ParticipantsCard from "@/components/ParticipantsCard.vue";
+import RecentTransactionTable from "@/components/RecentTransactionTable.vue";
+import ContributionProcess from "@/components/Dialog/ContributionProcess.vue";
 
 export default {
   components: {
     DefaultLayout,
     ParticipantsCard,
+    RecentTransactionTable,
+    Button,
+    ContributionProcess,
+  },
+
+  data() {
+    return {
+      isMemeber: true,
+    };
+  },
+
+  methods: {
+    handleContributionDialog() {
+      eventBus.emit("open-dialog", {
+        default: ContributionProcess,
+        position: "right",
+      });
+    },
   },
 };
 </script>
