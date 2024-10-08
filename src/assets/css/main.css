@@ -87,7 +87,7 @@ input {
 
 input,
 Select {
-  font-weight: 300;
+  font-weight: 300 !important;
 }
 
 .ajo-bell {
@@ -238,4 +238,9 @@ ion-content {
   height: 48px !important;
   padding-left: 30px !important;
   border-radius: 16px !important;
+}
+
+.vti__dropdown.open,
+.vti__dropdown:hover {
+  background-color: transparent !important;
 }

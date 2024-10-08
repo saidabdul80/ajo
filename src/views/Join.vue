@@ -26,6 +26,14 @@
                 class="tw-mb-5"
                 placeholder="Email Address"
                 v-model="form.email" />
+              <vue-tel-input
+                :dropdownOptions="{ showSearchBox: true, showFlags: true }"
+                :inputOptions="{ showDialCode: true }"
+                class="tw-w-full !tw-rounded-2xl tw-text-base tw-py-3 tw-mb-5 tw-h-[48px]">
+                <template #arrow-icon>
+                  <img src="/images/arrow-down.svg" alt="Custom Icon" />
+                </template>
+              </vue-tel-input>
               <Password
                 class="tw-mb-8"
                 placeholder="Password"

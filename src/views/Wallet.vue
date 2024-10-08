@@ -31,6 +31,8 @@
       <div>
         <FiltersTab contentType="table" title="Wallet activities" />
       </div>
+
+      <ActionMenu />
     </div>
   </DefaultLayout>
 </template>
@@ -42,6 +44,7 @@ import DefaultLayout from "@/components/DefaultLayout.vue";
 import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 import FiltersTab from "@/components/FiltersTab.vue";
 import WithdrawalDialog from "@/components/Dialog/WithdrawalDialog.vue";
+import ActionMenu from "@/components/ActionMenu.vue";
 
 export default {
   components: {
@@ -50,6 +53,7 @@ export default {
     WithdrawalDialog,
     FundWalletDialog,
     Button,
+    ActionMenu,
   },
 
   data() {

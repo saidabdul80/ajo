@@ -67,7 +67,11 @@
             :severity="getSeverity(slotProps.data.status)" />
         </template>
       </Column>
-      <Column header=""></Column>
+      <Column field="" header=" ">
+        <template #body="slotProps">
+          <ActionMenu :withdrawalDetails="slotProps.data" />
+        </template>
+      </Column>
     </DataTable>
   </div>
 </template>
@@ -80,6 +84,7 @@ import Column from "primevue/column";
 import AjoCard from "./AjoCard.vue";
 import Tag from "primevue/tag";
 import Avatar from "primevue/avatar";
+import ActionMenu from "@/components/ActionMenu.vue";
 
 export default {
   components: {
@@ -90,6 +95,7 @@ export default {
     Column,
     Tag,
     Avatar,
+    ActionMenu,
   },
 
   props: {
