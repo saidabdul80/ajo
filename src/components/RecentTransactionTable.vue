@@ -98,7 +98,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Recent transactions",
+      default: "Recent activities",
     },
   },
   data() {

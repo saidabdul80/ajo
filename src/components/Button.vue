@@ -76,6 +76,7 @@ export default {
   },
   methods: {
     onClick(event) {
+      event.stopPropagation();
       this.$emit("click", event);
     },
   },

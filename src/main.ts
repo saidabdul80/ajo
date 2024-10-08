@@ -3,7 +3,7 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 
-window.baseUrl = import.meta.env.VITE_API_URL
+window.baseUrl = import.meta.env.VITE_API_URL;
 import PrimeVue from "primevue/config";
 import Aura from "@primevue/themes/aura";
 import { IonicVue } from "@ionic/vue";

@@ -3,7 +3,8 @@
     :placeholder="placeholder"
     :disabled="disabled"
     class="tw-h-[48px] !tw-text-sm"
-    v-model="internalValue">
+    v-model="internalValue"
+    toggleMask>
     <template #header>
       <div class="font-semibold text-xm mb-4">Pick a password</div>
     </template>
