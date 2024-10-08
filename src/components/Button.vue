@@ -1,13 +1,12 @@
 <template>
   <Button
     :label="label"
-    :icon="loading ? 'pi pi-spin pi-spinner' : icon"
     :outlined="outlined"
     :disabled="disabled"
     :severity="color"
-    :loading="loading"
     @click="onClick"
     v-bind="$props"
+    :size="size"
     :class="computedClass">
   </Button>
 </template>
