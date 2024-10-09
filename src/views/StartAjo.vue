@@ -92,24 +92,29 @@
                   <Input
                     placeholder="Enter email address of participant"
                     v-model="newEmail"
+                    @keydown.enter.prevent="addEmail"
                     class="!tw-pr-28" />
                   <div
                     class="tw-inline-block tw-absolute tw-top-1/2 -tw-translate-y-1/2 tw-right-2">
                     <Button
                       label="Add email"
                       size="small"
-                      @click="addEmail"
+                      @click.stop="addEmail"
                       :is-full-width="false"
                       :disabled="!isValidEmail(newEmail)" />
                   </div>
                 </div>
 
                 <div v-if="participantsEmail.length">
-                  <ul class="tw-list-disc">
+                  <ul class="tw-list-disc" @drop="onDrop($event)">
                     <li
                       v-for="(email, index) in participantsEmail"
                       :key="index"
-                      class="tw-flex tw-justify-between">
+                      class="tw-flex tw-justify-between"
+                      draggable="true"
+                      @dragstart="onDrag(email, index)"
+                      @drop="onDrop(index)"
+                      @dragover.prevent>
                       <div class="tw-inline-flex tw-items-center tw-gap-3">
                         <span
                           class="tw-flex tw-justify-center tw-items-center leading-none tw-w-8 tw-h-8 tw-rounded-full tw-text-white tw-text-xl tw-bg-[#36454F]"
@@ -253,6 +258,8 @@ export default {
       newEmail: "",
       searchString: "",
       filteredRules: [],
+      draggedItem: null,
+      draggedIndex: null,
 
       form: {
         startDate: "",
@@ -297,7 +304,7 @@ export default {
           subTitle: "You can search and select from the rules below.",
         },
       },
-      participantsEmail: [],
+      participantsEmail: ["ayodele@gmail.com", "rurh@gmail.com"],
       steps: [
         {
           text: "Fill in basic details",
@@ -335,7 +342,7 @@ export default {
       }
 
       if (this.currentStep == 2) {
-        return this.participantsEmail.length > 0;
+        return this.participantsEmail.length > 2;
       }
 
       return this.form.selectedAjoRules.length > 0;
@@ -386,6 +393,20 @@ export default {
       this.filteredRules = this.rules.filter((rule) =>
         rule.toLowerCase().startsWith(lowerSearch)
       );
+    },
+
+    onDrag(email, index) {
+      this.draggedItem = email;
+      this.draggedIndex = index;
+    },
+    onDrop(dropIndex) {
+      if (dropIndex !== this.draggedIndex && this.draggedIndex !== null) {
+        this.participantsEmail.splice(this.draggedIndex, 1);
+        this.participantsEmail.splice(dropIndex, 0, this.draggedItem);
+      }
+      // Reset drag state
+      this.draggedItem = null;
+      this.draggedIndex = null;
     },
   },
 
