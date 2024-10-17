@@ -127,6 +127,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) { 
     CheckLoggedIn();
     if(CheckAbility(globalStore, to.meta.ability)){
+      globalStore.bootstrap()
       next(); 
     }else{
       next({path:'/404'})
