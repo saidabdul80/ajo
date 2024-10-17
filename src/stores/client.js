@@ -1,8 +1,8 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import axios from "axios";
-import { handleError } from '../helpers/error-handling';
-import ls from "../services/ls"
+import { handleError } from "../helpers/error-handling";
+import ls from "../services/ls";
 import { useGlobalsStore } from "./globals";
 
 export const useClient = defineStore("client", () => {
@@ -11,12 +11,16 @@ export const useClient = defineStore("client", () => {
   // Function to generate a unique key based on request config
   function generateRequestKey(config) {
     const method = config.method.toLowerCase();
-    const url = config.fullPath ? config.path : window.baseUrl + config.path.replace('//', '/');
-    const dataString = config.data ? JSON.stringify(config.data) : '';
+    const url = config.fullPath
+      ? config.path
+      : window.baseUrl + config.path.replace("//", "/");
+    const dataString = config.data ? JSON.stringify(config.data) : "";
     return `${method}:${url}:${dataString}`; // Unique key for each request
   }
 
-  async function http(config = { method: 'get', path: '', data: {}, fullPath: false }) {
+  async function http(
+    config = { method: "get", path: "", data: {}, fullPath: false }
+  ) {
     const requestKey = generateRequestKey(config);
 
     // Prevent duplicate requests for the same key
@@ -26,16 +30,16 @@ export const useClient = defineStore("client", () => {
     }
 
     const token = ls.get("auth.token");
-    let url = window.baseUrl + config?.path.replace('//', '/');
+    let url = window.baseUrl + config?.path.replace("//", "/");
     if (config?.fullPath) {
       url = config?.path;
     }
-    if (config.method.toLowerCase() === 'get' && config?.data != undefined) {
+    if (config.method.toLowerCase() === "get" && config?.data != undefined) {
       const urlParams = new URLSearchParams(config.data).toString();
       if (config.fullPath) {
-        url += '&' + urlParams;
+        url += "&" + urlParams;
       } else {
-        url += '?' + urlParams;
+        url += "?" + urlParams;
       }
     }
 
@@ -44,7 +48,7 @@ export const useClient = defineStore("client", () => {
     };
 
     if (config?.data instanceof FormData) {
-      headers['Content-Type'] = 'multipart/form-data';
+      headers["Content-Type"] = "multipart/form-data";
     }
 
     // Add request to ongoingRequests map
@@ -56,7 +60,7 @@ export const useClient = defineStore("client", () => {
         url: url,
         data: config?.data,
         headers: headers,
-        responseType: config?.responseType
+        responseType: config?.responseType,
       });
 
       useGlobalsStore().nameRules = ref({});
@@ -72,7 +76,8 @@ export const useClient = defineStore("client", () => {
       if (error?.response?.status === 401) {
         const route = window.currentRoute;
         if (route.meta.requiresAuth) {
-          let userRootPath = window.currentRoute.matched[0]?.path?.replace('/', '') || '';
+          let userRootPath =
+            window.currentRoute.matched[0]?.path?.replace("/", "") || "";
           useGlobalsStore().logout(userRootPath);
         }
       }
@@ -81,7 +86,7 @@ export const useClient = defineStore("client", () => {
       } else {
         useGlobalsStore().isOnlineStatus = true;
       }
-      console.log(error);
+
       handleError(error);
       return false;
     } finally {

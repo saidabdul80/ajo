@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
-import {useGlobalsStore} from "@/stores/globals"
+import { useGlobalsStore } from "@/stores/globals";
 
 import CheckLoggedIn from "@/middleware/authorized";
 import CheckAbility from "@/middleware/checkAbility";
@@ -9,48 +9,48 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     component: () => import("@/views/Home.vue"),
-     meta: { requiresAuth: false},
+    meta: { requiresAuth: false },
   },
 
   {
     path: "/join",
     name: "join",
     component: () => import("@/views/Join.vue"),
-     meta: { requiresAuth: false},
+    meta: { requiresAuth: false },
   },
   {
     path: "/signin",
     name: "signin",
     component: () => import("@/views/Signin.vue"),
-     meta: { requiresAuth: false},
+    meta: { requiresAuth: false },
   },
 
   {
     path: "/verify",
     name: "Verify",
     component: () => import("@/views/VerifyEmail.vue"),
-     meta: { requiresAuth: false},
+    meta: { requiresAuth: false },
   },
 
   {
     path: "/newpassword",
     name: "NewPassword",
     component: () => import("@/views/CreatNewPassword.vue"),
-     meta: { requiresAuth: false},
+    meta: { requiresAuth: false },
   },
 
   {
     path: "/passwordset",
     name: "PasswordSet",
     component: () => import("@/views/Passwordset.vue"),
-     meta: { requiresAuth: false},
+    meta: { requiresAuth: false },
   },
 
   {
     path: "/recovery",
     name: "Recovery",
     component: () => import("@/views/Recovery.vue"),
-     meta: { requiresAuth: false},
+    meta: { requiresAuth: false },
   },
   {
     path: "/app",
@@ -60,19 +60,19 @@ const routes: Array<RouteRecordRaw> = [
         path: "overview",
         name: "overview",
         component: () => import("@/views/Overview.vue"),
-         meta: { requiresAuth: true},
+        meta: { requiresAuth: true },
       },
       {
         path: "start",
         name: "start",
         component: () => import("@/views/StartAjo.vue"),
-         meta: { requiresAuth: true},
+        meta: { requiresAuth: true },
       },
       {
         path: "contributions",
         name: "contributions",
         component: () => import("@/views/Contributions.vue"),
-         meta: { requiresAuth: true},
+        meta: { requiresAuth: true },
       },
       {
         path: "/contributions/:id", // Dynamic route parameter for Ajo details
@@ -84,32 +84,32 @@ const routes: Array<RouteRecordRaw> = [
         path: "wallet",
         name: "wallet",
         component: () => import("@/views/Wallet.vue"),
-         meta: { requiresAuth: true},
+        meta: { requiresAuth: true },
       },
       {
         path: "notifications",
         name: "notifications",
         component: () => import("@/views/Notifications.vue"),
-         meta: { requiresAuth: true},
+        meta: { requiresAuth: true },
       },
       {
         path: "settings",
         name: "settings",
         component: () => import("@/views/Settings.vue"),
-         meta: { requiresAuth: true},
+        meta: { requiresAuth: true },
       },
       {
         path: "support",
         name: "support",
         component: () => import("@/views/Support.vue"),
-         meta: { requiresAuth: true},
+        meta: { requiresAuth: true },
       },
     ],
   },
   {
     path: "/:pathMatch(.*)*",
-    name: 'ErrorView',
-    component: () => import('@/components/Error.vue'),
+    name: "ErrorView",
+    component: () => import("@/components/Error.vue"),
   },
 ];
 
@@ -118,29 +118,27 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to, from, next) => {  
-  // window.currentRoute = to;  
-  // window.previousRoute = from;  
-  const globalStore = useGlobalsStore();   
-  AlreadyLogedIn(to)
-               
-  if (to.meta.requiresAuth) { 
+router.beforeEach(async (to, from, next) => {
+  // window.currentRoute = to;
+  // window.previousRoute = from;
+  const globalStore = useGlobalsStore();
+  AlreadyLogedIn(to);
+
+  if (to.meta.requiresAuth) {
     CheckLoggedIn();
-    if(CheckAbility(globalStore, to.meta.ability)){
-      next(); 
-    }else{
-      next({path:'/404'})
+    if (CheckAbility(globalStore, to.meta.ability)) {
+      next();
+    } else {
+      next({ path: "/404" });
     }
 
-    try{      
-      const res = await globalStore.bootstrap(false);                
-    }catch (error) {}    
-    
+    try {
+      const res = await globalStore.bootstrap(false);
+    } catch (error) {}
   } else {
-    globalStore.bootstrap(true, true);   
+    globalStore.bootstrap(true, true);
     next(); // Proceed to the next navigation step
   }
-})
-
+});
 
 export default router;

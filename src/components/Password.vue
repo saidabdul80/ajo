@@ -4,6 +4,7 @@
     :disabled="disabled"
     class="tw-h-[48px] !tw-text-sm"
     v-model="internalValue"
+    :invalid="invalid"
     toggleMask>
     <template #header>
       <div class="font-semibold text-xm mb-4">Pick a password</div>
@@ -22,11 +23,13 @@
 
 <script>
 import Password from "primevue/password";
+import Divider from "primevue/divider";
 
 export default {
   name: "CustomInput",
   components: {
     Password,
+    Divider,
   },
   props: {
     modelValue: {
@@ -56,6 +59,10 @@ export default {
     size: {
       type: String,
       default: "normal",
+    },
+    invalid: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

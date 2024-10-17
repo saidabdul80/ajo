@@ -20,6 +20,7 @@
                 class="tw-mb-5"
                 placeholder="Email Address"
                 v-model="form.email" />
+
               <Password
                 class="tw-mb-8"
                 placeholder="Password"
@@ -38,7 +39,11 @@
                   >Forgot password?</a
                 >
               </div>
-              <Button :loading="authStore.loading" @click="authStore.login(form)" label="Sign in" size="large" class="tw-w-full" />
+              <Button
+                :loading="authStore.loading"
+                @click="authStore.login(form)"
+                label="Sign in"
+                :disabled="authStore.loading" />
             </div>
           </div>
         </ion-content>
@@ -55,7 +60,7 @@ import Password from "@/components/Password.vue";
 import Checkbox from "@/components/Checkbox.vue";
 import H1 from "@/components/H1.vue";
 import Button from "@/components/Button.vue";
-import {useAuthStore} from "@/stores/auth"
+import { useAuthStore } from "@/stores/auth";
 import { mapState } from "pinia";
 export default {
   components: {
@@ -68,7 +73,7 @@ export default {
     Button,
   },
   computed: {
-    ...mapState(useAuthStore, ['loading'])
+    ...mapState(useAuthStore, ["loading"]),
   },
   data() {
     return {
@@ -77,7 +82,7 @@ export default {
         password: "",
         accept: false,
       },
-      authStore: useAuthStore()
+      authStore: useAuthStore(),
     };
   },
 };
