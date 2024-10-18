@@ -18,8 +18,12 @@
                 <label for="fName" class="tw-text-sm tw-text-[#586283]"
                   >First name</label
                 >
-                <Input id="fName" aria-describedby="fName-help" />
+                <Input
+                  id="fName"
+                  aria-describedby="fName-help"
+                  v-model="user.full_name" />
               </div>
+
               <div class="tw-flex tw-flex-col tw-gap-2">
                 <label for="mail" class="tw-text-sm tw-text-[#586283]"
                   >Email Address</label
@@ -27,7 +31,8 @@
                 <Input
                   id="mail"
                   aria-describedby="mail-help"
-                  :disabled="true" />
+                  :disabled="true"
+                  v-model="user.email" />
               </div>
               <div class="tw-flex tw-flex-col tw-gap-2 tw-relative">
                 <label for="password" class="tw-text-sm tw-text-[#586283]"
@@ -38,7 +43,8 @@
                   aria-describedby="password-help"
                   :disabled="true"
                   class="!tw-bg-transparent tw-pr-[70px]"
-                  type="password" />
+                  type="password"
+                  v-model="user.password" />
 
                 <button
                   class="tw-absolute tw-top-[55%] tw-right-4 tw-text-sm"
@@ -52,13 +58,19 @@
                 <label for="lName" class="tw-text-sm tw-text-[#586283]"
                   >Last name</label
                 >
-                <Input id="lName" aria-describedby="lName-help" />
+                <Input
+                  id="lName"
+                  aria-describedby="lName-help"
+                  v-model="user.full_name" />
               </div>
               <div class="tw-flex tw-flex-col tw-gap-2">
                 <label for="phone" class="tw-text-sm tw-text-[#586283]"
                   >Phone Number</label
                 >
-                <Input id="phone" aria-describedby="fName-help" />
+                <Input
+                  id="phone"
+                  aria-describedby="fName-help"
+                  v-model="user.phone_number" />
               </div>
             </div>
           </div>
@@ -144,6 +156,8 @@ import ChangePasswordDialog from "@/components/Dialog/ChangePasswordDialog.vue";
 import Select from "primevue/select";
 import ToggleSwitch from "primevue/toggleswitch";
 
+import { useAuthStore } from "@/stores/auth.js";
+
 export default {
   components: {
     DefaultLayout,
@@ -161,6 +175,7 @@ export default {
 
   data() {
     return {
+      user: useAuthStore().user,
       form: {
         selectedBank: null,
         acctName: null,
@@ -193,6 +208,10 @@ export default {
           model: false,
         },
       ],
+
+      userDetails: {
+        firstName: "Emmanuel",
+      },
     };
   },
 
