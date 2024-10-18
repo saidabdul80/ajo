@@ -2,9 +2,7 @@
   <Button
     :label="label"
     :outlined="outlined"
-    :disabled="disabled"
     :severity="color"
-    @click="onClick"
     v-bind="$props"
     :size="size"
     :class="computedClass">
@@ -72,12 +70,6 @@ export default {
           "!tw-py-1 !tw-px-4 tw-h-[48px]": this.size === "medium",
         },
       ];
-    },
-  },
-  methods: {
-    onClick(event) {
-      event.stopPropagation();
-      this.$emit("click", event);
     },
   },
 };

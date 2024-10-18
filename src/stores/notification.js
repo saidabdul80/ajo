@@ -1,30 +1,28 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useNotificationStore = (useWindow = false) => {
-  const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
+export const useNotificationStore = defineStore({
+  id: "notification",
 
-  return defineStoreFunc({
-    id: 'notification',
+  state: () => ({
+    active: false,
+    autoHide: true,
+    notifications: [],
+  }),
 
-    state: () => ({
-      active: false,
-      autoHide: true,
-      notifications: [],
-    }),
+  actions: {
+    // Action to show a new notification
+    showNotification(notification) {
+      this.notifications.push({
+        ...notification,
+        id: (Math.random().toString(36) + Date.now().toString(36)).substr(2), // Unique ID for notification
+      });
+    },
 
-    actions: {
-      showNotification(notification) {
-        this.notifications.push({
-          ...notification,
-          id: (Math.random().toString(36) + Date.now().toString(36)).substr(2),
-        })
-      },
-
-      hideNotification(data) {
-        this.notifications = this.notifications.filter((notification) => {
-          return notification.id != data.id
-        })
-      }
-    }
-  })()
-}
+    // Action to hide a notification by its ID
+    hideNotification(notificationToRemove) {
+      this.notifications = this.notifications.filter((notification) => {
+        return notification.id !== notificationToRemove.id;
+      });
+    },
+  },
+});

@@ -1,18 +1,16 @@
 <template>
-  <div class="tw-relative tw-flex tw-items-center tw-rounded-[12px]">
+  <div class="tw-relative tw-flex tw-flex-col tw-rounded-[12px]">
     <span v-if="icon" class="tw-absolute tw-text-gray-300 tw-left-5">
       <i :class="icon"></i>
     </span>
     <InputText
       v-model="internalValue"
-      :placeholder="placeholder"
-      :disabled="disabled"
+      v-bind="$props"
       :class="[
         'tw-w-full !tw-rounded-2xl !tw-text-base',
         { '!tw-pl-10': icon },
         computedClass,
-      ]"
-      :type="type" />
+      ]" />
   </div>
 </template>
 
@@ -33,10 +31,7 @@ export default {
       type: String,
       default: "",
     },
-    label: {
-      type: String,
-      default: "",
-    },
+
     class: {
       type: String,
       default: "",
@@ -56,6 +51,10 @@ export default {
     size: {
       type: String,
       default: "medium",
+    },
+    invalid: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

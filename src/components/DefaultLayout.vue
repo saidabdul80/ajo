@@ -1,6 +1,6 @@
 <template>
   <main class="tw-h-full tw-flex tw-flex-col">
-    <Header :title="HeaderTitle" :description="HeaderDescription">
+    <Header :title="computedHeaderTitle" :description="HeaderDescription">
       <template #headerRightContent>
         <slot name="rightContent"></slot>
       </template>
@@ -14,13 +14,13 @@
 </template>
 <script>
 import Header from "@/components/Header.vue";
+import { useAuthStore } from "@/stores/auth.js";
 
 export default {
   name: "DefaultLayout",
   props: {
     HeaderTitle: {
       type: String,
-      default: "Hello, Rhoda",
     },
     HeaderDescription: {
       type: String,
@@ -33,6 +33,22 @@ export default {
   },
   components: {
     Header,
+  },
+
+  data() {
+    return {
+      data: useAuthStore(),
+    };
+  },
+
+  computed: {
+    fullName() {
+      return this.data.user.full_name;
+    },
+
+    computedHeaderTitle() {
+      return this.HeaderTitle ? this.HeaderTitle : this.fullName;
+    },
   },
 };
 </script>

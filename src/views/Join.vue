@@ -59,7 +59,11 @@
                 </p>
               </div>
 
-              <Button label="Sign up" size="large" class="tw-w-full" />
+              <Button
+                label="Sign up"
+                size="large"
+                class="tw-w-full"
+                :disabled="!form.accept" />
             </div>
           </div>
         </ion-content>
