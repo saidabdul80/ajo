@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import { useAuthStore } from "@/stores/auth.js";
+
 import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
 import Header from "@/components/Header.vue";
@@ -77,6 +79,7 @@ export default {
   },
   data() {
     return {
+      user: useAuthStore().user,
       series: [
         {
           name: "Balance",
@@ -120,7 +123,11 @@ export default {
           enabled: true,
         },
       },
-      steps: [
+    };
+  },
+  computed: {
+    steps() {
+      return [
         {
           name: "signup",
           text: "Sign up to Cowris",
@@ -129,20 +136,20 @@ export default {
         {
           name: "email",
           text: "Verify your email",
-          isCompleted: false,
+          isCompleted: this.user.is_verified_email,
         },
         {
           name: "phone",
           text: "Add and verify phone number",
-          isCompleted: false,
+          isCompleted: this.user.is_verified_phone_number,
         },
         {
           name: "document",
           text: "Upload means of identification",
           isCompleted: false,
         },
-      ],
-    };
+      ];
+    },
   },
   methods: {
     verifyEmailDialog() {

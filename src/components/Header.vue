@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import PendingVerificationDialog from "./Dialog/PendingVerificationDialog.vue";

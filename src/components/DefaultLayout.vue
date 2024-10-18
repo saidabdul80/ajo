@@ -37,13 +37,13 @@ export default {
 
   data() {
     return {
-      data: useAuthStore(),
+      user: useAuthStore().user,
     };
   },
 
   computed: {
     fullName() {
-      return this.data.user.full_name;
+      return this.user.full_name;
     },
 
     computedHeaderTitle() {
