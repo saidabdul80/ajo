@@ -10,6 +10,7 @@ import { useUserStore } from "./user";
 import router from "../router";
 export const useGlobalsStore = defineStore('globals', {
   state: () => ({
+    notifications:[],
     pageTransition:{name:"router-view",mode:'in-out'},
     pageLoading: false,
     subPageName: null,
@@ -74,9 +75,7 @@ export const useGlobalsStore = defineStore('globals', {
         scrollBody.scrollToPoint(0, scrollTo.offsetTop, 1000);
     },
     // In useGlobalsStore
-    hasAbility(ability){
-      return this.abilities.includes(ability)
-    },
+ 
     setPrefix() {
       window.prefix = '';
       const authPrefix = ls.get('auth.prefix');
@@ -111,7 +110,7 @@ export const useGlobalsStore = defineStore('globals', {
           if (response?.user) { //if unAuth  
             ls.set('user', JSON.stringify(response?.user))
             const mainUserStore = useUserStore();
-            mainUserStore.user = userStore.currentUser                      
+            mainUserStore.user = response?.user                   
           }
          
           this.mdas = response.mdas
@@ -124,10 +123,10 @@ export const useGlobalsStore = defineStore('globals', {
       };
       // Handle the prefix correctly
       let prefix = '/bootstrap';
-      if (window.prefix && window.prefix !== 'null') {
-        prefix = `${window.prefix}/bootstrap`.replace('null/', '');
+      // if (window.prefix && window.prefix !== 'null') {
+      //   prefix = `${window.prefix}/bootstrap`.replace('null/', '');
         
-      }
+      // }
       if (unAuth) {
         prefix = prefix.replace('bootstrap', 'unauth_bootstrap');
       }

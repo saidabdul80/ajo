@@ -23,7 +23,7 @@
             </div>
             <div class="tw-w-[170px] tw-shrink-0">
               <PButton
-                @click="handleStartAjo"
+                @click="navigateToStartAjo"
                 icon="pi pi-plus"
                 label="Start new Ajo" />
             </div>
@@ -66,13 +66,14 @@ export default {
   },
 
   methods: {
-    handleStartAjo() {
+    navigateToStartAjo() {
+      this.$globals.to("start");
       // TODO: If profile setup is completed
-      eventBus.emit("open-dialog", {
-        default: PendingVerificationDialog,
-        title: "Pending verifications...",
-        position: "center",
-      });
+      // eventBus.emit("open-dialog", {
+      //   default: PendingVerificationDialog,
+      //   title: "Pending verifications...",
+      //   position: "center",
+      // });
     },
   },
 

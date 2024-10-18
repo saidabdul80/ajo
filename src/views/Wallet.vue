@@ -31,8 +31,6 @@
       <div>
         <FiltersTab contentType="table" title="Wallet activities" />
       </div>
-
-      <ActionMenu />
     </div>
   </DefaultLayout>
 </template>
