@@ -1,40 +1,45 @@
 <template>
   <div
-    class="tw-bg-white tw-overflow-x-auto  tw-border-[#e6eaee] tw-rounded-[5px]">
+    class="tw-bg-white tw-overflow-x-auto tw-border-[#e6eaee] tw-rounded-[5px]">
     <div
       v-if="!loading"
       class="table-shadow-sm tw-rounded-[5px] tw-overflow-auto">
       <div
         class="tw-border-b-[1px] tw-border-gray-200 tw-text-md md:tw-text-lg tw-font-bold tw-flex tw-flex-col md:tw-flex-row tw-justify-between tw-p-5">
-        <div class="tw-font-bold tw-mb-3 md:tw-mb-0">{{pageTitle}}</div>
-        
+        <div class="tw-font-bold tw-mb-3 md:tw-mb-0">{{ pageTitle }}</div>
+
         <div class="tw-flex tw-flex-row">
-       
           <div
             class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-gap-1 tw-border tw-border-gray-200 md:tw-border-none tw-p-2 tw-rounded-md">
             <div class="tw-font-bold tw-text-sm">Status:</div>
             <select
               v-model="status"
               class="tw-text-sm focus:tw-ring-0 focus:tw-outline-none">
-              <option v-for="status in statuses" :key="status" :value="status">{{status}}</option>
+              <option v-for="status in statuses" :key="status" :value="status">
+                {{ status }}
+              </option>
             </select>
           </div>
           <div
             class="tw-inline-flex tw-rounded-md tw-shadow-sm md:tw-ml-2 tw-ml-auto">
             <button
-              class="tw-px-4 tw-py-2 tw-border  
-               tw-text-sm tw-rounded-l-md"
-                 @click="changeSorting('newest')"
-                 :class="sortOrder=='newest' ? 'tw-bg-black tw-text-white' : 'tw-bg-gray-200 tw-text-black'"
-                >
+              class="tw-px-4 tw-py-2 tw-border tw-text-sm tw-rounded-l-md"
+              @click="changeSorting('newest')"
+              :class="
+                sortOrder == 'newest'
+                  ? 'tw-bg-black tw-text-white'
+                  : 'tw-bg-gray-200 tw-text-black'
+              ">
               Newest
             </button>
             <button
-              class="tw-px-4 tw-py-2 tw-border tw-border-gray-300  tw-text-black tw-text-sm
-                tw-rounded-r-md"
-                @click="changeSorting('oldest')"
-                :class="sortOrder=='oldest' ? 'tw-bg-black tw-text-white' : 'tw-bg-gray-200 tw-text-black'"
-                >
+              class="tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-text-black tw-text-sm tw-rounded-r-md"
+              @click="changeSorting('oldest')"
+              :class="
+                sortOrder == 'oldest'
+                  ? 'tw-bg-black tw-text-white'
+                  : 'tw-bg-gray-200 tw-text-black'
+              ">
               Oldest
             </button>
           </div>
@@ -110,7 +115,6 @@
       </div>
       <div v-else class="tw-flex tw-bg-white tw-justify-center">
         <img
-          
           src="@/assets/notransaction.png"
           class="tw-w-[100px] md:tw-w-[200px]"
           alt="no transactions" />
@@ -121,7 +125,6 @@
     </div>
     <div class="tw-mt-5">
       <Pagination
-      
         :current-page="paginationData?.meta?.current_page"
         :total-pages="paginationData?.meta?.last_page"
         :rows-per-page="paginationData?.meta?.per_page"
@@ -140,21 +143,19 @@ import { useGlobalsStore } from "../../stores/globals";
 
 export default {
   props: {
-    pageTitle:{
+    pageTitle: {
       type: String,
-      default: 'Recent Transactions'
+      default: "Recent Transactions",
     },
-    statuses:{
+    statuses: {
       type: Array,
-      default: () => (['All', 'Pending', 'Successful']),
+      default: () => ["All", "Pending", "Successful"],
     },
     headers: {
       type: Array,
-      required: true,
     },
     paginationData: {
       type: Object,
-      required: true,
     },
     loading: {
       type: Boolean,
@@ -177,22 +178,22 @@ export default {
       selectAll: false,
       selectedRows: [],
       sortOrder: "newest",
-      globals:useGlobalsStore()
+      globals: useGlobalsStore(),
     };
   },
   components: {
     TableLoader,
     Pagination,
   },
-  watch:{
-    status(newVal){
-      this.globals.filters.status = newVal
+  watch: {
+    status(newVal) {
+      this.globals.filters.status = newVal;
     },
-    sortOrder(newVal){
-      if(newVal == 'newest'){
-        this.globals.sort = 'desc'
-      }else{
-        this.globals.sort = 'asc'
+    sortOrder(newVal) {
+      if (newVal == "newest") {
+        this.globals.sort = "desc";
+      } else {
+        this.globals.sort = "asc";
       }
     },
     selectAll(value) {
@@ -228,7 +229,7 @@ export default {
       this.rows = data;
       this.$emit("page-length", data);
     },
-    changeSorting(order) {  
+    changeSorting(order) {
       this.sortOrder = order;
     },
   },

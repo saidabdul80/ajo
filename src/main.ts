@@ -6,7 +6,15 @@ import router from "./router";
 window.baseUrl = import.meta.env.VITE_API_URL;
 import PrimeVue from "primevue/config";
 import Aura from "@primevue/themes/aura";
-import { IonicVue } from "@ionic/vue";
+import {
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonicVue,
+  IonLabel,
+  IonMenuButton,
+  IonToolbar,
+} from "@ionic/vue";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/vue/css/core.css";
 
@@ -69,6 +77,13 @@ const MyPreset = definePreset(Aura, {
 });
 
 const app = createApp(App).use(IonicVue).use(router);
+
+app.component("ion-buttons", IonButtons);
+app.component("ion-header", IonHeader);
+app.component("ion-toolbar", IonToolbar);
+app.component("ion-label", IonLabel);
+app.component("ion-menu-button", IonMenuButton);
+app.component("ion-content", IonContent);
 app.use(pinia);
 const vuetify = createVuetify({
   components,

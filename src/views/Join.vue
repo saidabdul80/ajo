@@ -5,23 +5,24 @@
         <ion-content color="white">
           <div
             class="!tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-12 md:tw-py-0">
-            <div class="md:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]">
+            <div class="lg:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]">
               <H1
                 class="md:tw-text-left tw-text-center"
                 text="Join Ajo by Cowris" />
               <span
-                class="md:tw-text-left tw-text-balance tw-text-center tw-text-lg tw-mb-8 tw-block tw-text-gray-500"
-                >Already have an account on Cowris?
+                class="md:tw-text-left tw-text-balance tw-text-center tw-text-lg tw-mb-8 tw-block tw-text-gray-500">
+                Already have an account on Cowris?
                 <a
                   @click="$globals.to('/signin')"
                   class="tw-underline tw-cursor-pointer tw-text-gray-800">
                   Sign in
-                </a></span
-              >
+                </a>
+              </span>
+
               <Input
                 class="tw-mb-5"
                 placeholder="Full Name"
-                v-model="form.fullName" />
+                v-model="form.full_name" />
               <Input
                 class="tw-mb-5"
                 placeholder="Email Address"
@@ -29,7 +30,8 @@
               <vue-tel-input
                 :dropdownOptions="{ showSearchBox: true, showFlags: true }"
                 :inputOptions="{ showDialCode: true }"
-                class="tw-w-full !tw-rounded-2xl tw-text-base tw-py-3 tw-mb-5 tw-h-[48px]">
+                class="tw-w-full !tw-rounded-2xl tw-text-base tw-py-3 tw-mb-5 tw-h-[48px]"
+                v-model="form.phone_number">
                 <template #arrow-icon>
                   <img src="/images/arrow-down.svg" alt="Custom Icon" />
                 </template>
@@ -61,9 +63,10 @@
 
               <Button
                 label="Sign up"
-                size="large"
                 class="tw-w-full"
-                :disabled="!form.accept" />
+                :disabled="!formIsValid || authStore.loading"
+                @click="submitForm"
+                :loading="authStore.loading" />
             </div>
           </div>
         </ion-content>
@@ -71,7 +74,6 @@
     </template1>
   </div>
 </template>
-
 <script>
 import { IonContent } from "@ionic/vue";
 import Template1 from "@/components/Template1.vue";
@@ -80,6 +82,8 @@ import Password from "@/components/Password.vue";
 import Checkbox from "@/components/Checkbox.vue";
 import H1 from "@/components/H1.vue";
 import Button from "@/components/Button.vue";
+import { useAuthStore } from "@/stores/auth.js";
+
 export default {
   components: {
     IonContent,
@@ -92,15 +96,35 @@ export default {
   },
   data() {
     return {
+      authStore: useAuthStore(),
       form: {
-        accept: false,
-        password: "",
+        full_name: "",
         email: "",
-        fullName: "",
+        phone_number: "",
+        password: "",
+        accept: false,
       },
+      formSubmitted: false,
     };
+  },
+  computed: {
+    formIsValid() {
+      return (
+        this.form.full_name &&
+        this.form.email &&
+        this.form.phone_number &&
+        this.form.password &&
+        this.form.accept
+      );
+    },
+  },
+  methods: {
+    submitForm() {
+      this.formSubmitted = true;
+      if (this.formIsValid) {
+        this.authStore.register(this.form);
+      }
+    },
   },
 };
 </script>
-
-<style></style>

@@ -12,7 +12,6 @@
             class="pi pi-search tw-absolute tw-top-2/4 -tw-translate-y-1/2 tw-left-4 tw-text-[#9C9FA8]"></i>
           <InputText
             type="text"
-            v-model="value"
             variant="filled"
             class="!tw-pl-10 tw-w-full lg:tw-w-fit !tw-bg-[#F1F3F6] !tw-text-[#9C9FA8]"
             placeholder="Search transactions" />
@@ -59,7 +58,7 @@
               <Avatar
                 :image="slotProps.data.image"
                 shape="circle"
-                class="!tw-h-10 !tw-w-10" />
+                class="!tw-h-10 !tw-w-10 tw-flex-shrink-0" />
               <p>{{ slotProps.data.name }}</p>
             </div>
           </template>

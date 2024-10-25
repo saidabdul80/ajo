@@ -35,12 +35,31 @@ export const useAuthStore = defineStore("auth-store", {
       if (response) {
         const password = data.password;
         this.handlePassed(response);
+
         const notificationStore = useNotificationStore();
         notificationStore.showNotification({
           type: "success",
           message: "Logged in successfully.",
         });
         router.push("/app/overview");
+      }
+    },
+    async register(data) {
+      this.loading = true;
+      const response = await useClient().http({
+        method: "post",
+        path: "/register",
+        data: { ...data, password_confirmation: data.password },
+      });
+      this.loading = false;
+
+      if (response) {
+        const notificationStore = useNotificationStore();
+        notificationStore.showNotification({
+          type: "success",
+          message: "Reigistration successfully.",
+        });
+        router.push("/join");
       }
     },
     requireMFA() {
@@ -68,7 +87,7 @@ export const useAuthStore = defineStore("auth-store", {
       // });
 
       //Ls.set('permissions', JSON.stringify(allPermissions));
-      this.user = response.user;
+
       this.loginData.username = "";
       this.loginData.password = "";
     },
@@ -89,7 +108,7 @@ export const useAuthStore = defineStore("auth-store", {
         data,
       });
       if (response) {
-        Ls.remove("oldpassword");
+        ls.remove("oldpassword");
         const notificationStore = useNotificationStore();
         notificationStore.showNotification({
           type: "success",
@@ -108,33 +127,23 @@ export const useAuthStore = defineStore("auth-store", {
       this.loadingMFA = false;
       if (response) {
         this.qrcode = response.qrCodeDataUrl;
-        Ls.set("mfa.qrcode", response.qrCodeDataUrl);
+        ls.set("mfa.qrcode", response.qrCodeDataUrl);
       }
     },
     async logout() {
       try {
-        const token = Ls.get("auth.user");
+        const token = ls.get("auth.token");
         if (token) {
           //useClient().http({method:'post',path:'/auth/logout',data:{},fullPath:false});
-          Ls.remove("auth.user");
-          Ls.remove("permissions");
+          ls.remove("auth.token");
+          ls.remove("user");
           const notificationStore = useNotificationStore();
           notificationStore.showNotification({
             type: "success",
             message: "Logged out successfully.",
           });
-          setTimeout(() => {
-            router.push("/");
-          }, 500);
-        } else {
-          // const notificationStore = useNotificationStore();
-          // notificationStore.showNotification({
-          //     type: 'error',
-          //     message: 'Already logout.',
-          // });
-          setTimeout(() => {
-            router.push("/");
-          }, 500);
+
+          router.push("/");
         }
       } catch (err) {
         const notificationStore = useNotificationStore();

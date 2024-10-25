@@ -14,7 +14,7 @@
 </template>
 <script>
 import Header from "@/components/Header.vue";
-import { useAuthStore } from "@/stores/auth.js";
+import { useUserStore } from "@/stores/user.js";
 
 export default {
   name: "DefaultLayout",
@@ -35,15 +35,9 @@ export default {
     Header,
   },
 
-  data() {
-    return {
-      user: useAuthStore().user,
-    };
-  },
-
   computed: {
     fullName() {
-      return this.user.full_name;
+      return useUserStore().user.full_name;
     },
 
     computedHeaderTitle() {

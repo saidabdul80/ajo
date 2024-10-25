@@ -10,7 +10,6 @@
         <h1 class="tw-m-0 md:!tw-text-[22px] !tw-text-[16px]">{{ title }}</h1>
         <p class="tw-text-xs tw-mt-1">{{ description }}</p>
       </ion-label>
-      <ion-title></ion-title>
 
       <ion-label slot="end" v-if="!isValidLink">
         <div class="tw-hidden min-[992px]:tw-flex tw-items-center tw-gap-10">
@@ -47,11 +46,9 @@ export default {
   props: {
     title: {
       type: String,
-      required: true,
     },
     description: {
       type: String,
-      required: true,
     },
   },
   data() {

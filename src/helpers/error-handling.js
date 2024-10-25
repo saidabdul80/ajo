@@ -35,9 +35,9 @@ export const handleError = (err) => {
     } else if (err.response.data.errors) {
       // Show a notification per error
       const errors = JSON.parse(JSON.stringify(err.response.data.errors));
-      if (err.response.data?.message) {
-        showError(err.response.data?.message);
-      }
+      // if (err.response.data?.message) {
+      //   showError(err.response.data?.message);
+      // }
       for (const i in errors) {
         showError(errors[i][0]);
       }

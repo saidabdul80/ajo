@@ -27,7 +27,6 @@ export default {
   props: {
     modelValue: {
       type: [String, Number],
-      required: true,
     },
     placeholder: {
       type: String,

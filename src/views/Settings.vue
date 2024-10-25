@@ -208,10 +208,6 @@ export default {
           model: false,
         },
       ],
-
-      userDetails: {
-        firstName: "Emmanuel",
-      },
     };
   },
 

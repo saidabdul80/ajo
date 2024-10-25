@@ -1,14 +1,12 @@
 <template>
   <DefaultLayout>
-    <div class="tw-mb-7">
-      <Notify
-        message="Verify your email address to explore Ajo by Cowris."
-        type="warning">
+    <div class="tw-mb-7" v-if="currentNotification">
+      <Notify :message="currentNotification.message" type="warning">
         <template #end>
           <PButton
-            label="verify email"
+            :label="currentNotification.label"
             size="small"
-            @click="verifyEmailDialog" />
+            @click="handleVerification(currentNotification.dialog)" />
         </template>
       </Notify>
     </div>
@@ -30,8 +28,7 @@
             balance="&#x20A6; 0.00"
             :chartOptions="chartOptions"
             :series="series"
-            background-color="#C1B2F2"
-            @button-click="handleButtonClick" />
+            background-color="#C1B2F2" />
         </div>
         <div class="tw-h-full">
           <RecentTransactionTable />
@@ -41,7 +38,7 @@
         <AccountSetup
           title="Complete account setup"
           description="Finish setting up your account to fully enjoy Ajo by Cowris."
-          :steps="steps" />
+          :steps="stepDefinitions" />
         <AjoGroupList />
       </div>
     </div>
@@ -49,7 +46,7 @@
 </template>
 
 <script>
-import { useAuthStore } from "@/stores/auth.js";
+import { useUserStore } from "@/stores/user.js";
 
 import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
@@ -62,6 +59,7 @@ import DefaultLayout from "@/components/DefaultLayout.vue";
 import AccountSetup from "@/components/AccountSetup.vue";
 import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
+import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
 
 export default {
   name: "Overview",
@@ -79,7 +77,7 @@ export default {
   },
   data() {
     return {
-      user: useAuthStore().user,
+      userStore: useUserStore().user,
       series: [
         {
           name: "Balance",
@@ -123,38 +121,67 @@ export default {
           enabled: true,
         },
       },
-    };
-  },
-  computed: {
-    steps() {
-      return [
+
+      stepDefinitions: [
         {
           name: "signup",
           text: "Sign up to Cowris",
           isCompleted: true,
+          isClickable: false,
         },
         {
           name: "email",
           text: "Verify your email",
-          isCompleted: this.user.is_verified_email,
+          isCompleted: useUserStore.is_verified_email,
+          isClickable: !useUserStore.is_verified_email,
         },
         {
           name: "phone",
           text: "Add and verify phone number",
-          isCompleted: this.user.is_verified_phone_number,
+          isCompleted: useUserStore.is_verified_phone_number,
+          isClickable: !useUserStore.is_verified_phone_number,
         },
         {
           name: "document",
           text: "Upload means of identification",
           isCompleted: false,
+          isClickable: false,
         },
-      ];
+      ],
+
+      notifications: [
+        {
+          condition: () => !this.userStore.is_verified_email,
+          message: "Verify your email address to explore Ajo by Cowris.",
+          label: "Verify Email",
+          dialog: ConfirmEmailDialog,
+        },
+        {
+          condition: () => !this.userStore.is_verified_phone_number,
+          message: "Verify your phone number to explore Ajo by Cowris.",
+          label: "Verify Phone",
+          dialog: ConfirmPhoneDialog,
+        },
+        {
+          condition: () => !this.userStore.has_uploaded_document,
+          message: "Upload your document to explore Ajo by Cowris.",
+          label: "Upload Document",
+          dialog: "",
+        },
+      ],
+    };
+  },
+  computed: {
+    currentNotification() {
+      return this.notifications.find((notification) =>
+        notification.condition()
+      );
     },
   },
   methods: {
-    verifyEmailDialog() {
+    handleVerification(type) {
       eventBus.emit("open-dialog", {
-        default: ConfirmEmailDialog,
+        default: type,
         position: "right",
       });
     },
