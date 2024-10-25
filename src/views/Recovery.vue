@@ -5,7 +5,7 @@
         <ion-content color="white">
           <div
             class="tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-20 md:tw-py-0">
-            <div class="md:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]">
+            <div class="lg:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]">
               <H1
                 class="md:tw-text-left tw-text-center"
                 text="Recover account" />

@@ -41,22 +41,6 @@ import {
   IonSplitPane,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-import {
-  archiveOutline,
-  archiveSharp,
-  bookmarkOutline,
-  bookmarkSharp,
-  heartOutline,
-  heartSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
-} from "ionicons/icons";
 import { RouterView, useRoute } from "vue-router";
 import PInput from "@/components/Input.vue";
 import PButton from "@/components/Button.vue";
@@ -68,20 +52,6 @@ export default defineComponent({
     RouterView,
     PInput,
     PButton,
-    archiveOutline,
-    archiveSharp,
-    bookmarkOutline,
-    bookmarkSharp,
-    heartOutline,
-    heartSharp,
-    mailOutline,
-    mailSharp,
-    paperPlaneOutline,
-    paperPlaneSharp,
-    trashOutline,
-    trashSharp,
-    warningOutline,
-    warningSharp,
     IonApp,
     IonContent,
     IonIcon,

@@ -4,7 +4,7 @@
     <p clas="tw-text-[#333333] tw-pt-4">Are you sure you want to log out?</p>
 
     <div class="tw-flex tw-flex-col tw-gap-5 tw-pt-8">
-      <Button label="Yes, log out" color="danger" />
+      <Button label="Yes, log out" color="danger" @click="logout" />
       <Button label="No, go back" color="link" @click="closeDialog" />
     </div>
   </div>
@@ -13,15 +13,27 @@
 <script>
 import eventBus from "@/eventBus";
 import Button from "@/components/Button.vue";
+import { useAuthStore } from "@/stores/auth.js";
 
 export default {
   components: {
     Button,
   },
 
+  data() {
+    return {
+      user: useAuthStore(),
+    };
+  },
+
   methods: {
     closeDialog() {
       eventBus.emit("close-dialog");
+    },
+
+    logout() {
+      this.closeDialog();
+      this.user.logout();
     },
   },
 };

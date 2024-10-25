@@ -20,7 +20,6 @@ export default {
   props: {
     buttonsTitle: {
       type: Array,
-      required: true,
     },
   },
 

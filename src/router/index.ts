@@ -122,6 +122,7 @@ router.beforeEach(async (to, from, next) => {
   // window.currentRoute = to;
   // window.previousRoute = from;
   const globalStore = useGlobalsStore();
+
   AlreadyLogedIn(to);
 
   if (to.meta.requiresAuth) {

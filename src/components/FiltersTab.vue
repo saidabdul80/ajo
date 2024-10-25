@@ -101,7 +101,6 @@ export default {
   props: {
     contentType: {
       type: String,
-      required: true,
       validator: (value) => ["card", "table"].includes(value),
     },
 

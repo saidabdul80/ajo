@@ -69,44 +69,36 @@ export default {
   props: {
     ajoId: {
       type: String,
-      required: true,
     },
 
     ajoType: {
       type: String,
-      required: true,
     },
 
     ajoName: {
       type: String,
-      required: true,
     },
 
     ajoContributedAmount: {
       type: Number,
-      required: true,
       default: 8000,
     },
 
     ajoTotalAmount: {
       type: Number,
-      required: true,
       default: 12000,
     },
 
     ajoTimeline: {
       type: String,
-      required: true,
     },
 
     ajoLastUpate: {
       type: String,
-      required: true,
     },
 
     images: {
       type: Array,
-      required: true,
     },
   },
 

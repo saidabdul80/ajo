@@ -1,10 +1,8 @@
 // src/stores/constants.js
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
-export const useUserStore = defineStore('loginedUser', {
-  
+export const useUserStore = defineStore("loginedUser", {
   state: () => ({
-    user:{}
-  })  
-
+    user: {},
+  }),
 });

@@ -4,7 +4,6 @@
     :disabled="disabled"
     class="tw-h-[48px] !tw-text-sm"
     v-model="internalValue"
-    :invalid="invalid"
     toggleMask>
     <template #header>
       <div class="font-semibold text-xm mb-4">Pick a password</div>
@@ -34,7 +33,6 @@ export default {
   props: {
     modelValue: {
       type: [String, Number],
-      required: true,
     },
     placeholder: {
       type: String,
@@ -60,11 +58,8 @@ export default {
       type: String,
       default: "normal",
     },
-    invalid: {
-      type: Boolean,
-      default: false,
-    },
   },
+
   computed: {
     internalValue: {
       get() {
