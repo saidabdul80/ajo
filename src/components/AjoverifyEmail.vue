@@ -17,7 +17,7 @@
                 <InputNumber
                   class="tw-mb-5 tw-w-full"
                   size="medium"
-                  v-model="value2"
+                  v-model="form.code"
                   placeholder="Your 6-digit code"
                   inputId="minmax"
                   :min="0"
@@ -60,7 +60,9 @@ export default {
   },
   data() {
     return {
-      form: {},
+      form: {
+        code: null,
+      },
     };
   },
 };

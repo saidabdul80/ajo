@@ -34,6 +34,9 @@
 </template>
 
 <script>
+import { useUserStore } from "@/stores/user.js";
+
+import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import PendingVerificationDialog from "./Dialog/PendingVerificationDialog.vue";
@@ -53,6 +56,7 @@ export default {
   },
   data() {
     return {
+      userStore: useUserStore(),
       currentRoutePath: null,
     };
   },
@@ -63,13 +67,18 @@ export default {
 
   methods: {
     navigateToStartAjo() {
-      this.$globals.to("start");
-      // TODO: If profile setup is completed
-      // eventBus.emit("open-dialog", {
-      //   default: PendingVerificationDialog,
-      //   title: "Pending verifications...",
-      //   position: "center",
-      // });
+      const { is_verified_email, is_verified_phone_number } =
+        this.userStore.user;
+
+      if (!is_verified_email && is_verified_phone_number) {
+      } else {
+        this.$globals.to("start");
+        // eventBus.emit("open-dialog", {
+        //   default: PendingVerificationDialog,
+        //   title: "Pending verifications...",
+        //   position: "center",
+        // });
+      }
     },
   },
 
