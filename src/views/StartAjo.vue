@@ -105,12 +105,13 @@
                   </div>
                 </div>
 
-                <div v-if="participantsEmail.length">
+                <div v-if="participantsEmail.length > 1">
                   <ul class="tw-list-disc" @drop="onDrop($event)">
                     <li
                       v-for="(email, index) in participantsEmail"
                       :key="index"
                       class="tw-flex tw-justify-between"
+                      :class="index == 0 && 'tw-mb-2'"
                       draggable="true"
                       @dragstart="onDrag(email, index)"
                       @drop="onDrop(index)"
@@ -123,6 +124,7 @@
                         <span class="tw-text-lg">{{ email }}</span>
                       </div>
                       <Button
+                        v-if="index != 0"
                         label="Remove"
                         @click="removeEmail(email)"
                         class="!tw-text-[#D80027]"
@@ -132,11 +134,9 @@
                         color="link" />
                     </li>
                   </ul>
-                </div>
 
-                <div v-if="participantsEmail.length">
                   <div
-                    class="tw-inline-flex tw-gap-3 tw-bg-[#FFF7E9] tw-p-5 tw-rounded-lg tw-border tw-border-[#E0C9A5]">
+                    class="tw-inline-flex tw-gap-3 tw-bg-[#FFF7E9] tw-p-5 tw-rounded-lg tw-border tw-border-[#E0C9A5] tw-mt-5">
                     <i class="pi pi-exclamation-circle tw-text-[#F0B149]"></i>
                     <div class="tw-text-sm">
                       <p
@@ -224,6 +224,8 @@
 </template>
 
 <script>
+import { useUserStore } from "@/stores/user.js";
+
 import eventBus from "@/eventBus";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import AjoGroupList from "@/components/AjoGroupList.vue";
@@ -252,9 +254,11 @@ export default {
     RadioButton,
     InputNumber,
   },
+
   data() {
     return {
-      currentStep: 1,
+      userStore: useUserStore(),
+      currentStep: 2,
       newEmail: "",
       searchString: "",
       filteredRules: [],
@@ -266,11 +270,11 @@ export default {
         groupName: "",
         category: "",
         description: "",
-        totalAmount: "",
-        amountPerPerson: "",
+        totalAmount: 0,
+        amountPerPerson: 0,
         contributionFrequency: "",
         selectedAjoRules: [],
-        isPublic: null,
+        isPublic: false,
       },
       categories: [
         "Personal savings",
@@ -304,7 +308,7 @@ export default {
           subTitle: "You can search and select from the rules below.",
         },
       },
-      participantsEmail: ["ayodele@gmail.com", "rurh@gmail.com"],
+      otherParticipants: [],
       steps: [
         {
           text: "Fill in basic details",
@@ -328,8 +332,11 @@ export default {
   },
 
   computed: {
+    participantsEmail() {
+      return [this.userStore.user?.email, ...this.otherParticipants];
+    },
     isFormValid() {
-      if (this.currentStep == 1) {
+      if (this.currentStep === 1) {
         return (
           this.form.groupName &&
           this.form.category &&
@@ -341,8 +348,8 @@ export default {
         );
       }
 
-      if (this.currentStep == 2) {
-        return this.participantsEmail.length > 2;
+      if (this.currentStep === 2) {
+        return this.participantsEmail.length > 1;
       }
 
       return this.form.selectedAjoRules.length > 0;
@@ -353,14 +360,14 @@ export default {
     addEmail() {
       if (
         this.isValidEmail(this.newEmail) &&
-        !this.participantsEmail.includes(this.newEmail)
+        !this.otherParticipants.includes(this.newEmail)
       ) {
-        this.participantsEmail.push(this.newEmail);
+        this.otherParticipants.push(this.newEmail);
         this.newEmail = "";
       }
     },
     removeEmail(email) {
-      this.participantsEmail = this.participantsEmail.filter(
+      this.otherParticipants = this.otherParticipants.filter(
         (item) => item !== email
       );
     },
@@ -375,7 +382,7 @@ export default {
         this.currentStep += 1;
       }
 
-      if (this.currentStep == 3 && this.isFormValid) {
+      if (this.currentStep === 3 && this.isFormValid) {
         this.steps[this.currentStep - 1].isCompleted = true;
         eventBus.emit("open-dialog", {
           default: AjoGroupDialog,
@@ -396,14 +403,41 @@ export default {
     },
 
     onDrag(email, index) {
-      this.draggedItem = email;
-      this.draggedIndex = index;
-    },
-    onDrop(dropIndex) {
-      if (dropIndex !== this.draggedIndex && this.draggedIndex !== null) {
-        this.participantsEmail.splice(this.draggedIndex, 1);
-        this.participantsEmail.splice(dropIndex, 0, this.draggedItem);
+      // Prevent dragging the first email (user email)
+      if (index > 0) {
+        this.draggedItem = email;
+        this.draggedIndex = index - 1; // Adjusted to be relative to otherParticipants
+      } else {
+        this.draggedItem = null;
+        this.draggedIndex = null;
       }
+    },
+
+    onDrop(dropIndex) {
+      // Adjusted drop index to be relative to `otherParticipants`
+      const adjustedDropIndex = dropIndex - 1;
+
+      // Proceed only if the drop is within `otherParticipants`
+      if (
+        this.draggedIndex !== null &&
+        adjustedDropIndex >= 0 &&
+        adjustedDropIndex !== this.draggedIndex
+      ) {
+        const reorderedParticipants = [...this.otherParticipants];
+
+        // Remove dragged item from original position
+        const [draggedParticipant] = reorderedParticipants.splice(
+          this.draggedIndex,
+          1
+        );
+
+        // Insert dragged item at the new position in `otherParticipants`
+        reorderedParticipants.splice(adjustedDropIndex, 0, draggedParticipant);
+
+        // Update the otherParticipants array
+        this.otherParticipants = reorderedParticipants;
+      }
+
       // Reset drag state
       this.draggedItem = null;
       this.draggedIndex = null;

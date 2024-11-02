@@ -30,6 +30,7 @@
 
           <InputNumber
             placeholder="Amount to withdraw"
+            v-model="amount"
             inputId="integeronly"
             fluid />
         </div>
@@ -91,6 +92,7 @@ export default {
         bankName: "Wema Bank",
         accountName: "Rhoda Ogunesan",
       },
+      amount: null,
     };
   },
 

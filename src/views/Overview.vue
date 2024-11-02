@@ -151,19 +151,19 @@ export default {
 
       notifications: [
         {
-          condition: () => !this.userStore.is_verified_email,
+          state: () => !this.userStore.is_verified_email,
           message: "Verify your email address to explore Ajo by Cowris.",
           label: "Verify Email",
           dialog: ConfirmEmailDialog,
         },
         {
-          condition: () => !this.userStore.is_verified_phone_number,
+          state: () => !this.userStore.is_verified_phone_number,
           message: "Verify your phone number to explore Ajo by Cowris.",
           label: "Verify Phone",
           dialog: ConfirmPhoneDialog,
         },
         {
-          condition: () => !this.userStore.has_uploaded_document,
+          state: () => !this.userStore.has_uploaded_document,
           message: "Upload your document to explore Ajo by Cowris.",
           label: "Upload Document",
           dialog: "",
@@ -173,9 +173,7 @@ export default {
   },
   computed: {
     currentNotification() {
-      return this.notifications.find((notification) =>
-        notification.condition()
-      );
+      return this.notifications.find((notification) => notification.state());
     },
   },
   methods: {

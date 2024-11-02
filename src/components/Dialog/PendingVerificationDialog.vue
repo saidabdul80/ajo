@@ -8,8 +8,8 @@
         Complete account set-up to start Ajo
       </h4>
       <p class="tw-text-[#333333]">
-        Hi Rhoda, you cannot start Ajo yet as you have not verified your email
-        address and phone number.
+        Hi {{ userStore.full_name }}, you cannot start Ajo yet as you have not
+        verified your email address and phone number.
       </p>
     </div>
     <Button
@@ -21,14 +21,22 @@
 </template>
 
 <script>
-import Button from "@/components/Button.vue";
+import { useUserStore } from "@/stores/user.js";
+
 import eventBus from "@/eventBus";
+import Button from "@/components/Button.vue";
 import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
 
 export default {
   components: {
     Button,
     ConfirmEmailDialog,
+  },
+
+  data() {
+    return {
+      userStore: useUserStore().user,
+    };
   },
 
   methods: {
