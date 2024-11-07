@@ -1,10 +1,5 @@
 <template>
-  <Password
-    :placeholder="placeholder"
-    :disabled="disabled"
-    class="tw-h-[48px] !tw-text-sm"
-    v-model="internalValue"
-    toggleMask>
+  <Password class="tw-h-[48px] !tw-text-sm" toggleMask>
     <template #header>
       <div class="font-semibold text-xm mb-4">Pick a password</div>
     </template>
@@ -29,46 +24,6 @@ export default {
   components: {
     Password,
     Divider,
-  },
-  props: {
-    modelValue: {
-      type: [String, Number],
-    },
-    placeholder: {
-      type: String,
-      default: "",
-    },
-    label: {
-      type: String,
-      default: "",
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    type: {
-      type: String,
-      default: "text",
-    },
-    icon: {
-      type: String,
-      default: "",
-    },
-    size: {
-      type: String,
-      default: "normal",
-    },
-  },
-
-  computed: {
-    internalValue: {
-      get() {
-        return this.modelValue;
-      },
-      set(val) {
-        this.$emit("update:modelValue", val);
-      },
-    },
   },
 };
 </script>

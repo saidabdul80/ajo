@@ -3,72 +3,46 @@
     <template1>
       <template #content>
         <ion-content color="white">
-          <div
-            class="!tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-12 md:tw-py-0">
+          <form @submit.prevent="submitForm" class="!tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-12 md:tw-py-0">
             <div class="lg:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]">
-              <H1
-                class="md:tw-text-left tw-text-center"
-                text="Join Ajo by Cowris" />
-              <span
-                class="md:tw-text-left tw-text-balance tw-text-center tw-text-lg tw-mb-8 tw-block tw-text-gray-500">
+              <H1 class="md:tw-text-left tw-text-center" text="Join Ajo by Cowris" />
+              <span class="md:tw-text-left tw-text-balance tw-text-center tw-text-lg tw-mb-8 tw-block tw-text-gray-500">
                 Already have an account on Cowris?
-                <a
-                  @click="$globals.to('/signin')"
-                  class="tw-underline tw-cursor-pointer tw-text-gray-800">
-                  Sign in
-                </a>
+                <a @click="$globals.to('/signin')" class="tw-underline tw-cursor-pointer tw-text-gray-800">Sign in</a>
               </span>
 
-              <Input
-                class="tw-mb-5"
-                placeholder="Full Name"
-                v-model="form.full_name" />
-              <Input
-                class="tw-mb-5"
-                placeholder="Email Address"
-                v-model="form.email" />
+              <Input class="tw-mb-5" placeholder="FirstName" v-model="initialValues.firstName" />
+
+              <Input class="tw-mb-5" placeholder="LastName" v-model="initialValues.lastName" />
+
+              <Input class="tw-mb-5" placeholder="Email Address" v-model="initialValues.email" />
               <vue-tel-input
                 :dropdownOptions="{ showSearchBox: true, showFlags: true }"
                 :inputOptions="{ showDialCode: true }"
                 class="tw-w-full !tw-rounded-2xl tw-text-base tw-py-3 tw-mb-5 tw-h-[48px]"
-                v-model="form.phone_number">
+                v-model="initialValues.phone_number">
                 <template #arrow-icon>
                   <img src="/images/arrow-down.svg" alt="Custom Icon" />
                 </template>
               </vue-tel-input>
-              <Password
-                class="tw-mb-8"
-                placeholder="Password"
-                v-model="form.password" />
+              <Password class="tw-mb-8" placeholder="Password" v-model="initialValues.password" autocomplete="current-password" />
 
-              <div
-                class="tw-flex tw-w-full tw-justify-between tw-gap-3 tw-mb-8">
+              <div class="tw-flex tw-w-full tw-justify-between tw-gap-3 tw-mb-8">
                 <div class="tw-flex tw-gap-1">
-                  <Checkbox :binary="true" v-model="form.accept" />
+                  <Checkbox :binary="true" v-model="initialValues.accept" />
                 </div>
-                <p
-                  class="tw-text-base -tw-mt-1 tw-block tw-text-gray-500 tw-text-balance">
+                <p class="tw-text-base -tw-mt-1 tw-block tw-text-gray-500 tw-text-balance">
                   I have read and agreed to the
-                  <a class="tw-underline tw-cursor-pointer tw-text-gray-800"
-                    >Terms & Conditions</a
-                  >
+                  <a class="tw-underline tw-cursor-pointer tw-text-gray-800">Terms & Conditions</a>
                   and
-                  <a class="tw-underline tw-cursor-pointer tw-text-gray-800"
-                    >KYC Policy</a
-                  >
-                  and confirm that I am opening this account for my own personal
-                  use, and not for use by a third party.
+                  <a class="tw-underline tw-cursor-pointer tw-text-gray-800">KYC Policy</a>
+                  and confirm that I am opening this account for my own personal use, and not for use by a third party.
                 </p>
               </div>
 
-              <Button
-                label="Sign up"
-                class="tw-w-full"
-                :disabled="!formIsValid || authStore.loading"
-                @click="submitForm"
-                :loading="authStore.loading" />
+              <Button label="Sign up" class="tw-w-full" type="submit" :disabled="!formIsValid || authStore.loading" :loading="authStore.loading" />
             </div>
-          </div>
+          </form>
         </ion-content>
       </template>
     </template1>
@@ -97,32 +71,25 @@ export default {
   data() {
     return {
       authStore: useAuthStore(),
-      form: {
-        full_name: "",
+      initialValues: {
+        firstName: "",
+        lastName: "",
         email: "",
         phone_number: "",
         password: "",
         accept: false,
       },
-      formSubmitted: false,
     };
   },
   computed: {
     formIsValid() {
-      return (
-        this.form.full_name &&
-        this.form.email &&
-        this.form.phone_number &&
-        this.form.password &&
-        this.form.accept
-      );
+      return this.initialValues.firstName && this.initialValues.lastName && this.initialValues.email && this.initialValues.phone_number && this.initialValues.password && this.initialValues.accept;
     },
   },
   methods: {
     submitForm() {
-      this.formSubmitted = true;
       if (this.formIsValid) {
-        this.authStore.register(this.form);
+        this.authStore.register(this.initialValues);
       }
     },
   },

@@ -1,31 +1,16 @@
 <template>
   <DefaultLayout>
     <div class="tw-mb-7">
-      <Notify
-        message="Rhoda Ogunesan has invited you to join Ajo group."
-        type="warning">
+      <Notify message="Rhoda Ogunesan has invited you to join Ajo group." type="warning">
         <template #end>
           <Button label="View Ajo details" size="small" />
         </template>
       </Notify>
     </div>
     <div class="tw-flex tw-flex-col">
-      <div
-        class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
-        <WalletBalanceCard
-          title="Wallet Balance"
-          balance="&#x20A6; 5,000.00"
-          buttonLabel="Fund Wallet"
-          :chartOptions="chartOptions"
-          :series="series"
-          @button-click="handleFundWallet" />
-        <WalletBalanceCard
-          title="Total contribution"
-          balance="&#x20A6; 0.00"
-          :chartOptions="chartOptions"
-          :series="series"
-          background-color="#C1B2F2"
-          @button-click="handleButtonClick" />
+      <div class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
+        <WalletBalanceCard title="Wallet Balance" balance="&#x20A6; 5,000.00" buttonLabel="Fund Wallet" :chartOptions="chartOptions" :series="series" />
+        <WalletBalanceCard title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
       </div>
 
       <FiltersTab contentType="card" />

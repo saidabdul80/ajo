@@ -1,22 +1,13 @@
 <template>
   <ion-app>
-    <ion-content
-      :fullscreen="true"
-      class="ion-padding scroller-body tw-w-full tw-h-[90vh] tw-bg-white"
-      style="--padding-top: 0px !important">
+    <ion-content :fullscreen="true" class="ion-padding scroller-body tw-w-full tw-h-[90vh] tw-bg-white" style="--padding-top: 0px !important">
       <transition
-        :name="
-          $vuetify.display.mdAndDown ? $globals.pageTransition.name : 'show'
-        "
-        :mode="
-          $vuetify.display.mdAndDown ? $globals.pageTransition.mode : 'show'
-        "
+        :name="$vuetify.display.mdAndDown ? this.$globals.pageTransition.name : 'in-out'"
+        :mode="$vuetify.display.mdAndDown ? this.$globals.pageTransition.mode : 'in-out'"
         v-on:after-enter="afterEnter"
         v-on:after-leave="afterLeave">
         <!-- <router-view></router-view> -->
-        <ion-router-outlet
-          class="transition"
-          :key="$route.fullPath"></ion-router-outlet>
+        <ion-router-outlet class="transition" :key="$route.fullPath"></ion-router-outlet>
       </transition>
     </ion-content>
   </ion-app>
@@ -26,20 +17,7 @@
 
 <script lang="ts">
 import NotificationRoot from "@/components/notifications/NotificationRoot.vue";
-import {
-  IonApp,
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonListHeader,
-  IonMenu,
-  IonMenuToggle,
-  IonNote,
-  IonRouterOutlet,
-  IonSplitPane,
-} from "@ionic/vue";
+import { IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { RouterView, useRoute } from "vue-router";
 import PInput from "@/components/Input.vue";
@@ -137,9 +115,7 @@ export default defineComponent({
   created() {
     const path = window.location.pathname.split("folder/")[1];
     if (path !== undefined) {
-      this.selectedIndex = this.appPages.findIndex(
-        (page) => page.title.toLowerCase() === path.toLowerCase()
-      );
+      this.selectedIndex = this.appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
     }
   },
 });
