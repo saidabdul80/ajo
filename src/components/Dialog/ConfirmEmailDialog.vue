@@ -1,72 +1,36 @@
 <template>
   <div :class="[currentStep !== 'verified' && 'md:tw-pt-28']">
     <!-- Confirm Email -->
-    <div v-if="currentStep === 'confirm'" class="tw-space-y-2 tw-pb-12">
+    <form @submit.prevent="goToVerify" v-if="currentStep === 'confirm'" class="tw-space-y-2 tw-pb-12">
       <h5 class="tw-text-[28px] tw-text-black">Confirm email address</h5>
-      <p class="tw-text-[#586283] tw-max-w-[40ch]">
-        Please, confirm your email address before verification. A code will be
-        sent to confirm you own the email.
-      </p>
+      <p class="tw-text-[#586283] tw-max-w-[40ch]">Please, confirm your email address before verification. A code will be sent to confirm you own the email.</p>
       <div class="tw-space-y-8 tw-pt-4">
         <Input placeholder="Email Address" v-model="form.email" size="medium" />
-        <Button
-          label="Continue"
-          size="medium"
-          class="tw-w-full"
-          @click="goToVerify" />
+        <Button type="submit" label="Continue" size="medium" class="tw-w-full" />
       </div>
-    </div>
+    </form>
 
     <!-- Verify Email -->
-    <div v-if="currentStep === 'verify'" class="tw-space-y-2 tw-pb-12">
+    <form @submit.prevent="verifyEmail" v-if="currentStep === 'verify'" class="tw-space-y-2 tw-pb-12">
       <h5 class="tw-text-[28px] tw-text-black">Verify email address</h5>
-      <p class="tw-text-[#586283] tw-max-w-[40ch]">
-        We sent a 6-digit code to {{ form.email }}. Please enter the code to
-        verify your email address.
-      </p>
+      <p class="tw-text-[#586283] tw-max-w-[40ch]">We sent a 6-digit code to {{ form.email }}. Please enter the code to verify your email address.</p>
       <div class="tw-space-y-8 tw-pt-4">
-        <Input
-          placeholder="Your 6-digit code"
-          v-model="form.otp"
-          size="medium" />
-        <Button
-          label="Submit"
-          size="medium"
-          class="tw-w-full"
-          @click="verifyEmail" />
-        <Button
-          label="Resend code"
-          size="medium"
-          class="tw-w-full !tw-text-black"
-          link />
+        <Input placeholder="Your 6-digit code" v-model="form.otp" size="medium" />
+        <Button type="submit" label="Submit" size="medium" class="tw-w-full" />
+        <Button label="Resend code" size="medium" class="tw-w-full !tw-text-black" link />
       </div>
-    </div>
+    </form>
 
     <!-- Email Verified -->
     <div v-if="currentStep === 'verified'" class="md:tw-pt-10 tw-text-center">
       <div class="tw-space-y-2 tw-pb-12">
-        <img
-          src="/images/mail-message.svg"
-          alt="icon"
-          class="tw-w-4/5 md:tw-w-full" />
+        <img src="/images/mail-message.svg" alt="icon" class="tw-w-4/5 md:tw-w-full" />
         <h5 class="tw-text-[28px] tw-text-black">Email verified!</h5>
-        <p class="tw-text-[#586283] tw-max-w-[40ch]">
-          Well done, Rhoda! You have successfully verified your email address.
-          You can proceed to verify your phone number.
-        </p>
+        <p class="tw-text-[#586283] tw-max-w-[40ch]">Well done, Rhoda! You have successfully verified your email address. You can proceed to verify your phone number.</p>
       </div>
       <div class="tw-space-y-8">
-        <Button
-          @click="openPhoneVerification"
-          label="Verify phone number"
-          size="medium"
-          class="tw-w-full" />
-        <Button
-          @click="closeDialog"
-          label="I’ll do it later."
-          size="medium"
-          class="tw-w-full !tw-text-black"
-          link />
+        <Button @click="openPhoneVerification" label="Verify phone number" size="medium" class="tw-w-full" />
+        <Button @click="closeDialog" label="I’ll do it later." size="medium" class="tw-w-full !tw-text-black" link />
       </div>
     </div>
   </div>

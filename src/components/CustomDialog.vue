@@ -1,19 +1,9 @@
 <template>
   <Transition name="fade">
     <div v-if="isDialogOpen" class="dialog-overlay" @click="closeDialog">
-      <div
-        :class="[
-          'custom-dialog tw-max-w-[480px]',
-          position,
-          position === 'center' ? 'tw-w-[90%]' : 'tw-w-full',
-          position === 'right' && 'slide-in',
-        ]"
-        @click.stop>
-        <div
-          class="tw-flex tw-justify-between tw-items-center tw-p-5 tw-border-b">
-          <h4
-            v-if="title"
-            class="tw-text-xl tw-text-black tw-text-left tw-w-full">
+      <div :class="['custom-dialog tw-max-w-[480px]', position, position === 'center' ? 'tw-w-[90%]' : 'tw-w-full', position === 'right' && 'slide-in']" @click.stop>
+        <div class="tw-flex tw-justify-between tw-items-center tw-p-5 tw-border-b">
+          <h4 v-if="title" class="tw-text-xl tw-text-black tw-text-left tw-w-full">
             {{ title }}
           </h4>
           <button @click="closeDialog" class="tw-ml-auto tw-flex-shrink-0">
@@ -21,9 +11,7 @@
           </button>
         </div>
         <div class="content tw-p-8">
-          <component
-            :is="slotContent.default"
-            v-bind="slotContent.props"></component>
+          <component :is="slotContent.default" v-bind="slotContent.props"></component>
         </div>
       </div>
     </div>
@@ -31,7 +19,7 @@
 </template>
 
 <script>
-import { markRaw } from "vue";
+import { ref } from "vue";
 import eventBus from "@/eventBus";
 
 export default {
@@ -57,7 +45,7 @@ export default {
   },
   methods: {
     openDialogWithContent(content) {
-      this.slotContent.default = markRaw(content.default);
+      this.slotContent.default = ref(content.default);
       this.isDialogOpen = true;
       this.position = content.position || "center";
       this.title = content.title;

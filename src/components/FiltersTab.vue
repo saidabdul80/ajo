@@ -1,26 +1,17 @@
 <template>
-  <div
-    class="tw-flex tw-flex-col tw-gap-3 md:tw-flex-row md:tw-items-center tw-justify-between tw-bg-white tw-p-6 tw-border tw-border-[#DBDEE2CC]">
+  <div class="tw-flex tw-flex-col tw-gap-3 md:tw-flex-row md:tw-items-center tw-justify-between tw-bg-white tw-p-6 tw-border tw-border-[#DBDEE2CC]">
     <h4 class="tw-text-xl tw-text-black">{{ title }}</h4>
     <div class="tw-flex tw-flex-col tw-gap-3 md:tw-flex-row md:tw-items-center">
       <div>
-        <label> Status: </label>
-        <Select
-          placeholder="All"
-          :options="statusOptions"
-          @change="hndleStatusSelection"
-          class="tw-w-fit !tw-shadow-none !tw-rounded-2xl !tw-border-none !tw-bg-transparent" />
+        <label>Status:</label>
+        <Select placeholder="All" :options="statusOptions" @change="hndleStatusSelection" class="tw-w-fit !tw-shadow-none !tw-rounded-2xl !tw-border-none !tw-bg-transparent" />
       </div>
 
-      <Pills
-        :buttonsTitle="['Newest', 'Oldest']"
-        @pill-selected="handlePillSelection" />
+      <Pills :buttonsTitle="['Newest', 'Oldest']" @pill-selected="handlePillSelection" />
     </div>
   </div>
 
-  <div
-    v-if="contentType == 'card'"
-    class="tw-grid md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-4 tw-mt-4">
+  <div v-if="contentType == 'card'" class="tw-grid md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-4 tw-mt-4">
     <AjoCard
       v-for="(data, idx) in ajoContributions"
       :key="data.ajoType"
@@ -33,21 +24,13 @@
       :ajoLastUpate="data.ajoLastUpate"
       :images="data.images" />
   </div>
-  <div
-    v-if="contentType == 'table'"
-    class="tw-border-b tw-border-l tw-border-r tw-border-[#DBDEE2CC]">
-    <DataTable
-      :value="contributors"
-      paginator
-      :rows="3"
-      tableStyle="min-width: 60rem">
+
+  <div v-if="contentType == 'table'" class="tw-border-b tw-border-l tw-border-r tw-border-[#DBDEE2CC]">
+    <DataTable :value="contributors" paginator :rows="3" tableStyle="min-width: 60rem">
       <Column field="name" header="Account Name">
         <template #body="slotProps">
           <div class="tw-inline-flex tw-items-center tw-gap-3">
-            <Avatar
-              :image="slotProps.data.image"
-              shape="circle"
-              class="!tw-h-10 !tw-w-10" />
+            <Avatar :image="slotProps.data.image" shape="circle" class="!tw-h-10 !tw-w-10" />
             <p>{{ slotProps.data.name }}</p>
           </div>
         </template>
@@ -62,9 +45,7 @@
       </Column>
       <Column field="status" header="Status">
         <template #body="slotProps">
-          <Tag
-            :value="slotProps.data.status"
-            :severity="getSeverity(slotProps.data.status)" />
+          <Tag :value="slotProps.data.status" :severity="getSeverity(slotProps.data.status)" />
         </template>
       </Column>
       <Column field="" header=" ">
@@ -205,13 +186,7 @@ export default {
           ajoTotalAmount: 120000,
           ajoTimeline: "2 weeks",
           ajoLastUpate: "3 days",
-          images: [
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-          ],
+          images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
         },
         {
           id: 2,
@@ -221,13 +196,7 @@ export default {
           ajoTotalAmount: 100000,
           ajoTimeline: "1 month",
           ajoLastUpate: "5 days",
-          images: [
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-          ],
+          images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
         },
         {
           id: 3,
@@ -237,13 +206,7 @@ export default {
           ajoTotalAmount: 60000,
           ajoTimeline: "1 week",
           ajoLastUpate: "2 days",
-          images: [
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-          ],
+          images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
         },
         {
           id: 4,
@@ -253,13 +216,7 @@ export default {
           ajoTotalAmount: 200000,
           ajoTimeline: "3 weeks",
           ajoLastUpate: "1 day",
-          images: [
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-            "/images/avatar.png",
-          ],
+          images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
         },
       ],
     };

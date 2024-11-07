@@ -3,49 +3,27 @@
     <template1>
       <template #content>
         <ion-content color="white">
-          <div
-            class="tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-20 md:tw-py-0">
+          <form @submit.prevent="authStore.login(initialValues)" class="tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-20 md:tw-py-0">
             <div class="lg:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]">
               <H1 class="md:tw-text-left tw-text-center" text="Welcome back" />
-              <span
-                class="md:tw-text-left tw-text-center tw-text-lg tw-mb-8 tw-block tw-text-gray-500"
-                >No Cowris account yet?
-                <a
-                  @click="$globals.to('/join')"
-                  class="tw-underline tw-cursor-pointer tw-text-gray-800"
-                  >Sign up</a
-                >
+              <span class="md:tw-text-left tw-text-center tw-text-lg tw-mb-8 tw-block tw-text-gray-500">
+                No Cowris account yet?
+                <a @click="$globals.to('/join')" class="tw-underline tw-cursor-pointer tw-text-gray-800">Sign up</a>
               </span>
-              <Input
-                class="tw-mb-5"
-                placeholder="Email Address"
-                v-model="form.email" />
+              <Input class="tw-mb-5" placeholder="Email Address" v-model="initialValues.email" />
 
-              <Password
-                class="tw-mb-8"
-                placeholder="Password"
-                v-model="form.password" />
-              <div
-                class="tw-flex tw-w-full tw-justify-between md:tw-gap-1 tw-mb-8">
+              <Password class="tw-mb-8" placeholder="Password" v-model="initialValues.password" />
+
+              <div class="tw-flex tw-w-full tw-justify-between md:tw-gap-1 tw-mb-8">
                 <div class="tw-flex tw-gap-3 tw-items-center">
-                  <Checkbox :binary="true" v-model="form.accept" />
-                  <span class="tw-text-base tw-block tw-text-gray-500"
-                    >Remember me</span
-                  >
+                  <Checkbox :binary="true" v-model="initialValues.accept" />
+                  <span class="tw-text-base tw-block tw-text-gray-500">Remember me</span>
                 </div>
-                <a
-                  @click="$globals.to('/recovery')"
-                  class="tw-text-base tw-font-medium tw-cursor-pointer"
-                  >Forgot password?</a
-                >
+                <a @click="$globals.to('/recovery')" class="tw-text-base tw-font-medium tw-cursor-pointer">Forgot password?</a>
               </div>
-              <Button
-                :loading="authStore.loading"
-                @click="authStore.login(form)"
-                label="Sign in"
-                :disabled="authStore.loading" />
+              <Button type="submit" :loading="authStore.loading" label="Sign in" :disabled="authStore.loading" />
             </div>
-          </div>
+          </form>
         </ion-content>
       </template>
     </template1>
@@ -77,7 +55,7 @@ export default {
   },
   data() {
     return {
-      form: {
+      initialValues: {
         email: "",
         password: "",
         accept: false,

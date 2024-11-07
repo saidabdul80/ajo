@@ -1,6 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { useNotificationStore } from "@/stores/notification";
+import { useAjoStore } from "./ajo";
 
 import { useLocalStorage } from "@vueuse/core";
 import { useClient } from "@/stores/client";
@@ -41,6 +42,10 @@ export const useAuthStore = defineStore("auth-store", {
           type: "success",
           message: "Logged in successfully.",
         });
+
+        // Fetch all ajo groups
+        useAjoStore().fetchAllAjo();
+
         router.push("/app/overview");
       }
     },
@@ -157,8 +162,7 @@ export const useAuthStore = defineStore("auth-store", {
       const notificationStore = useNotificationStore();
       notificationStore.showNotification({
         type: "success",
-        message:
-          "Check your email and spam folder for the password reset link within 5 minutes.",
+        message: "Check your email and spam folder for the password reset link within 5 minutes.",
       });
     },
   },
