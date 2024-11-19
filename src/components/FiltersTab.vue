@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import { useAjoStore } from "@/stores/ajo.js";
+
 import Pills from "@/components/Pills.vue";
 import Select from "primevue/select";
 import DataTable from "primevue/datatable";
@@ -93,6 +95,8 @@ export default {
 
   data() {
     return {
+      ajoStore: useAjoStore(),
+      ajos: null,
       statusOptions: ["All", "Type"],
       contributors: [
         {
@@ -252,6 +256,10 @@ export default {
           return null;
       }
     },
+  },
+
+  async mounted() {
+    this.ajos = await this.ajoStore.fetchAllAjo();
   },
 };
 </script>

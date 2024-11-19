@@ -42,12 +42,9 @@
             </ion-menu-toggle>
 
             <div class="tw-mt-auto tw-w-[80%] tw-mx-auto">
-              <!-- <div class="lg:tw-hidden tw-pb-8">
-                <p-button
-                  size="medium"
-                  icon="pi pi-plus"
-                  label="Start new Ajo" />
-              </div> -->
+              <div class="lg:tw-hidden tw-pb-8">
+               <StartAjoButton />
+              </div>
               <p-button
                 size="medium"
                 class="!tw-bg-transparent !tw-text-[#D80027] !tw-border-none !tw-justify-start"
@@ -137,6 +134,7 @@ import { useRoute } from "vue-router";
 import PButton from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import LogoutDialog from "@/components/Dialog/LogoutDialog.vue";
+import StartAjoButton from "@/components/StartAjoButton.vue";
 
 export default {
   components: {
@@ -160,6 +158,7 @@ export default {
     PButton,
     Input,
     LogoutDialog,
+    StartAjoButton,
   },
   setup() {
     const route = useRoute();

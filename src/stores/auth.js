@@ -43,9 +43,6 @@ export const useAuthStore = defineStore("auth-store", {
           message: "Logged in successfully.",
         });
 
-        // Fetch all ajo groups
-        useAjoStore().fetchAllAjo();
-
         router.push("/app/overview");
       }
     },

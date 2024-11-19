@@ -21,10 +21,7 @@
                 icon="pi pi-search" />
             </div>
             <div class="tw-w-[170px] tw-shrink-0">
-              <PButton
-                @click="navigateToStartAjo"
-                icon="pi pi-plus"
-                label="Start new Ajo" />
+             <StartAjoButton />
             </div>
           </slot>
         </div>
@@ -36,15 +33,18 @@
 <script>
 import { useUserStore } from "@/stores/user.js";
 
-import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import PendingVerificationDialog from "./Dialog/PendingVerificationDialog.vue";
+import StartAjoButton from "./StartAjoButton.vue";
 
 export default {
   name: "Header",
   components: {
+      PButton,
+    Input,
     PendingVerificationDialog,
+    StartAjoButton
   },
   props: {
     title: {
@@ -59,27 +59,6 @@ export default {
       userStore: useUserStore(),
       currentRoutePath: null,
     };
-  },
-  components: {
-    PButton,
-    Input,
-  },
-
-  methods: {
-    navigateToStartAjo() {
-      const { is_verified_email, is_verified_phone_number } =
-        this.userStore.user;
-
-      if (!is_verified_email && is_verified_phone_number) {
-      } else {
-        this.$globals.to("start");
-        // eventBus.emit("open-dialog", {
-        //   default: PendingVerificationDialog,
-        //   title: "Pending verifications...",
-        //   position: "center",
-        // });
-      }
-    },
   },
 
   mounted() {
