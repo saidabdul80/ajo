@@ -58,5 +58,35 @@ export const useAjoStore = defineStore("ajoStore", {
         console.log("Error fetching ajos frequencies", e.message);
       }
     },
+
+    async inviteAjoParticipant(data) {
+      try {
+        const response = await useClient().http({
+          method: "post",
+          path: "/ajo-invites/request",
+          data: data,
+        });
+        if (response) {
+          return response;
+        }
+      } catch (e) {
+        console.log("Error", e.message);
+      }
+    },
+
+    async createAjoRules(data) {
+      try {
+        const response = await useClient().http({
+          method: "post",
+          path: "/api/ajo-rules",
+          data: data,
+        });
+        if (response) {
+          return response;
+        }
+      } catch (e) {
+        console.log("Error", e.message);
+      }
+    },
   },
 });

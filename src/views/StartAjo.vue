@@ -33,7 +33,7 @@
                   placeholder="Select Contribution Frequency"
                   class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
-                <DatePicker v-model="intialValues.startDate" showIcon fluid dateFormat="dd/mm/yy" iconDisplay="input" placeholder="Start Date" class="tw-w-full tw-h-[48px]">
+                <DatePicker v-model="intialValues.startDate" :minDate="minDate" showIcon fluid dateFormat="dd/mm/yy" iconDisplay="input" placeholder="Start Date" class="tw-w-full tw-h-[48px]">
                   <template #inputicon="slotProps">
                     <img class="tw-inline-block" src="/images/calendar.svg" alt="calendar-icon" @click="slotProps.clickCallback" />
                   </template>
@@ -125,6 +125,7 @@
 </template>
 
 <script>
+import { markRaw, shallowRef } from "vue";
 import { useUserStore } from "@/stores/user.js";
 import { useAjoStore } from "@/stores/ajo.js";
 import { helpers } from "@/helpers/utilities.js";
@@ -153,7 +154,6 @@ export default {
     Button,
     AccountSetup,
     Checkbox,
-    AjoGroupDialog,
     RadioButton,
     InputNumber,
   },
@@ -162,12 +162,13 @@ export default {
     return {
       userStore: useUserStore(),
       ajoStore: useAjoStore(),
-      currentStep: 2,
+      currentStep: 1,
       newEmail: "",
       searchString: "",
       filteredRules: [],
       draggedItem: null,
       draggedIndex: null,
+      minDate: new Date(),
 
       intialValues: {
         startDate: "",
@@ -214,7 +215,6 @@ export default {
 
   computed: {
     participantsEmail() {
-      console.log(this.userStore)
       return [this.userStore.user?.email, ...this.otherParticipants];
     },
     isFormValid() {
@@ -265,7 +265,16 @@ export default {
     async nextStep() {
       const { formattedDate } = helpers;
 
-      if (this.currentStep === 1 && this.isFormValid) {
+      if (this.isFormValid && this.currentStep <= 2) {
+        this.steps[this.currentStep - 1].isCompleted = true;
+        this.currentStep += 1;
+
+        this.openDialog();
+      }
+
+      if (this.currentStep === 3 && this.isFormValid) {
+        this.steps[this.currentStep - 1].isCompleted = true;
+
         const data = {
           name: this.intialValues.groupName,
           description: this.intialValues.description,
@@ -277,29 +286,50 @@ export default {
           category: this.intialValues.category,
         };
 
-        const res = await this.ajoStore.createAjo(data);
-
-        if (!res) {
-          return;
+        try {
+          // Simulate API call to create Ajo group
+          const res = await this.ajoStore.createAjo(data);
+          this.inviteParticipants(res.user_id);
+          this.setAjoRules(res.user_id);
+        } catch (error) {
+          console.error("Error creating Ajo group:", error);
         }
       }
+    },
 
-      if (this.isFormValid && this.currentStep <= 2) {
-        this.steps[this.currentStep - 1].isCompleted = true;
-        this.currentStep += 1;
+    async inviteParticipants(ajoId) {
+      if (ajoId) {
+        for (const participant of this.participantsEmail) {
+          try {
+            const data = { ajo_id: ajoId, email: participant };
+            await this.ajoStore.inviteAjoParticipant(data);
+          } catch (error) {
+            console.error("Error inviting participant:", error);
+          }
+        }
       }
+    },
 
-      if (this.currentStep === 3 && this.isFormValid) {
-        this.steps[this.currentStep - 1].isCompleted = true;
-        eventBus.emit("open-dialog", {
-          default: AjoGroupDialog,
-          title: "All done!",
-          position: "center",
-          props: {
-            title: this.intialValues.groupName,
-          },
-        });
+    async setAjoRules(ajoId) {
+      if (ajoId) {
+        for (const rule of this.intialValues.selectedAjoRules) {
+          try {
+            const data = { ajo_id: ajoId, value: rule };
+            await this.ajoStore.createAjoRules(data);
+          } catch (error) {
+            console.error("Error setting Ajo rules:", error);
+          }
+        }
       }
+    },
+
+    openDialog() {
+      eventBus.emit("open-dialog", {
+        default: markRaw(AjoGroupDialog),
+        title: "All done!",
+        position: "center",
+        props: { title: this.intialValues.groupName },
+      });
     },
 
     searchRules() {
@@ -308,7 +338,6 @@ export default {
     },
 
     onDrag(email, index) {
-      // Prevent dragging the first email (user email)
       if (index > 0) {
         this.draggedItem = email;
         this.draggedIndex = index - 1;
@@ -342,7 +371,6 @@ export default {
     numberInputs.forEach((input) => (input.value = ""));
 
     this.contributionFrequencies = await this.ajoStore.fetchAjoFrequencies();
-   
   },
 };
 </script>

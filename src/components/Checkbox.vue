@@ -12,7 +12,7 @@ export default {
   },
   props: {
     modelValue: {
-      type: Boolean,
+      type: [Boolean, Array],
     },
 
     disabled: {
