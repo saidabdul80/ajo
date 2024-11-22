@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { markRaw } from "vue";
 import eventBus from "@/eventBus";
 
 export default {
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     openDialogWithContent(content) {
-      this.slotContent.default = ref(content.default);
+      this.slotContent.default = markRaw(content.default);
       this.isDialogOpen = true;
       this.position = content.position || "center";
       this.title = content.title;

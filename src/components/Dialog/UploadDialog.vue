@@ -1,92 +1,43 @@
 <template>
   <div :class="[currentStep !== 'verified' && 'md:tw-pt-28']">
-    <!-- Select Documnent -->
+    <!-- Select Document -->
     <div v-if="currentStep === 'confirm'" class="tw-space-y-2 tw-pb-12">
-      <h5 class="tw-text-[28px] tw-text-black">
-        Select a means of identification
-      </h5>
-      <p class="tw-text-[#586283] tw-max-w-[40ch]">
-        You will need to upload the selected document. Make sure the document is
-        readily available.
-      </p>
+      <h5 class="tw-text-[28px] tw-text-black">Select a means of identification</h5>
+      <p class="tw-text-[#586283] tw-max-w-[40ch]">You will need to upload the selected document. Make sure the document is readily available.</p>
       <div class="tw-space-y-8 tw-pt-7">
         <div class="tw-flex tw-flex-col tw-gap-4">
-          <div class="tw-flex tw-items-center">
-            <RadioButton
-              v-model="uploadDocument"
-              inputId="NIN"
-              name="document"
-              value="NIN"
-              variant="filled" />
-            <label for="NIN" class="tw-ml-2"
-              >National Identification Number (NIN) Slip</label
-            >
-          </div>
-          <div class="tw-flex tw-items-center">
-            <RadioButton
-              v-model="uploadDocument"
-              inputId="internationalPassport"
-              name="document"
-              value="internationalPassport"
-              variant="filled" />
-            <label for="internationalPassport" class="tw-ml-2"
-              >International passport</label
-            >
-          </div>
-          <div class="tw-flex tw-items-center">
-            <RadioButton
-              v-model="uploadDocument"
-              inputId="utilityBill"
-              name="document"
-              value="utilityBill"
-              variant="filled" />
-            <label for="utilityBill" class="tw-ml-2">Utility bill</label>
+          <div class="tw-flex tw-flex-col tw-items-start tw-gap-5" v-for="document in filteredDocumentTypes" :key="document.value">
+            <div>
+              <RadioButton v-model="uploadDocument" :inputId="document.name" name="document" :value="document.value" variant="filled" />
+              <label :for="document.name" class="tw-ml-2">{{ document.name }}</label>
+            </div>
+
+            <Input v-if="document.value === 7 && uploadDocument === 7" placeholder="Please, specify here..." v-model="customDocumentName" />
           </div>
         </div>
-        <Button
-          label="Continue"
-          size="medium"
-          class="tw-w-full"
-          :disabled="!uploadDocument"
-          @click="goToVerify" />
+        <Button label="Continue" size="medium" class="tw-w-full" :disabled="!uploadDocument" @click="goToVerify" />
       </div>
     </div>
 
     <!-- Document Upload -->
     <div v-if="currentStep === 'verify'" class="tw-space-y-2 tw-pb-12">
-      <h5 class="tw-text-[28px] tw-text-black">{{ documentName }} Slip</h5>
-      <p class="tw-text-[#586283] tw-max-w-[40ch]">
-        Upload your document here.
-      </p>
+      <h5 class="tw-text-[28px] tw-text-black">{{ uploadDocument === 7 ? customDocumentName : documentName }} Slip</h5>
+      <p class="tw-text-[#586283] tw-max-w-[40ch]">Upload your document here.</p>
       <div class="tw-space-y-8 tw-py-10">
         <FileUpload />
-        <Button
-          label="Continue"
-          size="medium"
-          class="tw-w-full"
-          @click="verifyDocument" />
+        <Button label="Continue" size="medium" class="tw-w-full" @click="verifyDocument" />
       </div>
     </div>
 
     <!-- Document Uploaded -->
     <div v-if="currentStep === 'verified'" class="md:tw-pt-10 tw-text-center">
       <div class="tw-space-y-2 tw-pb-12 tw-text-center">
-        <img
-          src="/images/account-set.svg"
-          alt="icon"
-          class="tw-inline-block tw-w-4/5 md:tw-w-full" />
+        <img src="/images/account-set.svg" alt="icon" class="tw-inline-block tw-w-4/5 md:tw-w-full" />
         <h5 class="tw-text-[28px] tw-text-black">Account set-up completed!</h5>
-        <p class="tw-text-[#586283] tw-max-w-[40ch]">
-          You’re done! You have successfully completed all verifications. You
-          can start exploring Ajo by Cowris.
-        </p>
+        <p class="tw-text-[#586283] tw-max-w-[40ch]">You’re done! You have successfully completed all verifications. You can start exploring Ajo by Cowris.</p>
       </div>
       <div class="tw-space-y-8">
-        <Button
-          @click="closeDialog"
-          label="Alright"
-          size="medium"
-          class="tw-w-full" />
+        <Button @click="closeDialog" label="Alright" size="medium" class="tw-w-full" />
       </div>
     </div>
   </div>
@@ -111,15 +62,37 @@ export default {
     return {
       currentStep: "confirm",
       uploadDocument: "",
-      form: {
-        phone: "",
-        otp: "",
-      },
+      customDocumentName: "",
+      userCountry: "Nigeria",
+      uploadDocumentTypes: [
+        { name: "National Identification Number (NIN) Slip", value: 1, countries: ["Nigeria"] },
+        { name: "International Passport", value: 2, countries: ["Canada", "Nigeria"] },
+        { name: "Utility Bills", value: 3, countries: ["Nigeria"] },
+        { name: "Driver's License", value: 4, countries: ["Canada"] },
+        { name: "Permanent Residence Card", value: 5, countries: ["Canada"] },
+        { name: "Proof of Address", value: 6, countries: ["Canada"] },
+        { name: "Others", value: 7, countries: ["Canada"] },
+      ],
     };
+  },
+
+  computed: {
+    filteredDocumentTypes() {
+      return this.uploadDocumentTypes.filter((doc) => !doc.countries || doc.countries.includes(this.userCountry));
+    },
+
+    documentName() {
+      const selected = this.uploadDocumentTypes.find((doc) => doc.value === this.uploadDocument);
+      return selected ? selected.name : "";
+    },
   },
 
   methods: {
     goToVerify() {
+      if (this.uploadDocument === 7 && !this.customDocumentName) {
+        alert("Please specify the document name.");
+        return;
+      }
       this.currentStep = "verify";
     },
 
@@ -131,23 +104,5 @@ export default {
       eventBus.emit("close-dialog");
     },
   },
-
-  computed: {
-    documentName() {
-      switch (this.uploadDocument) {
-        case "NIN":
-          return "NIN";
-          break;
-        case "internationalPassport":
-          return "International Passport";
-
-        default:
-          return "Utility Bill";
-          break;
-      }
-    },
-  },
 };
 </script>
-
-<style scoped></style>

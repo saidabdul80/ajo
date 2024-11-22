@@ -7,12 +7,7 @@
     <Popover ref="op">
       <ul>
         <li>
-          <Button
-            label="Report an issue"
-            icon="pi pi-flag"
-            color="link"
-            class="!tw-justify-start"
-            @click="handleReportIssue" />
+          <Button label="Report an issue" icon="pi pi-flag" color="link" class="!tw-justify-start" @click="handleReportIssue" />
         </li>
         <li>
           <Button
@@ -21,8 +16,7 @@
             icon="pi pi-replay"
             color="link"
             class="!tw-justify-start"
-            @click="handleRepeatWithdrawal">
-          </Button>
+            @click="handleRepeatWithdrawal"></Button>
         </li>
       </ul>
     </Popover>
@@ -34,14 +28,12 @@ import eventBus from "@/eventBus";
 import Popover from "primevue/popover";
 import Button from "@/components/Button.vue";
 import ReportDialog from "@/components/Dialog/ReportDialog.vue";
-import WithdrawalDialog from "./Dialog/WithdrawalDialog.vue";
 
 export default {
   components: {
     Popover,
     Button,
     ReportDialog,
-    WithdrawalDialog,
   },
 
   props: {

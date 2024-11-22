@@ -38,11 +38,6 @@
                     <img class="tw-inline-block" src="/images/calendar.svg" alt="calendar-icon" @click="slotProps.clickCallback" />
                   </template>
                 </DatePicker>
-                <DatePicker v-model="intialValues.endDate" showIcon fluid dateFormat="dd/mm/yy" iconDisplay="input" placeholder="End Date" class="tw-w-full tw-h-[48px]">
-                  <template #inputicon="slotProps">
-                    <img class="tw-inline-block" src="/images/calendar.svg" alt="calendar-icon" @click="slotProps.clickCallback" />
-                  </template>
-                </DatePicker>
               </div>
             </div>
 
@@ -103,9 +98,9 @@
 
                 <div v-if="filteredRules.length > 0" class="tw-space-y-6">
                   <p v-for="(rule, index) in filteredRules" :key="index" class="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-text-gray-500">
-                    <Checkbox v-model="intialValues.selectedAjoRules" :value="rule" :inputId="`rule${index}`" />
-                    <label :for="`rule${index}`" class="ml-2 tw-text-base tw-text-black">
-                      {{ rule }}
+                    <Checkbox v-model="intialValues.selectedAjoRules" :value="rule.value" :inputId="rule.name" />
+                    <label :for="rule.name" class="ml-2 tw-text-base tw-text-black">
+                      {{ rule.label }}
                     </label>
                   </p>
                 </div>
@@ -125,7 +120,6 @@
 </template>
 
 <script>
-import { markRaw, shallowRef } from "vue";
 import { useUserStore } from "@/stores/user.js";
 import { useAjoStore } from "@/stores/ajo.js";
 import { helpers } from "@/helpers/utilities.js";
@@ -172,7 +166,6 @@ export default {
 
       intialValues: {
         startDate: "",
-        endDate: "",
         groupName: "",
         category: "",
         description: "",
@@ -209,7 +202,6 @@ export default {
           isCompleted: false,
         },
       ],
-      rules: ["No member can quit when contribution starts.", "All members must make their contributions by set date, with no exceptions.", "Early withdrawal is not allowed."],
     };
   },
 
@@ -223,7 +215,6 @@ export default {
           this.intialValues.groupName &&
           this.intialValues.category &&
           this.intialValues.description &&
-          this.intialValues.endDate &&
           this.intialValues.amountPerPerson &&
           this.intialValues.contributionFrequency &&
           this.intialValues.startDate
@@ -268,8 +259,6 @@ export default {
       if (this.isFormValid && this.currentStep <= 2) {
         this.steps[this.currentStep - 1].isCompleted = true;
         this.currentStep += 1;
-
-        this.openDialog();
       }
 
       if (this.currentStep === 3 && this.isFormValid) {
@@ -282,15 +271,27 @@ export default {
           user_id: this.userStore.user.id,
           amount: this.intialValues.amountPerPerson,
           start_date: formattedDate(this.intialValues.startDate),
-          end_date: formattedDate(this.intialValues.endDate),
+          end_date: formattedDate(this.intialValues.startDate),
           category: this.intialValues.category,
         };
 
         try {
-          // Simulate API call to create Ajo group
           const res = await this.ajoStore.createAjo(data);
-          this.inviteParticipants(res.user_id);
-          this.setAjoRules(res.user_id);
+          if (!res || res.success === false) {
+            throw new Error("Failed to create Ajo.");
+          }
+
+          const inviteResponse = await this.inviteParticipants(res.user_id);
+          if (!inviteResponse || inviteResponse.success === false) {
+            throw new Error("Failed to invite participants.");
+          }
+
+          const setRulesResponse = await this.setAjoRules(res.user_id);
+          if (!setRulesResponse || setRulesResponse.success === false) {
+            throw new Error("Failed to set Ajo rules.");
+          }
+
+          this.openDialog();
         } catch (error) {
           console.error("Error creating Ajo group:", error);
         }
@@ -325,7 +326,7 @@ export default {
 
     openDialog() {
       eventBus.emit("open-dialog", {
-        default: markRaw(AjoGroupDialog),
+        default: AjoGroupDialog,
         title: "All done!",
         position: "center",
         props: { title: this.intialValues.groupName },
@@ -334,7 +335,7 @@ export default {
 
     searchRules() {
       const lowerSearch = this.searchString.toLowerCase();
-      this.filteredRules = this.rules.filter((rule) => rule.toLowerCase().startsWith(lowerSearch));
+      this.filteredRules = this.rules.filter((rule) => rule.label.toLowerCase().startsWith(lowerSearch));
     },
 
     onDrag(email, index) {
@@ -366,7 +367,7 @@ export default {
   },
 
   async mounted() {
-    this.filteredRules = this.rules;
+    this.filteredRules = await this.ajoStore.fetchAjoRules();
     const numberInputs = document.querySelectorAll(".p-inputnumber-input");
     numberInputs.forEach((input) => (input.value = ""));
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-relative tw-flex tw-flex-col tw-rounded-[12px]">
+  <div class="tw-relative tw-flex tw-flex-col tw-rounded-[12px] tw-w-full">
     <span v-if="icon" class="tw-absolute tw-text-gray-300 tw-left-5 tw-top-1/2 tw-translate-y-[-40%]">
       <i :class="icon"></i>
     </span>

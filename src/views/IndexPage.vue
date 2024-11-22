@@ -88,7 +88,6 @@
 </template>
 
 <script lang="ts">
-import { markRaw } from "vue";
 import eventBus from "@/eventBus";
 import {
   IonPage,
@@ -201,7 +200,7 @@ export default {
 
     handleLogout() {
       eventBus.emit("open-dialog", {
-        default: markRaw(LogoutDialog),
+        default: LogoutDialog,
         position: "center",
       });
     },

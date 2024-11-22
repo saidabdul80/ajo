@@ -66,6 +66,22 @@ export const useAjoStore = defineStore("ajoStore", {
           path: "/ajo-invites/request",
           data: data,
         });
+
+        if (response) {
+          return response;
+        }
+      } catch (e) {
+        console.log("Error", e.message);
+      }
+    },
+
+    async fetchAjoRules() {
+      try {
+        const response = await useClient().http({
+          method: "get",
+          path: "/rules",
+        });
+
         if (response) {
           return response;
         }
@@ -81,6 +97,7 @@ export const useAjoStore = defineStore("ajoStore", {
           path: "/api/ajo-rules",
           data: data,
         });
+
         if (response) {
           return response;
         }

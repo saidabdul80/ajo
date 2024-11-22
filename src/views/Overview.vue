@@ -3,42 +3,22 @@
     <div class="tw-mb-7" v-if="currentNotification">
       <Notify :message="currentNotification.message" type="warning">
         <template #end>
-          <PButton
-            :label="currentNotification.label"
-            size="small"
-            @click="handleVerification(currentNotification.dialog)" />
+          <PButton :label="currentNotification.label" size="small" @click="handleVerification(currentNotification.dialog)" />
         </template>
       </Notify>
     </div>
-    <div
-      class="tw-flex tw-flex-col-reverse xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
-      <div
-        class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full tw-pb-6 xl:tw-pb-0">
-        <div
-          class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
-          <WalletBalanceCard
-            title="Wallet Balance"
-            balance="&#x20A6; 5,000.00"
-            buttonLabel="Fund Wallet"
-            :chartOptions="chartOptions"
-            :series="series"
-            @button-click="handleFundWallet" />
-          <WalletBalanceCard
-            title="Total contribution"
-            balance="&#x20A6; 0.00"
-            :chartOptions="chartOptions"
-            :series="series"
-            background-color="#C1B2F2" />
+    <div class="tw-flex tw-flex-col-reverse xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
+      <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full tw-pb-6 xl:tw-pb-0">
+        <div class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
+          <WalletBalanceCard title="Wallet Balance" balance="&#x20A6; 5,000.00" buttonLabel="Fund Wallet" :chartOptions="chartOptions" :series="series" @button-click="handleFundWallet" />
+          <WalletBalanceCard title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
         </div>
         <div class="tw-h-full">
           <RecentTransactionTable />
         </div>
       </div>
       <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
-        <AccountSetup
-          title="Complete account setup"
-          description="Finish setting up your account to fully enjoy Ajo by Cowris."
-          :steps="stepDefinitions" />
+        <AccountSetup title="Complete account setup" description="Finish setting up your account to fully enjoy Ajo by Cowris." :steps="stepDefinitions" />
         <AjoGroupList />
       </div>
     </div>
@@ -60,6 +40,7 @@ import AccountSetup from "@/components/AccountSetup.vue";
 import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
 import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
+import UploadDialog from "@/components/Dialog/UploadDialog.vue";
 
 export default {
   name: "Overview",
@@ -74,6 +55,7 @@ export default {
     Header,
     FundWalletDialog,
     ConfirmEmailDialog,
+    UploadDialog,
   },
   data() {
     return {
@@ -145,7 +127,7 @@ export default {
           name: "document",
           text: "Upload means of identification",
           isCompleted: false,
-          isClickable: false,
+          isClickable: true,
         },
       ],
 
@@ -163,10 +145,10 @@ export default {
           dialog: ConfirmPhoneDialog,
         },
         {
-          state: () => !this.userStore.has_uploaded_document,
+          state: () => true,
           message: "Upload your document to explore Ajo by Cowris.",
           label: "Upload Document",
-          dialog: "",
+          dialog: UploadDialog,
         },
       ],
     };

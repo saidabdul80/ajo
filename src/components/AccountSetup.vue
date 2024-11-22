@@ -24,15 +24,7 @@
             <img v-if="item.isCompleted" src="/images/check.svg" alt="icon" />
             <span v-else>{{ index + 1 }}</span>
           </span>
-          <span
-            :class="[
-              'tw-text-xl tw-text-left',
-              item.isCompleted
-                ? 'tw-text-[#36454F] tw-line-through'
-                : ' tw-text-[#000000]',
-            ]"
-            >{{ item.text }}</span
-          >
+          <span :class="['tw-text-xl tw-text-left', item.isCompleted ? 'tw-text-[#36454F] tw-line-through' : ' tw-text-[#000000]']">{{ item.text }}</span>
         </p>
       </li>
     </ul>
