@@ -89,7 +89,15 @@ export default {
   methods: {
     submitForm() {
       if (this.formIsValid) {
-        this.authStore.register(this.initialValues);
+        this.authStore.register({
+          accept: this.initialValues.accept,
+          first_name: this.initialValues.firstName,
+          last_name: this.initialValues.lastName,
+          email: this.initialValues.email,
+          password: this.initialValues.password,
+          password_confirmation: this.initialValues.password,
+          phone_number: this.initialValues.phone_number,
+        });
       }
     },
   },

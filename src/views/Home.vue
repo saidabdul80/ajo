@@ -2,62 +2,31 @@
   <Nav />
   <ion-content class="scroller-body-inner" color="white" :fullscreen="true">
     <main id="container">
-      <div
-        class="tw-grid tw-gap-5 md:tw-px-20 tw-px-4"
-        :class="lg ? 'tw-grid-cols-2' : ''">
+      <div class="tw-grid tw-gap-5 md:tw-px-20 tw-px-4" :class="lg ? 'tw-grid-cols-2' : ''">
         <AjoLandContent />
-        <div
-          class="tw-grid tw-gap-2 tw-h-full md:tw-h-[90dvh] md:tw-overflow-hidden"
-          :class="lg ? 'tw-grid-cols-2' : ''">
+        <div class="tw-grid tw-gap-2 tw-h-full md:tw-h-[90dvh] md:tw-overflow-hidden" :class="lg ? 'tw-grid-cols-2' : ''">
           <div class="tw-overflow-y-hidden">
-            <vue3-marquee
-              :gradien="true"
-              :duration="110"
-              :vertical="lg"
-              pauseOnHover>
-              <div
-                v-for="x in 10"
-                :key="x"
-                class="tw-mb-3 tw-w-full"
-                :class="lg ? '' : 'tw-px-2'">
-                <Card
-                  class="tw-cursor-pointer"
-                  @click="handleAjoCard(x)"
-                  :style="lg ? 'width:100%' : 'width: 95% !important'" />
+            <vue3-marquee :gradient="true" :duration="110" :vertical="lg" pauseOnHover>
+              <div v-for="x in 10" :key="x" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
+                <Card class="tw-cursor-pointer" :style="lg ? 'width:100%' : 'width: 95% !important'" />
               </div>
             </vue3-marquee>
           </div>
           <div class="tw-overflow-y-hidden tw-w-full">
-            <vue3-marquee
-              :duration="110"
-              direction="reverse"
-              :vertical="lg"
-              pauseOnHover>
-              <div
-                v-for="x in 10"
-                :key="'down-' + x"
-                class="tw-mb-3 tw-w-full"
-                :class="lg ? '' : 'tw-px-2'">
-                <Card
-                  class="tw-cursor-pointer"
-                  @click="handleAjoCard(x)"
-                  :style="lg ? 'width:100%' : 'width: 95% !important'" />
+            <vue3-marquee :duration="110" direction="reverse" :vertical="lg" pauseOnHover>
+              <div v-for="x in 10" :key="'down-' + x" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
+                <Card class="tw-cursor-pointer" :style="lg ? 'width:100%' : 'width: 95% !important'" />
               </div>
             </vue3-marquee>
           </div>
         </div>
       </div>
 
-      <div
-        class="tw-bg-[#36454F] tw-py-20 tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-4 md:tw-px-20 tw-px-4">
-        <Counter
-          v-for="(counterItem, index) in counterItems"
-          :key="index"
-          :item="counterItem" />
+      <div class="tw-bg-[#36454F] tw-py-20 tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-4 md:tw-px-20 tw-px-4">
+        <Counter v-for="(counterItem, index) in counterItems" :key="index" :item="counterItem" />
       </div>
 
-      <div
-        class="tw-bg-[#F8F9D7] md:tw-px-20 tw-px-4 tw-py-20 md:tw-py-[120px]">
+      <div class="tw-bg-[#F8F9D7] md:tw-px-20 tw-px-4 tw-py-20 md:tw-py-[120px]">
         <BodyContent />
       </div>
 
@@ -69,8 +38,7 @@
         <joinAjoTradition />
       </div>
 
-      <div
-        class="tw-flex tw-flex-col tw-justify-center tw-min-h-[48px] tw-bg-[#E1E1E1] tw-py-4 md:tw-px-20 tw-px-4">
+      <div class="tw-flex tw-flex-col tw-justify-center tw-min-h-[48px] tw-bg-[#E1E1E1] tw-py-4 md:tw-px-20 tw-px-4">
         <AjoFooter />
       </div>
     </main>
@@ -78,15 +46,7 @@
 </template>
 
 <script>
-import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/vue";
+import { IonContent } from "@ionic/vue";
 import AjoLandContent from "@/components/AjoLandContent.vue";
 import Card from "@/components/Card.vue";
 import BodyContent from "@/components/AboutAjo.vue";
@@ -141,11 +101,6 @@ export default {
         },
       ],
     };
-  },
-  methods: {
-    handleAjoCard(x) {
-      alert(x);
-    },
   },
   computed: {
     lg() {

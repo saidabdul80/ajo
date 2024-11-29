@@ -155,6 +155,7 @@ export default {
   },
   computed: {
     currentNotification() {
+      console.log(this.userStore);
       return this.notifications.find((notification) => notification.state());
     },
   },

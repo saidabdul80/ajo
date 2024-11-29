@@ -61,7 +61,7 @@ export const useAuthStore = defineStore("auth-store", {
           type: "success",
           message: "Reigistration successfully.",
         });
-        router.push("/join");
+        router.push("/signin");
       }
     },
     requireMFA() {

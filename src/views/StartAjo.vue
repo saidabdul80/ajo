@@ -98,7 +98,7 @@
 
                 <div v-if="filteredRules.length > 0" class="tw-space-y-6">
                   <p v-for="(rule, index) in filteredRules" :key="index" class="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-text-gray-500">
-                    <Checkbox v-model="intialValues.selectedAjoRules" :value="rule.value" :inputId="rule.name" />
+                    <Checkbox v-model="intialValues.selectedAjoRules" :value="rule.name" :inputId="rule.name" />
                     <label :for="rule.name" class="ml-2 tw-text-base tw-text-black">
                       {{ rule.label }}
                     </label>
@@ -173,6 +173,7 @@ export default {
         contributionFrequency: "",
         selectedAjoRules: [],
         isPublic: false,
+        rules: [],
       },
       categories: ["Personal savings", "Education", "Housing", "Business", "Health", "Trips or vacations", "Event", "Charity", "Investment", "Emergency fund"],
       contributionFrequencies: null,
@@ -254,7 +255,7 @@ export default {
     },
 
     async nextStep() {
-      const { formattedDate } = helpers;
+      const { formattedDate, calculateEndDate } = helpers;
 
       if (this.isFormValid && this.currentStep <= 2) {
         this.steps[this.currentStep - 1].isCompleted = true;
@@ -271,7 +272,7 @@ export default {
           user_id: this.userStore.user.id,
           amount: this.intialValues.amountPerPerson,
           start_date: formattedDate(this.intialValues.startDate),
-          end_date: formattedDate(this.intialValues.startDate),
+          end_date: formattedDate(calculateEndDate(this.intialValues.startDate, this.intialValues.contributionFrequency.name)),
           category: this.intialValues.category,
         };
 
@@ -281,15 +282,9 @@ export default {
             throw new Error("Failed to create Ajo.");
           }
 
-          const inviteResponse = await this.inviteParticipants(res.user_id);
-          if (!inviteResponse || inviteResponse.success === false) {
-            throw new Error("Failed to invite participants.");
-          }
+          await this.inviteParticipants(res.id);
 
-          const setRulesResponse = await this.setAjoRules(res.user_id);
-          if (!setRulesResponse || setRulesResponse.success === false) {
-            throw new Error("Failed to set Ajo rules.");
-          }
+          await this.setAjoRules(res.id);
 
           this.openDialog();
         } catch (error) {
@@ -304,8 +299,10 @@ export default {
           try {
             const data = { ajo_id: ajoId, email: participant };
             await this.ajoStore.inviteAjoParticipant(data);
+
+            console.log(participant);
           } catch (error) {
-            console.error("Error inviting participant:", error);
+            throw new Error("Error inviting participant:", error);
           }
         }
       }
@@ -317,8 +314,10 @@ export default {
           try {
             const data = { ajo_id: ajoId, value: rule };
             await this.ajoStore.createAjoRules(data);
+
+            console.log(rule);
           } catch (error) {
-            console.error("Error setting Ajo rules:", error);
+            throw new Error("Failed to set Ajo rules.", error);
           }
         }
       }
@@ -335,7 +334,7 @@ export default {
 
     searchRules() {
       const lowerSearch = this.searchString.toLowerCase();
-      this.filteredRules = this.rules.filter((rule) => rule.label.toLowerCase().startsWith(lowerSearch));
+      this.filteredRules = this.intialValues.rules.filter((rule) => rule.label.toLowerCase().startsWith(lowerSearch));
     },
 
     onDrag(email, index) {
@@ -367,7 +366,8 @@ export default {
   },
 
   async mounted() {
-    this.filteredRules = await this.ajoStore.fetchAjoRules();
+    this.intialValues.rules = await this.ajoStore.fetchAjoRules();
+    this.filteredRules = this.intialValues.rules;
     const numberInputs = document.querySelectorAll(".p-inputnumber-input");
     numberInputs.forEach((input) => (input.value = ""));
 

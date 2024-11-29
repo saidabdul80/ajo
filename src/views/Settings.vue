@@ -13,7 +13,7 @@
               <div class="tw-space-y-6">
                 <div class="tw-flex tw-flex-col tw-gap-2">
                   <label for="fName" class="tw-text-sm tw-text-[#586283]">First name</label>
-                  <Input id="fName" aria-describedby="fName-help" v-model="user.full_name" />
+                  <Input id="fName" aria-describedby="fName-help" v-model="user.first_name" />
                 </div>
 
                 <div class="tw-flex tw-flex-col tw-gap-2">
@@ -30,7 +30,7 @@
               <div class="tw-space-y-6">
                 <div class="tw-flex tw-flex-col tw-gap-2">
                   <label for="lName" class="tw-text-sm tw-text-[#586283]">Last name</label>
-                  <Input id="lName" aria-describedby="lName-help" v-model="user.full_name" />
+                  <Input id="lName" aria-describedby="lName-help" v-model="user.last_name" />
                 </div>
                 <div class="tw-flex tw-flex-col tw-gap-2">
                   <label for="phone" class="tw-text-sm tw-text-[#586283]">Phone Number</label>

@@ -1,8 +1,6 @@
 <template>
   <ion-header class="tw-bg-white tw-shadow-none">
-    <ion-toolbar
-      color="white"
-      class="tw-h-[104px] tw-flex tw-px-8 tw-border-b !tw-border-[#E8EBEF]">
+    <ion-toolbar color="white" class="tw-h-[104px] tw-flex tw-px-8 tw-border-b !tw-border-[#E8EBEF]">
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
@@ -15,13 +13,10 @@
         <div class="tw-hidden min-[992px]:tw-flex tw-items-center tw-gap-10">
           <slot name="headerRightContent">
             <div class="xl:tw-w-[400px]">
-              <Input
-                size="medium"
-                placeholder="Search for group..."
-                icon="pi pi-search" />
+              <Input size="medium" placeholder="Search for group..." icon="pi pi-search" />
             </div>
             <div class="tw-w-[170px] tw-shrink-0">
-             <StartAjoButton />
+              <StartAjoButton />
             </div>
           </slot>
         </div>
@@ -41,10 +36,10 @@ import StartAjoButton from "./StartAjoButton.vue";
 export default {
   name: "Header",
   components: {
-      PButton,
+    PButton,
     Input,
     PendingVerificationDialog,
-    StartAjoButton
+    StartAjoButton,
   },
   props: {
     title: {

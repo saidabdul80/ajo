@@ -37,7 +37,8 @@ export default {
 
   computed: {
     fullName() {
-      return useUserStore().user.full_name;
+      const fullName = `${useUserStore().user.first_name} ${useUserStore().user.last_name}`;
+      return fullName;
     },
 
     computedHeaderTitle() {

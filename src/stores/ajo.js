@@ -39,8 +39,9 @@ export const useAjoStore = defineStore("ajoStore", {
           return response;
         }
       } catch (e) {
-        this.loading = false;
         console.log("Error fetching ajos group", e.message);
+      } finally {
+        this.loading = false;
       }
     },
 
@@ -94,7 +95,7 @@ export const useAjoStore = defineStore("ajoStore", {
       try {
         const response = await useClient().http({
           method: "post",
-          path: "/api/ajo-rules",
+          path: "/ajo-rules",
           data: data,
         });
 
