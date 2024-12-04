@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
 
   {
     path: "/passwordset",
-    name: "PasswordSet",
+    name: "Passwordset",
     component: () => import("@/views/Passwordset.vue"),
     meta: { requiresAuth: false },
   },

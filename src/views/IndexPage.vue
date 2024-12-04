@@ -1,27 +1,13 @@
 <template>
   <ion-content>
     <ion-split-pane content-id="main-content">
-      <ion-menu
-        content-id="main-content"
-        type="overlay"
-        class="lg:tw-w-[200px] tw-w-full">
+      <ion-menu content-id="main-content" type="overlay" class="lg:tw-w-[200px] tw-w-full">
         <ion-content>
-          <ion-list
-            id="inbox-list"
-            style="padding-top: 0px !important"
-            class="tw-h-full tw-flex tw-flex-col">
-            <ion-list-header
-              ><img
-                width="68%"
-                class="tw-mt-2"
-                src="@/assets/images/logo-name.svg"
-            /></ion-list-header>
+          <ion-list id="inbox-list" style="padding-top: 0px !important" class="tw-h-full tw-flex tw-flex-col">
+            <ion-list-header><img width="68%" class="tw-mt-2" src="@/assets/images/logo-name.svg" /></ion-list-header>
             <ion-note></ion-note>
 
-            <ion-menu-toggle
-              :auto-hide="false"
-              v-for="(p, i) in appPages"
-              :key="i">
+            <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
               <ion-item
                 :color="isActive(p) ? 'dark' : ''"
                 @click="selectedIndex = i"
@@ -30,24 +16,17 @@
                 lines="none"
                 :detail="false"
                 class="hydrated tw-w-[75%] tw-mx-auto tw-block tw-my-3 tw-rounded-xl tw-me-10">
-                <ion-label
-                  class="!tw-flex tw-gap-4 !tw-text-base tw-items-center">
-                  <span
-                    :class="
-                      isActive(p) ? p.mdIcon + '-white' : p.mdIcon
-                    "></span>
+                <ion-label class="!tw-flex tw-gap-4 !tw-text-base tw-items-center">
+                  <span :class="isActive(p) ? p.mdIcon + '-white' : p.mdIcon"></span>
                   {{ p.title }}
                 </ion-label>
               </ion-item>
             </ion-menu-toggle>
 
             <div class="tw-mt-auto tw-w-[80%] tw-mx-auto">
-              <!-- <div class="lg:tw-hidden tw-pb-8">
-                <p-button
-                  size="medium"
-                  icon="pi pi-plus"
-                  label="Start new Ajo" />
-              </div> -->
+              <div class="lg:tw-hidden tw-pb-8">
+                <StartAjoButton />
+              </div>
               <p-button
                 size="medium"
                 class="!tw-bg-transparent !tw-text-[#D80027] !tw-border-none !tw-justify-start"
@@ -60,11 +39,7 @@
         </ion-content>
       </ion-menu>
 
-      <ion-page
-        id="main-content"
-        mode="ios"
-        class="tw-w-full"
-        style="padding-top: 0px !important">
+      <ion-page id="main-content" mode="ios" class="tw-w-full" style="padding-top: 0px !important">
         <!-- <ion-header>
           <ion-toolbar
             color="white"
@@ -137,6 +112,7 @@ import { useRoute } from "vue-router";
 import PButton from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import LogoutDialog from "@/components/Dialog/LogoutDialog.vue";
+import StartAjoButton from "@/components/StartAjoButton.vue";
 
 export default {
   components: {
@@ -159,7 +135,7 @@ export default {
     IonToolbar,
     PButton,
     Input,
-    LogoutDialog,
+    StartAjoButton,
   },
   setup() {
     const route = useRoute();
@@ -232,9 +208,7 @@ export default {
   created() {
     const path = window.location.pathname.split("folder/")[1];
     if (path !== undefined) {
-      this.selectedIndex = this.appPages.findIndex(
-        (page) => page.title.toLowerCase() === path.toLowerCase()
-      );
+      this.selectedIndex = this.appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
     }
   },
 

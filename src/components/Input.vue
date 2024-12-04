@@ -1,18 +1,9 @@
 <template>
-  <div class="tw-relative tw-flex tw-flex-col tw-rounded-[12px]">
-    <span
-      v-if="icon"
-      class="tw-absolute tw-text-gray-300 tw-left-5 tw-top-1/2 tw-translate-y-[-40%]">
+  <div class="tw-relative tw-flex tw-flex-col tw-rounded-[12px] tw-w-full">
+    <span v-if="icon" class="tw-absolute tw-text-gray-300 tw-left-5 tw-top-1/2 tw-translate-y-[-40%]">
       <i :class="icon"></i>
     </span>
-    <InputText
-      v-model="internalValue"
-      v-bind="$props"
-      :class="[
-        'tw-w-full !tw-rounded-2xl !tw-text-base',
-        { '!tw-pl-10': icon },
-        computedClass,
-      ]" />
+    <InputText v-model="internalValue" v-bind="$props" :class="['tw-w-full !tw-rounded-2xl !tw-text-base', { '!tw-pl-10': icon }, computedClass]" />
   </div>
 </template>
 

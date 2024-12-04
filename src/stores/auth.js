@@ -43,9 +43,6 @@ export const useAuthStore = defineStore("auth-store", {
           message: "Logged in successfully.",
         });
 
-        // Fetch all ajo groups
-        useAjoStore().fetchAllAjo();
-
         router.push("/app/overview");
       }
     },
@@ -64,7 +61,7 @@ export const useAuthStore = defineStore("auth-store", {
           type: "success",
           message: "Reigistration successfully.",
         });
-        router.push("/join");
+        router.push("/signin");
       }
     },
     requireMFA() {

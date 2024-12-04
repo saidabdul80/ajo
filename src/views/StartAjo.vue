@@ -14,36 +14,26 @@
 
             <div v-if="currentStep === 1">
               <div class="tw-space-y-8 tw-pt-8">
-                <Input placeholder="Group Name" size="medium" v-model="form.groupName" />
+                <Input placeholder="Group Name" size="medium" v-model="intialValues.groupName" />
 
-                <Select v-model="form.category" :options="categories" placeholder="Select a Category" class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
+                <Select v-model="intialValues.category" :options="categories" placeholder="Select a Category" class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
-                <Input placeholder="Goal of Contribution / Description" size="medium" v-model="form.description" />
-
-                <!-- <div class="tw-relative">
-                  <img class="tw-inline-block tw-absolute tw-z-40 tw-w-4 tw-h-3 tw-top-1/2 -tw-translate-y-1/2 tw-left-3" src="/images/naira.svg" alt="currency-icon" />
-
-                  <InputNumber ref="inputField" v-model="form.totalAmount" placeholder="Total Contribution Amount" inputId="integeronly" fluid />
-                </div> -->
+                <Input placeholder="Goal of Contribution / Description" size="medium" v-model="intialValues.description" />
 
                 <div class="tw-relative">
                   <img class="tw-inline-block tw-absolute tw-z-40 tw-w-3 tw-h-3 tw-top-1/2 -tw-translate-y-1/2 tw-left-3" src="/images/naira.svg" alt="currency-icon" />
 
-                  <InputNumber v-model="form.amountPerPerson" placeholder="Contribution Per Person" inputId="integeronly" fluid />
+                  <InputNumber v-model="intialValues.amountPerPerson" placeholder="Contribution Per Person" inputId="integeronly" fluid />
                 </div>
 
                 <Select
-                  v-model="form.contributionFrequency"
-                  :options="contributionFrequencies"
+                  v-model="intialValues.contributionFrequency"
+                  :options="frequencyOptions"
+                  optionLabel="name"
                   placeholder="Select Contribution Frequency"
                   class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
-                <DatePicker v-model="form.startDate" showIcon fluid dateFormat="dd/mm/yy" iconDisplay="input" placeholder="Start Date" class="tw-w-full tw-h-[48px]">
-                  <template #inputicon="slotProps">
-                    <img class="tw-inline-block" src="/images/calendar.svg" alt="calendar-icon" @click="slotProps.clickCallback" />
-                  </template>
-                </DatePicker>
-                <DatePicker v-model="form.endDate" showIcon fluid dateFormat="dd/mm/yy" iconDisplay="input" placeholder="End Date" class="tw-w-full tw-h-[48px]">
+                <DatePicker v-model="intialValues.startDate" :minDate="minDate" showIcon fluid dateFormat="dd/mm/yy" iconDisplay="input" placeholder="Start Date" class="tw-w-full tw-h-[48px]">
                   <template #inputicon="slotProps">
                     <img class="tw-inline-block" src="/images/calendar.svg" alt="calendar-icon" @click="slotProps.clickCallback" />
                   </template>
@@ -92,9 +82,9 @@
                   <div class="tw-inline-flex tw-items-center tw-gap-8 tw-pt-8">
                     <p class="tw-text-lg tw-text-[#333333] tw-font-medium">Do you want to make this Ajo group public?</p>
                     <div class="tw-flex tw-items-center tw-gap-3">
-                      <RadioButton v-model="form.isPublic" inputId="ajoState1" name="No" value="No" />
+                      <RadioButton v-model="intialValues.isPublic" inputId="ajoState1" name="No" value="No" />
                       <label for="ajoState1" class="ml-2">No</label>
-                      <RadioButton v-model="form.isPublic" inputId="ajoState2" name="No" value="Yes" />
+                      <RadioButton v-model="intialValues.isPublic" inputId="ajoState2" name="No" value="Yes" />
                       <label for="ajoState2" class="ml-2">Yes</label>
                     </div>
                   </div>
@@ -108,9 +98,9 @@
 
                 <div v-if="filteredRules.length > 0" class="tw-space-y-6">
                   <p v-for="(rule, index) in filteredRules" :key="index" class="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-text-gray-500">
-                    <Checkbox v-model="form.selectedAjoRules" :value="rule" :inputId="`rule${index}`" />
-                    <label :for="`rule${index}`" class="ml-2 tw-text-base tw-text-black">
-                      {{ rule }}
+                    <Checkbox v-model="intialValues.selectedAjoRules" :value="rule.name" :inputId="rule.name" />
+                    <label :for="rule.name" class="ml-2 tw-text-base tw-text-black">
+                      {{ rule.label }}
                     </label>
                   </p>
                 </div>
@@ -158,7 +148,6 @@ export default {
     Button,
     AccountSetup,
     Checkbox,
-    AjoGroupDialog,
     RadioButton,
     InputNumber,
   },
@@ -173,10 +162,10 @@ export default {
       filteredRules: [],
       draggedItem: null,
       draggedIndex: null,
+      minDate: new Date(),
 
-      form: {
+      intialValues: {
         startDate: "",
-        endDate: "",
         groupName: "",
         category: "",
         description: "",
@@ -184,9 +173,10 @@ export default {
         contributionFrequency: "",
         selectedAjoRules: [],
         isPublic: false,
+        rules: [],
       },
       categories: ["Personal savings", "Education", "Housing", "Business", "Health", "Trips or vacations", "Event", "Charity", "Investment", "Emergency fund"],
-      contributionFrequencies: ["Daily", "Weekly", "Monthly", "Once in 2 months", "3 months", "6 months"],
+      contributionFrequencies: null,
       currentStepTitle: {
         1: { name: "Fill in Basic Details" },
         2: {
@@ -213,7 +203,6 @@ export default {
           isCompleted: false,
         },
       ],
-      rules: ["No member can quit when contribution starts.", "All members must make their contributions by set date, with no exceptions.", "Early withdrawal is not allowed."],
     };
   },
 
@@ -223,14 +212,30 @@ export default {
     },
     isFormValid() {
       if (this.currentStep === 1) {
-        return this.form.groupName && this.form.category && this.form.description && this.form.endDate && this.form.amountPerPerson && this.form.contributionFrequency && this.form.startDate;
+        return (
+          this.intialValues.groupName &&
+          this.intialValues.category &&
+          this.intialValues.description &&
+          this.intialValues.amountPerPerson &&
+          this.intialValues.contributionFrequency &&
+          this.intialValues.startDate
+        );
       }
 
       if (this.currentStep === 2) {
         return this.participantsEmail.length > 1;
       }
 
-      return this.form.selectedAjoRules.length > 0;
+      return this.intialValues.selectedAjoRules.length > 0;
+    },
+
+    frequencyOptions() {
+      if (this.contributionFrequencies) {
+        return Object.values(this.contributionFrequencies).map(({ value, label }) => ({
+          name: label,
+          code: value,
+        }));
+      }
     },
   },
 
@@ -250,23 +255,7 @@ export default {
     },
 
     async nextStep() {
-      const { formattedDate } = helpers;
-
-      if (this.currentStep === 1 && this.isFormValid) {
-        const data = {
-          name: this.form.groupName,
-          description: this.form.description,
-          frequency: this.form.contributionFrequency,
-          user_id: this.userStore.user.id,
-          amount: this.form.amountPerPerson,
-          start_date: formattedDate(this.form.startDate),
-          end_date: formattedDate(this.form.endDate),
-          status: this.form.category,
-        };
-
-        const res = await this.ajoStore.createAjo(data);
-        console.log(res);
-      }
+      const { formattedDate, calculateEndDate } = helpers;
 
       if (this.isFormValid && this.currentStep <= 2) {
         this.steps[this.currentStep - 1].isCompleted = true;
@@ -275,27 +264,83 @@ export default {
 
       if (this.currentStep === 3 && this.isFormValid) {
         this.steps[this.currentStep - 1].isCompleted = true;
-        eventBus.emit("open-dialog", {
-          default: AjoGroupDialog,
-          title: "All done!",
-          position: "center",
-          props: {
-            title: this.form.groupName,
-          },
-        });
+
+        const data = {
+          name: this.intialValues.groupName,
+          description: this.intialValues.description,
+          frequency: this.intialValues.contributionFrequency.code,
+          user_id: this.userStore.user.id,
+          amount: this.intialValues.amountPerPerson,
+          start_date: formattedDate(this.intialValues.startDate),
+          end_date: formattedDate(calculateEndDate(this.intialValues.startDate, this.intialValues.contributionFrequency.name)),
+          category: this.intialValues.category,
+        };
+
+        try {
+          const res = await this.ajoStore.createAjo(data);
+          if (!res || res.success === false) {
+            throw new Error("Failed to create Ajo.");
+          }
+
+          await this.inviteParticipants(res.id);
+
+          await this.setAjoRules(res.id);
+
+          this.openDialog();
+        } catch (error) {
+          console.error("Error creating Ajo group:", error);
+        }
       }
+    },
+
+    async inviteParticipants(ajoId) {
+      if (ajoId) {
+        for (const participant of this.participantsEmail) {
+          try {
+            const data = { ajo_id: ajoId, email: participant };
+            await this.ajoStore.inviteAjoParticipant(data);
+
+            console.log(participant);
+          } catch (error) {
+            throw new Error("Error inviting participant:", error);
+          }
+        }
+      }
+    },
+
+    async setAjoRules(ajoId) {
+      if (ajoId) {
+        for (const rule of this.intialValues.selectedAjoRules) {
+          try {
+            const data = { ajo_id: ajoId, value: rule };
+            await this.ajoStore.createAjoRules(data);
+
+            console.log(rule);
+          } catch (error) {
+            throw new Error("Failed to set Ajo rules.", error);
+          }
+        }
+      }
+    },
+
+    openDialog() {
+      eventBus.emit("open-dialog", {
+        default: AjoGroupDialog,
+        title: "All done!",
+        position: "center",
+        props: { title: this.intialValues.groupName },
+      });
     },
 
     searchRules() {
       const lowerSearch = this.searchString.toLowerCase();
-      this.filteredRules = this.rules.filter((rule) => rule.toLowerCase().startsWith(lowerSearch));
+      this.filteredRules = this.intialValues.rules.filter((rule) => rule.label.toLowerCase().startsWith(lowerSearch));
     },
 
     onDrag(email, index) {
-      // Prevent dragging the first email (user email)
       if (index > 0) {
         this.draggedItem = email;
-        this.draggedIndex = index - 1; // Adjusted to be relative to otherParticipants
+        this.draggedIndex = index - 1;
       } else {
         this.draggedItem = null;
         this.draggedIndex = null;
@@ -303,33 +348,30 @@ export default {
     },
 
     onDrop(dropIndex) {
-      // Adjusted drop index to be relative to `otherParticipants`
       const adjustedDropIndex = dropIndex - 1;
 
-      // Proceed only if the drop is within `otherParticipants`
       if (this.draggedIndex !== null && adjustedDropIndex >= 0 && adjustedDropIndex !== this.draggedIndex) {
         const reorderedParticipants = [...this.otherParticipants];
 
-        // Remove dragged item from original position
         const [draggedParticipant] = reorderedParticipants.splice(this.draggedIndex, 1);
 
-        // Insert dragged item at the new position in `otherParticipants`
         reorderedParticipants.splice(adjustedDropIndex, 0, draggedParticipant);
 
-        // Update the otherParticipants array
         this.otherParticipants = reorderedParticipants;
       }
 
-      // Reset drag state
       this.draggedItem = null;
       this.draggedIndex = null;
     },
   },
 
-  mounted() {
-    this.filteredRules = this.rules;
+  async mounted() {
+    this.intialValues.rules = await this.ajoStore.fetchAjoRules();
+    this.filteredRules = this.intialValues.rules;
     const numberInputs = document.querySelectorAll(".p-inputnumber-input");
     numberInputs.forEach((input) => (input.value = ""));
+
+    this.contributionFrequencies = await this.ajoStore.fetchAjoFrequencies();
   },
 };
 </script>
