@@ -78,10 +78,9 @@ export const useGlobalsStore = defineStore("globals", {
     setPrefix() {
       window.prefix = "";
       const authPrefix = ls.get("auth.prefix");
-      if (authPrefix) {
-        window.prefix = `${authPrefix == "-" ? "" : "/" + authPrefix}`;
-        window.userRoot = authPrefix == "-" ? "admin" : authPrefix;
-      }
+      window.prefix = '';
+      window.userRoot = '';
+  
     },
     async changePassword(data) {
       const response = await useClient().http({
@@ -158,8 +157,8 @@ export const useGlobalsStore = defineStore("globals", {
       }
     },
     routeTo(prefix) {
-      if (!prefix.includes("login")) {
-        router.push({ path: `/${prefix}/login`, replace: true });
+      if (!window.currentRoute.path.includes("signin")) {
+        router.push({ path: '/signin', replace: true });
         return true;
       }
       return false;
@@ -172,20 +171,8 @@ export const useGlobalsStore = defineStore("globals", {
             return;
           }
         } else {
-          const token = ls.get("auth.token");
-          let prefix = window.prefix || ""; // Initialize prefix
-          if (prefix.includes("null")) {
-            prefix = "-"; // Handle 'null' case
-          }
-
-          prefix = prefix === "-" ? "admin" : prefix; // Default to 'admin' if prefix is empty
-          if (token) {
-            ls.clear();
-
-            this.routeTo(prefix);
-          } else {
-            this.routeTo(prefix);
-          }
+          ls.clear();
+          this.routeTo();
         }
 
         const notificationStore = useNotificationStore();
