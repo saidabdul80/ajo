@@ -3,6 +3,7 @@
     <div class="tw-basis-full">
       <div class="tw-flex tw-flex-col-reverse tw-justify-end xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full tw-h-full">
         <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full">
+        
           <form class="tw-bg-white tw-h-full tw-p-6 tw-flex tw-flex-col">
             <h2 class="tw-text-[22px] tw-text-black">
               Step {{ currentStep }}:
@@ -14,30 +15,29 @@
 
             <div v-if="currentStep === 1">
               <div class="tw-space-y-8 tw-pt-8">
-                <Input placeholder="Group Name" size="medium" v-model="intialValues.groupName" />
+                <Input placeholder="Group Name" size="medium" v-model="intialValues.name" :errorMessage="globalStore.nameRules.name" />
 
-                <Select v-model="intialValues.category" :options="categories" placeholder="Select a Category" class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
+                <Select v-model="intialValues.category" :options="categories" :errorMessage="globalStore.nameRules.category" placeholder="Select a Category" class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
-                <Input placeholder="Goal of Contribution / Description" size="medium" v-model="intialValues.description" />
+                <Input placeholder="Goal of Contribution / Description" size="medium" v-model="intialValues.description" :errorMessage="globalStore.nameRules.description" />
 
                 <div class="tw-relative">
                   <img class="tw-inline-block tw-absolute tw-z-40 tw-w-3 tw-h-3 tw-top-1/2 -tw-translate-y-1/2 tw-left-3" src="/images/naira.svg" alt="currency-icon" />
 
-                  <InputNumber v-model="intialValues.amountPerPerson" placeholder="Contribution Per Person" inputId="integeronly" fluid />
+                  <InputNumber v-model="intialValues.amount" placeholder="Contribution Per Person" inputId="integeronly" fluid />
                 </div>
 
                 <Select
-                  v-model="intialValues.contributionFrequency"
+                  v-model="selectedFrequency"
                   :options="frequencyOptions"
                   optionLabel="name"
+                  :option-value="null"
+                  @change="onFrequencyChange"
+                  :errorMessage="globalStore.nameRules.frequency"
                   placeholder="Select Contribution Frequency"
                   class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
-                <DatePicker v-model="intialValues.startDate" :minDate="minDate" showIcon fluid dateFormat="dd/mm/yy" iconDisplay="input" placeholder="Start Date" class="tw-w-full tw-h-[48px]">
-                  <template #inputicon="slotProps">
-                    <img class="tw-inline-block" src="/images/calendar.svg" alt="calendar-icon" @click="slotProps.clickCallback" />
-                  </template>
-                </DatePicker>
+                <PDate v-model="ajoDate" @change="onAjoDateChange" :view="dateView" width="100%" />
               </div>
             </div>
 
@@ -82,9 +82,9 @@
                   <div class="tw-inline-flex tw-items-center tw-gap-8 tw-pt-8">
                     <p class="tw-text-lg tw-text-[#333333] tw-font-medium">Do you want to make this Ajo group public?</p>
                     <div class="tw-flex tw-items-center tw-gap-3">
-                      <RadioButton v-model="intialValues.isPublic" inputId="ajoState1" name="No" value="No" />
+                      <RadioButton v-model="intialValues.is_public" inputId="ajoState1" name="No" value="No" />
                       <label for="ajoState1" class="ml-2">No</label>
-                      <RadioButton v-model="intialValues.isPublic" inputId="ajoState2" name="No" value="Yes" />
+                      <RadioButton v-model="intialValues.is_public" inputId="ajoState2" name="No" value="Yes" />
                       <label for="ajoState2" class="ml-2">Yes</label>
                     </div>
                   </div>
@@ -98,7 +98,7 @@
 
                 <div v-if="filteredRules.length > 0" class="tw-space-y-6">
                   <p v-for="(rule, index) in filteredRules" :key="index" class="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-text-gray-500">
-                    <Checkbox v-model="intialValues.selectedAjoRules" :value="rule.name" :inputId="rule.name" />
+                    <Checkbox v-model="intialValues.ajo_rules" :value="rule.value" :inputId="rule.name" />
                     <label :for="rule.name" class="ml-2 tw-text-base tw-text-black">
                       {{ rule.label }}
                     </label>
@@ -122,6 +122,8 @@
 <script>
 import { useUserStore } from "@/stores/user.js";
 import { useAjoStore } from "@/stores/ajo.js";
+import { useGlobalsStore } from "@/stores/globals.js";
+
 import { helpers } from "@/helpers/utilities.js";
 
 import eventBus from "@/eventBus";
@@ -133,9 +135,12 @@ import DatePicker from "primevue/datepicker";
 import Button from "@/components/Button.vue";
 import AccountSetup from "@/components/AccountSetup.vue";
 import Checkbox from "@/components/Checkbox.vue";
+import PDate from "@/components/PDate.vue";
+
 import AjoGroupDialog from "@/components/Dialog/AjoGroupDialog.vue";
 import RadioButton from "primevue/radiobutton";
 import InputNumber from "primevue/inputnumber";
+import { error } from "highcharts";
 
 export default {
   name: "StartAjo",
@@ -148,6 +153,7 @@ export default {
     Button,
     AccountSetup,
     Checkbox,
+    PDate,
     RadioButton,
     InputNumber,
   },
@@ -156,6 +162,7 @@ export default {
     return {
       userStore: useUserStore(),
       ajoStore: useAjoStore(),
+      globalStore: useGlobalsStore(),
       currentStep: 1,
       newEmail: "",
       searchString: "",
@@ -163,16 +170,10 @@ export default {
       draggedItem: null,
       draggedIndex: null,
       minDate: new Date(),
-
+      
       intialValues: {
-        startDate: "",
-        groupName: "",
-        category: "",
-        description: "",
-        amountPerPerson: 0,
-        contributionFrequency: "",
-        selectedAjoRules: [],
-        isPublic: false,
+        ajo_rules: [],
+        is_public: false,
         rules: [],
       },
       categories: ["Personal savings", "Education", "Housing", "Business", "Health", "Trips or vacations", "Event", "Charity", "Investment", "Emergency fund"],
@@ -203,6 +204,7 @@ export default {
           isCompleted: false,
         },
       ],
+      dateView: "date",
     };
   },
 
@@ -213,12 +215,13 @@ export default {
     isFormValid() {
       if (this.currentStep === 1) {
         return (
-          this.intialValues.groupName &&
+          this.intialValues.name &&
           this.intialValues.category &&
           this.intialValues.description &&
-          this.intialValues.amountPerPerson &&
-          this.intialValues.contributionFrequency &&
-          this.intialValues.startDate
+          this.intialValues.amount &&
+          this.intialValues.frequency &&
+          this.intialValues.start_date &&
+          this.intialValues.end_date
         );
       }
 
@@ -226,20 +229,62 @@ export default {
         return this.participantsEmail.length > 1;
       }
 
-      return this.intialValues.selectedAjoRules.length > 0;
+      return this.intialValues.ajo_rules.length > 0;
     },
 
     frequencyOptions() {
       if (this.contributionFrequencies) {
-        return Object.values(this.contributionFrequencies).map(({ value, label }) => ({
-          name: label,
-          code: value,
-        }));
+        return Object.values(this.contributionFrequencies);
       }
     },
   },
 
   methods: {
+    validateDate(date) {
+      const startDate = new Date(date[0]); 
+      const endDate = new Date(date[1]);   
+
+      const timeDifference = endDate - startDate;
+      const totalDays = timeDifference / (1000 * 3600 * 24);
+      if(totalDays% this.dateView !==0){
+        return false;
+      }else{
+        return true;
+      }
+    },
+    onAjoDateChange(date) {
+      this.validateDate(date);
+      this.intialValues.start_date = date[0];
+      this.intialValues.end_date = date[1];
+      //this.end_date = helpers.calculateEndDate(date, this.selectedFrequency?.name);
+    },
+    // onEndDateChange(date) {
+    //   this.end_date = date;
+    //   this.start_date = helpers.calculateStartDate(date, this.selectedFrequency?.name);
+    // },
+    onFrequencyChange(frequency) {
+      this.intialValues.frequency = Number(this.selectedFrequency?.value);
+      switch (this.selectedFrequency?.name) {
+        case "YEARLY":
+          this.dateView = "year";
+          
+          break;
+        case "MONTHLY":
+          this.dateView = "month";
+          break;
+        case "WEEKLY":
+          // this.intialValues.startDate = helpers.calculateStartDate(this.minDate, frequency);
+          this.dateView = "date";
+          break;
+        case "DAILY":
+          // this.intialValues.startDate = helpers.calculateStartDate(this.minDate, frequency);
+          this.dateView = "date";
+          break;
+        default:
+          this.dateView = "date";
+          break;
+      }
+    },
     addEmail() {
       if (this.isValidEmail(this.newEmail) && !this.otherParticipants.includes(this.newEmail)) {
         this.otherParticipants.push(this.newEmail);
@@ -264,27 +309,12 @@ export default {
 
       if (this.currentStep === 3 && this.isFormValid) {
         this.steps[this.currentStep - 1].isCompleted = true;
-
-        const data = {
-          name: this.intialValues.groupName,
-          description: this.intialValues.description,
-          frequency: this.intialValues.contributionFrequency.code,
-          user_id: this.userStore.user.id,
-          amount: this.intialValues.amountPerPerson,
-          start_date: formattedDate(this.intialValues.startDate),
-          end_date: formattedDate(calculateEndDate(this.intialValues.startDate, this.intialValues.contributionFrequency.name)),
-          category: this.intialValues.category,
-        };
-
         try {
-          const res = await this.ajoStore.createAjo(data);
+          this.intialValues.members =  this.participantsEmail;
+          const res = await this.ajoStore.createAjo(this.intialValues);
           if (!res || res.success === false) {
             throw new Error("Failed to create Ajo.");
           }
-
-          await this.inviteParticipants(res.id);
-
-          await this.setAjoRules(res.id);
 
           this.openDialog();
         } catch (error) {
@@ -293,24 +323,10 @@ export default {
       }
     },
 
-    async inviteParticipants(ajoId) {
-      if (ajoId) {
-        for (const participant of this.participantsEmail) {
-          try {
-            const data = { ajo_id: ajoId, email: participant };
-            await this.ajoStore.inviteAjoParticipant(data);
-
-            console.log(participant);
-          } catch (error) {
-            throw new Error("Error inviting participant:", error);
-          }
-        }
-      }
-    },
-
+  
     async setAjoRules(ajoId) {
       if (ajoId) {
-        for (const rule of this.intialValues.selectedAjoRules) {
+        for (const rule of this.intialValues.ajo_rules) {
           try {
             const data = { ajo_id: ajoId, value: rule };
             await this.ajoStore.createAjoRules(data);

@@ -4,6 +4,7 @@
       <i :class="icon"></i>
     </span>
     <InputText v-model="internalValue" v-bind="$props" :class="['tw-w-full !tw-rounded-2xl !tw-text-base', { '!tw-pl-10': icon }, computedClass]" />
+    <p v-if="errorMessage !== ''" class="tw-text-red-700 tw-text-xs tw-m-1">{{ errorMessage }}</p>
   </div>
 </template>
 
@@ -47,6 +48,10 @@ export default {
     invalid: {
       type: Boolean,
       default: false,
+    },
+    errorMessage: {
+      type: String,
+      default: "",
     },
   },
   computed: {
