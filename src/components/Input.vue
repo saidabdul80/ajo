@@ -3,7 +3,7 @@
     <span v-if="icon" class="tw-absolute tw-text-gray-300 tw-left-5 tw-top-1/2 tw-translate-y-[-40%]">
       <i :class="icon"></i>
     </span>
-    <InputText v-model="internalValue" v-bind="$props" :class="['tw-w-full !tw-rounded-2xl !tw-text-base', { '!tw-pl-10': icon }, computedClass]" />
+    <InputText :required="required" v-model="internalValue" v-bind="$props" :class="['tw-w-full !tw-rounded-2xl !tw-text-base', { '!tw-pl-10': icon }, computedClass]" />
     <p v-if="errorMessage !== ''" class="tw-text-red-700 tw-text-xs tw-m-1">{{ errorMessage }}</p>
   </div>
 </template>
@@ -17,6 +17,10 @@ export default {
     InputText,
   },
   props: {
+    required: {
+      type: Boolean,
+      default: false,
+    },
     modelValue: {
       type: [String, Number],
     },

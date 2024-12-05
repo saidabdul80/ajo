@@ -13,10 +13,13 @@
     <!-- Verify Email -->
     <form @submit.prevent="verifyEmail" v-if="currentStep === 'verify'" class="tw-space-y-2 tw-pb-12">
       <h5 class="tw-text-[28px] tw-text-black">Verify email address</h5>
-      <p class="tw-text-[#586283] tw-max-w-[40ch]">We sent a 6-digit code to {{ form.email }}. Please enter the code to verify your email address.</p>
+      <p class="tw-text-[#586283] tw-max-w-[40ch]">We sent a 6-digit code to {{ form.email }}. Please enter the code to verify your email address.
+
+        <a @click="sendCode" class="tw-text-[#586283] tw-underline tw-cursor-pointer">Resend code</a>
+      </p>
       <div class="tw-space-y-8 tw-pt-4">
         <Input placeholder="Your 6-digit code" v-model="form.otp" size="medium" />
-        <Button type="submit" label="Submit" size="medium" class="tw-w-full" />
+        <Button @click="completeVerification" type="submit" label="Submit" size="medium" class="tw-w-full" />
         <Button label="Resend code" size="medium" class="tw-w-full !tw-text-black" link />
       </div>
     </form>
@@ -42,6 +45,9 @@ import Input from "@/components/Input.vue";
 import eventBus from "@/eventBus";
 import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
 
+import { useClient } from "@/stores/client";
+import { useUserStore } from "@/stores/user.js";
+import { useNotificationStore } from "@/stores/notification";
 export default {
   components: {
     Button,
@@ -51,7 +57,7 @@ export default {
 
   data() {
     return {
-      currentStep: "confirm",
+      currentStep: "verify",
       form: {
         email: "",
         otp: "",
@@ -60,10 +66,29 @@ export default {
   },
 
   methods: {
+    async sendCode() {
+
+       const res = await useClient().http({method:'post', path:'/resend_email_verification', data: {email: useUserStore().user.email}}) 
+       const notificationStore = useNotificationStore();
+        notificationStore.showNotification({
+          type: "success",
+          message: "Email Sent successfully.",
+        });
+    },
     goToVerify() {
       this.currentStep = "verify";
     },
-
+    completeVerification() {
+      const res = useClient().http({method:'get', path:'/verify_email', data: {email: useUserStore().user.email, token: this.form.otp}}) 
+      if(res){
+        this.currentStep = "verified";
+      }
+      // const notificationStore = useNotificationStore();
+      // notificationStore.showNotification({
+      //   type: "success",
+      //   message: "Email Verified successfully.",
+      // });
+    },
     verifyEmail() {
       this.currentStep = "verified";
     },

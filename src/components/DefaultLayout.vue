@@ -34,6 +34,11 @@ export default {
   components: {
     Header,
   },
+  data() {
+    return {
+      userStore: useUserStore()
+    }
+  },
 
   computed: {
     fullName() {
