@@ -24,7 +24,7 @@
       <h5 class="tw-text-[28px] tw-text-black">{{ uploadDocument === 7 ? customDocumentName : documentName }} Slip</h5>
       <p class="tw-text-[#586283] tw-max-w-[40ch]">Upload your document here.</p>
       <div class="tw-space-y-8 tw-py-10">
-        <FileUpload />
+        <FileUpload v-model="file" />
         <Button label="Continue" size="medium" class="tw-w-full" @click="verifyDocument" />
       </div>
     </div>
@@ -49,7 +49,8 @@ import Button from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import FileUpload from "@/components/FileUpload.vue";
 import RadioButton from "primevue/radiobutton";
-
+import { useClient } from "@/stores/client";
+import { useUserStore } from "@/stores/user.js";
 export default {
   components: {
     Button,
@@ -60,18 +61,21 @@ export default {
 
   data() {
     return {
+      user: useUserStore().user,
       currentStep: "confirm",
       uploadDocument: "",
       customDocumentName: "",
       userCountry: "Nigeria",
+      file:null,
+      fileType:null,
       uploadDocumentTypes: [
-        { name: "National Identification Number (NIN) Slip", value: 1, countries: ["Nigeria"] },
-        { name: "International Passport", value: 2, countries: ["Canada", "Nigeria"] },
-        { name: "Utility Bills", value: 3, countries: ["Nigeria"] },
-        { name: "Driver's License", value: 4, countries: ["Canada"] },
-        { name: "Permanent Residence Card", value: 5, countries: ["Canada"] },
-        { name: "Proof of Address", value: 6, countries: ["Canada"] },
-        { name: "Others", value: 7, countries: ["Canada"] },
+        {type: 'nin_slip',  name: "National Identification Number (NIN) Slip", value: 1, countries: ["Nigeria"] },
+        {type: 'international_passport',  name: "International Passport", value: 2, countries: ["Canada", "Nigeria"] },
+        {type: 'utility_bills',  name: "Utility Bills", value: 3, countries: ["Nigeria"] },
+        {type: 'drivers_license',  name: "Driver's License", value: 4, countries: ["Canada"] },
+        {type: 'permanent_residence_card',  name: "Permanent Residence Card", value: 5, countries: ["Canada"] },
+        {type: 'proof_of_address',  name: "Proof of Address", value: 6, countries: ["Canada"] },
+        {type: 'others',  name: "Others", value: 7, countries: ["Canada"] },
       ],
     };
   },
@@ -83,6 +87,7 @@ export default {
 
     documentName() {
       const selected = this.uploadDocumentTypes.find((doc) => doc.value === this.uploadDocument);
+      this.fileType = selected ? selected.type : null;
       return selected ? selected.name : "";
     },
   },
@@ -97,6 +102,18 @@ export default {
     },
 
     verifyDocument() {
+      if(!this.file){
+        alert("Please upload a document.");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("file", this.file);
+      formData.append("id", useUserStore().user.id);
+      formData.append("type", this.fileType);
+      const res = useClient().http({method:'post', path:'/upload_documents', data: formData})
+      if(res){
+        this.currentStep = "verified";
+      }
       this.currentStep = "verified";
     },
 

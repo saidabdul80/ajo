@@ -7,6 +7,7 @@
         </template>
       </Notify>
     </div>
+
     <div class="tw-flex tw-flex-col-reverse xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
       <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full tw-pb-6 xl:tw-pb-0">
         <div class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
@@ -18,6 +19,7 @@
         </div>
       </div>
       <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
+
         <AccountSetup title="Complete account setup" description="Finish setting up your account to fully enjoy Ajo by Cowris." :steps="stepDefinitions" />
         <AjoGroupList />
       </div>
@@ -41,7 +43,7 @@ import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
 import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
 import UploadDialog from "@/components/Dialog/UploadDialog.vue";
-
+import { computed } from "vue"
 export default {
   name: "Overview",
   components: {
@@ -57,9 +59,15 @@ export default {
     ConfirmEmailDialog,
     UploadDialog,
   },
+  setup() {
+            const userStoreC = useUserStore();
+            const userStore = computed(() =>  userStoreC.user);
+            return {
+                userStore
+            };
+    },
   data() {
     return {
-      userStore: useUserStore().user,
       series: [
         {
           name: "Balance",
@@ -114,20 +122,20 @@ export default {
         {
           name: "email",
           text: "Verify your email",
-          isCompleted: useUserStore.is_verified_email,
-          isClickable: !useUserStore.is_verified_email,
+          isCompleted: useUserStore().user.is_verified_email,
+          isClickable: !useUserStore().user.is_verified_email,
         },
         {
           name: "phone",
           text: "Add and verify phone number",
-          isCompleted: useUserStore.is_verified_phone_number,
-          isClickable: !useUserStore.is_verified_phone_number,
+          isCompleted: useUserStore().user.is_verified_phone_number,
+          isClickable: !useUserStore().user.is_verified_phone_number,
         },
         {
           name: "document",
           text: "Upload means of identification",
-          isCompleted: false,
-          isClickable: true,
+          isCompleted: (useUserStore().user.nin_slip_url || useUserStore().user.international_passport_url || useUserStore().user.utility_bills_url || useUserStore().user.drivers_license_url || useUserStore().user.permanent_residence_card_url || useUserStore().user.proof_of_address_url),
+          isClickable: !(useUserStore().user.nin_slip_url || useUserStore().user.international_passport_url || useUserStore().user.utility_bills_url || useUserStore().user.drivers_license_url || useUserStore().user.permanent_residence_card_url || useUserStore().user.proof_of_address_url),
         },
       ],
 
@@ -145,7 +153,7 @@ export default {
           dialog: ConfirmPhoneDialog,
         },
         {
-          state: () => true,
+          state: () => !(useUserStore().user.nin_slip_url || useUserStore().user.international_passport_url || useUserStore().user.utility_bills_url || useUserStore().user.drivers_license_url || useUserStore().user.permanent_residence_card_url || useUserStore().user.proof_of_address_url),
           message: "Upload your document to explore Ajo by Cowris.",
           label: "Upload Document",
           dialog: UploadDialog,
