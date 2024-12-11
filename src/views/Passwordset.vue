@@ -21,7 +21,7 @@
     </template1>
   </div>
 </template>
-
+      
 <script>
 import { IonContent } from "@ionic/vue";
 import Template1 from "@/components/Template1.vue";
