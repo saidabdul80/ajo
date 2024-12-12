@@ -74,7 +74,7 @@
               </h5>
               <div class="tw-flex tw-justify-between tw-items-center">
                 <p>{{ alert.description }}</p>
-                <ToggleSwitch v-model="alert.model" />
+                <ToggleSwitch v-model="alert.model" :onchange="() => handleModelChange(alert)" />
               </div>
             </div>
           </div>
@@ -130,26 +130,25 @@ export default {
       {
         title: "Security alerts",
         description: "Get notified about important security alerts, such as password resets.",
-        model: false,
+        model: user.value.notify_security_alerts,
       },
       {
         title: "Ajo alerts",
         description: "Get notified about all Ajo group invitations and swap requests.",
-        model: false,
+        model: user.value.notify_ajo_alerts,
       },
       {
         title: "Product announcements",
         description: "Get notified about new features on Cowris, including mobile app launch and features.",
-        model: false,
+        model: user.value.notify_product_announcements,
       },
       {
         title: "Support tickets",
         description: "Get notified about support responses and enquiries replies.",
-        model: false,
+        model: user.value.notify_support_tickets,
       },
     ]);
 
-    // Methods
     const changePasswordDialog = () => {
       eventBus.emit("open-dialog", {
         default: ChangePasswordDialog,
@@ -176,6 +175,27 @@ export default {
       }
     };
 
+    const handleModelChange = async (value) => {
+      const title = value.title;
+
+      switch (title) {
+        case "Security alerts":
+          await ajoStore.updateNotificationSetting(user.value.id, { notify_security_alerts: value.model });
+          break;
+        case "Ajo alerts":
+          await ajoStore.updateNotificationSetting(user.value.id, { notify_ajo_alerts: value.model });
+          break;
+        case "Product announcements":
+          await ajoStore.updateNotificationSetting(user.value.id, { notify_product_announcements: value.model });
+          break;
+        case "Support tickets":
+          await ajoStore.updateNotificationSetting(user.value.id, { notify_support_tickets: value.model });
+          break;
+        default:
+          break;
+      }
+    };
+
     return {
       ajoStore,
       user,
@@ -185,6 +205,7 @@ export default {
       changePasswordDialog,
       handleUpdateBankDetails,
       validateForm,
+      handleModelChange,
     };
   },
 };

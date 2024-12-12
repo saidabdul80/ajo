@@ -145,5 +145,25 @@ export const useAjoStore = defineStore("ajoStore", {
         this.loading = false;
       }
     },
+
+    async updateNotificationSetting(id, data) {
+      const notificationStore = useNotificationStore(); // Declare inside action
+      try {
+        const response = await useClient().http({
+          method: "put",
+          path: `/users/${id}/notifications`,
+          data: data,
+        });
+
+        if (response) {
+          notificationStore.showNotification({
+            type: "success",
+            message: response.message || "Bank details updated successfully!",
+          });
+        }
+      } catch (e) {
+        this.handleError("Error turning off notification", e, notificationStore);
+      }
+    },
   },
 });
