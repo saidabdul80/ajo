@@ -25,11 +25,6 @@ export const useAjoStore = defineStore("ajoStore", {
           path: "/ajos",
           data,
         });
-
-        if (response && response.data) {
-          this.loading = false;
-          return response.data;
-        }
       } catch (e) {
         this.handleError("Error creating Ajo group", e, notificationStore);
       } finally {
@@ -46,9 +41,8 @@ export const useAjoStore = defineStore("ajoStore", {
           path: "/ajos",
         });
 
-        if (response && response.data) {
-          this.loading = false;
-          return response.data;
+        if (response) {
+          return response;
         }
       } catch (e) {
         this.handleError("Error fetching Ajo groups", e, notificationStore);
@@ -65,8 +59,8 @@ export const useAjoStore = defineStore("ajoStore", {
           path: "/frequencies",
         });
 
-        if (response && response.data) {
-          return response.data;
+        if (response) {
+          return response;
         }
       } catch (e) {
         this.handleError("Error fetching Ajo frequencies", e, notificationStore);
@@ -82,8 +76,8 @@ export const useAjoStore = defineStore("ajoStore", {
           data: data,
         });
 
-        if (response && response.data) {
-          return response.data;
+        if (response) {
+          return response;
         }
       } catch (e) {
         this.handleError("Error inviting Ajo participant", e, notificationStore);
@@ -98,8 +92,8 @@ export const useAjoStore = defineStore("ajoStore", {
           path: "/rules",
         });
 
-        if (response && response.data) {
-          return response.data;
+        if (response) {
+          return response;
         }
       } catch (e) {
         this.handleError("Error fetching Ajo rules", e, notificationStore);
@@ -114,10 +108,6 @@ export const useAjoStore = defineStore("ajoStore", {
           path: "/ajo-rules",
           data: data,
         });
-
-        if (response && response.data) {
-          return response.data;
-        }
       } catch (e) {
         this.handleError("Error creating Ajo rules", e, notificationStore);
       }

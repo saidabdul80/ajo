@@ -110,7 +110,7 @@
               </div>
             </div>
             <div class="tw-pt-8">
-              <Button label="Continue" @click="nextStep" class="tw-w-full tw-mt-auto" :disabled="!isFormValid" />
+              <Button label="Continue" @click="nextStep" class="tw-w-full tw-mt-auto" :disabled="!isFormValid || ajoStore.loading" :loading="ajoStore.loading" />
             </div>
           </form>
         </div>
@@ -358,6 +358,7 @@ export default {
 
     onMounted(async () => {
       rules = await ajoStore.fetchAjoRules();
+
       filteredRules.value = rules;
 
       const numberInputs = document.querySelectorAll(".p-inputnumber-input");
