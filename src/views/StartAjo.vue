@@ -170,7 +170,6 @@ export default {
     const draggedIndex = ref(null);
     const minDate = ref(new Date());
     const frequency = ref(null);
-    let rules = [];
 
     const intialValues = reactive({
       ajo_rules: [],
@@ -182,6 +181,7 @@ export default {
       frequency: null,
       start_date: null,
       end_date: null,
+      rules: [],
     });
 
     const categories = ["Personal savings", "Education", "Housing", "Business", "Health", "Trips or vacations", "Event", "Charity", "Investment", "Emergency fund"];
@@ -288,16 +288,17 @@ export default {
       if (currentStep.value === 3 && isFormValid.value) {
         steps[currentStep.value - 1].isCompleted = true;
 
-        intialValues.members = participantsEmail.value;
         try {
           intialValues.members = participantsEmail.value;
+
+          console.log(intialValues);
 
           const res = await ajoStore.createAjo(intialValues);
           if (!res || res.success === false) {
             throw new Error("Failed to create Ajo.");
           }
 
-          // await setAjoRules(user.user_id);
+          await setAjoRules(user.user_id);
 
           openDialog();
         } catch (error) {
@@ -357,9 +358,9 @@ export default {
     };
 
     onMounted(async () => {
-      rules = await ajoStore.fetchAjoRules();
+      intialValues.rules = await ajoStore.fetchAjoRules();
 
-      filteredRules.value = rules;
+      filteredRules.value = intialValues.rules;
 
       const numberInputs = document.querySelectorAll(".p-inputnumber-input");
       numberInputs.forEach((input) => (input.value = ""));

@@ -59,7 +59,7 @@
 
 <script>
 import { useAjoStore } from "@/stores/ajo.js";
-import { helpers } from "@/helpers/utilities.js";
+import { ref, onMounted } from "vue";
 
 import Pills from "@/components/Pills.vue";
 import Select from "primevue/select";
@@ -94,155 +94,155 @@ export default {
     },
   },
 
-  data() {
-    return {
-      ajoStore: useAjoStore(),
-      ajos: null,
-      statusOptions: ["All", "Type"],
-      contributors: [
-        {
-          id: "CWR93768Y43",
-          name: "Rhoda Ogunesan",
-          date: "Nov 8, 10:35 AM",
-          type: "Withdrawal",
-          amount: 34244,
-          status: "pending",
-          image: "/images/avatar.png",
-        },
-        {
-          id: "CWR12345A67",
-          name: "James Smith",
-          date: "Nov 9, 2:15 PM",
-          type: "Deposit",
-          amount: 12000,
-          status: "successful",
-          image: "/images/avatar.png",
-        },
-        {
-          id: "CWR98765B78",
-          name: "Linda Johnson",
-          date: "Nov 10, 11:30 AM",
-          type: "Withdrawal",
-          amount: 5400,
-          status: "failed",
-          image: "/images/avatar.png",
-        },
-        {
-          id: "CWR54321C89",
-          name: "Michael Brown",
-          date: "Nov 11, 9:45 AM",
-          type: "Deposit",
-          amount: 28750,
-          status: "pending",
-          image: "/images/avatar.png",
-        },
-        {
-          id: "CWR76543D90",
-          name: "Sarah Davis",
-          date: "Nov 12, 3:00 PM",
-          type: "Withdrawal",
-          amount: 1000,
-          status: "successful",
-          image: "/images/avatar.png",
-        },
-        {
-          id: "CWR45678E01",
-          name: "David Wilson",
-          date: "Nov 13, 4:20 PM",
-          type: "Deposit",
-          amount: 10500,
-          status: "pending",
-          image: "/images/avatar.png",
-        },
-        {
-          id: "CWR67890F12",
-          name: "Emma Garcia",
-          date: "Nov 14, 1:00 PM",
-          type: "Withdrawal",
-          amount: 8750,
-          status: "successful",
-          image: "/images/avatar.png",
-        },
-        {
-          id: "CWR23456G23",
-          name: "Sophia Martinez",
-          date: "Nov 15, 5:10 PM",
-          type: "Deposit",
-          amount: 15000,
-          status: "pending",
-          image: "/images/avatar.png",
-        },
-        {
-          id: "CWR34567H34",
-          name: "William Rodriguez",
-          date: "Nov 16, 8:15 AM",
-          type: "Withdrawal",
-          amount: 2500,
-          status: "successful",
-          image: "/images/avatar.png",
-        },
-      ],
-      ajoContributions: [
-        {
-          id: 1,
-          ajoType: "Savings Group",
-          ajoName: "My Ajo 1",
-          ajoContributedAmount: 80000,
-          ajoTotalAmount: 120000,
-          ajoTimeline: "2 weeks",
-          ajoLastUpate: "3 days",
-          images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
-        },
-        {
-          id: 2,
-          ajoType: "Investment Group",
-          ajoName: "Investment Ajo",
-          ajoContributedAmount: 50000,
-          ajoTotalAmount: 100000,
-          ajoTimeline: "1 month",
-          ajoLastUpate: "5 days",
-          images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
-        },
-        {
-          id: 3,
-          ajoType: "Cooperative",
-          ajoName: "Cooperative Ajo",
-          ajoContributedAmount: 30000,
-          ajoTotalAmount: 60000,
-          ajoTimeline: "1 week",
-          ajoLastUpate: "2 days",
-          images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
-        },
-        {
-          id: 4,
-          ajoType: "Loan Group",
-          ajoName: "Loan Ajo",
-          ajoContributedAmount: 100000,
-          ajoTotalAmount: 200000,
-          ajoTimeline: "3 weeks",
-          ajoLastUpate: "1 day",
-          images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
-        },
-      ],
-    };
-  },
+  setup(props) {
+    const ajoStore = useAjoStore();
 
-  methods: {
-    handlePillSelection(value) {
+    // Reactive state
+    const ajos = ref(null);
+    const statusOptions = ref(["All", "Type"]);
+    const contributors = ref([
+      {
+        id: "CWR93768Y43",
+        name: "Rhoda Ogunesan",
+        date: "Nov 8, 10:35 AM",
+        type: "Withdrawal",
+        amount: 34244,
+        status: "pending",
+        image: "/images/avatar.png",
+      },
+      {
+        id: "CWR12345A67",
+        name: "James Smith",
+        date: "Nov 9, 2:15 PM",
+        type: "Deposit",
+        amount: 12000,
+        status: "successful",
+        image: "/images/avatar.png",
+      },
+      {
+        id: "CWR98765B78",
+        name: "Linda Johnson",
+        date: "Nov 10, 11:30 AM",
+        type: "Withdrawal",
+        amount: 5400,
+        status: "failed",
+        image: "/images/avatar.png",
+      },
+      {
+        id: "CWR54321C89",
+        name: "Michael Brown",
+        date: "Nov 11, 9:45 AM",
+        type: "Deposit",
+        amount: 28750,
+        status: "pending",
+        image: "/images/avatar.png",
+      },
+      {
+        id: "CWR76543D90",
+        name: "Sarah Davis",
+        date: "Nov 12, 3:00 PM",
+        type: "Withdrawal",
+        amount: 1000,
+        status: "successful",
+        image: "/images/avatar.png",
+      },
+      {
+        id: "CWR45678E01",
+        name: "David Wilson",
+        date: "Nov 13, 4:20 PM",
+        type: "Deposit",
+        amount: 10500,
+        status: "pending",
+        image: "/images/avatar.png",
+      },
+      {
+        id: "CWR67890F12",
+        name: "Emma Garcia",
+        date: "Nov 14, 1:00 PM",
+        type: "Withdrawal",
+        amount: 8750,
+        status: "successful",
+        image: "/images/avatar.png",
+      },
+      {
+        id: "CWR23456G23",
+        name: "Sophia Martinez",
+        date: "Nov 15, 5:10 PM",
+        type: "Deposit",
+        amount: 15000,
+        status: "pending",
+        image: "/images/avatar.png",
+      },
+      {
+        id: "CWR34567H34",
+        name: "William Rodriguez",
+        date: "Nov 16, 8:15 AM",
+        type: "Withdrawal",
+        amount: 2500,
+        status: "successful",
+        image: "/images/avatar.png",
+      },
+    ]);
+    const ajoContributions = ref([
+      {
+        id: 1,
+        ajoType: "Savings Group",
+        ajoName: "My Ajo 1",
+        ajoContributedAmount: 80000,
+        ajoTotalAmount: 120000,
+        ajoTimeline: "2 weeks",
+        ajoLastUpate: "3 days",
+        images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
+      },
+      {
+        id: 2,
+        ajoType: "Investment Group",
+        ajoName: "Investment Ajo",
+        ajoContributedAmount: 50000,
+        ajoTotalAmount: 100000,
+        ajoTimeline: "1 month",
+        ajoLastUpate: "5 days",
+        images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
+      },
+      {
+        id: 3,
+        ajoType: "Cooperative",
+        ajoName: "Cooperative Ajo",
+        ajoContributedAmount: 30000,
+        ajoTotalAmount: 60000,
+        ajoTimeline: "1 week",
+        ajoLastUpate: "2 days",
+        images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
+      },
+      {
+        id: 4,
+        ajoType: "Loan Group",
+        ajoName: "Loan Ajo",
+        ajoContributedAmount: 100000,
+        ajoTotalAmount: 200000,
+        ajoTimeline: "3 weeks",
+        ajoLastUpate: "1 day",
+        images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
+      },
+    ]);
+
+    // Methods
+    const handlePillSelection = (value) => {
       console.log(value);
-    },
+    };
 
-    hndleStatusSelection(e) {
+    const hndleStatusSelection = (e) => {
       console.log(e.value);
-    },
-    formatCurrency(value) {
+    };
+
+    const formatCurrency = (value) => {
       return value.toLocaleString("en-NG", {
         style: "currency",
         currency: "NGN",
       });
-    },
+    };
 
-    getSeverity(status) {
+    const getSeverity = (status) => {
       switch (status) {
         case "successful":
           return "success";
@@ -256,11 +256,24 @@ export default {
         default:
           return null;
       }
-    },
-  },
+    };
 
-  async mounted() {
-    this.ajos = await this.ajoStore.fetchAllAjo();
+    // Fetch Ajo data on mount
+    onMounted(async () => {
+      ajos.value = await ajoStore.fetchAllAjo();
+    });
+
+    return {
+      ajos,
+      statusOptions,
+      contributors,
+      ajoContributions,
+      handlePillSelection,
+      hndleStatusSelection,
+      formatCurrency,
+      getSeverity,
+      props,
+    };
   },
 };
 </script>

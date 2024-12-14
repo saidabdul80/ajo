@@ -19,7 +19,6 @@
         </div>
       </div>
       <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
-
         <AccountSetup title="Complete account setup" description="Finish setting up your account to fully enjoy Ajo by Cowris." :steps="stepDefinitions" />
         <AjoGroupList />
       </div>
@@ -29,7 +28,6 @@
 
 <script>
 import { useUserStore } from "@/stores/user.js";
-
 import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
 import Header from "@/components/Header.vue";
@@ -43,7 +41,8 @@ import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
 import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
 import UploadDialog from "@/components/Dialog/UploadDialog.vue";
-import { computed } from "vue"
+import { reactive, computed } from "vue";
+
 export default {
   name: "Overview",
   components: {
@@ -60,128 +59,155 @@ export default {
     UploadDialog,
   },
   setup() {
-            const userStoreC = useUserStore();
-            const userStore = computed(() =>  userStoreC.user);
-            return {
-                userStore
-            };
-    },
-  data() {
-    return {
-      series: [
-        {
-          name: "Balance",
-          data: [0, 1, 3, 2, 7, 4, 6],
-        },
-      ],
-      chartOptions: {
-        colors: ["#546E7A", "#E91E63"],
-        chart: {
-          type: "area",
-          height: "auto",
-          background: "transparent",
-          sparkline: {
-            enabled: true,
-          },
-        },
-        stroke: {
-          curve: "smooth",
-        },
-        fill: {
-          type: "gradient",
-          colors: ["#ccc"],
-          gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.4,
-            opacityTo: 0.5,
-            stops: [0, 90, 100],
-          },
-        },
-        xaxis: {
-          labels: {
-            show: false,
-          },
-        },
-        yaxis: {
-          labels: {
-            show: false,
-          },
-        },
-        tooltip: {
+    const userStore = useUserStore();
+    const user = computed(() => userStore.user);
+
+    const series = reactive([
+      {
+        name: "Balance",
+        data: [0, 1, 3, 2, 7, 4, 6],
+      },
+    ]);
+
+    const chartOptions = reactive({
+      colors: ["#546E7A", "#E91E63"],
+      chart: {
+        type: "area",
+        height: "auto",
+        background: "transparent",
+        sparkline: {
           enabled: true,
         },
       },
+      stroke: {
+        curve: "smooth",
+      },
+      fill: {
+        type: "gradient",
+        colors: ["#ccc"],
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.4,
+          opacityTo: 0.5,
+          stops: [0, 90, 100],
+        },
+      },
+      xaxis: {
+        labels: {
+          show: false,
+        },
+      },
+      yaxis: {
+        labels: {
+          show: false,
+        },
+      },
+      tooltip: {
+        enabled: true,
+      },
+    });
 
-      stepDefinitions: [
-        {
-          name: "signup",
-          text: "Sign up to Cowris",
-          isCompleted: true,
-          isClickable: false,
-        },
-        {
-          name: "email",
-          text: "Verify your email",
-          isCompleted: useUserStore().user.is_verified_email,
-          isClickable: !useUserStore().user.is_verified_email,
-        },
-        {
-          name: "phone",
-          text: "Add and verify phone number",
-          isCompleted: useUserStore().user.is_verified_phone_number,
-          isClickable: !useUserStore().user.is_verified_phone_number,
-        },
-        {
-          name: "document",
-          text: "Upload means of identification",
-          isCompleted: (useUserStore().user.nin_slip_url || useUserStore().user.international_passport_url || useUserStore().user.utility_bills_url || useUserStore().user.drivers_license_url || useUserStore().user.permanent_residence_card_url || useUserStore().user.proof_of_address_url),
-          isClickable: !(useUserStore().user.nin_slip_url || useUserStore().user.international_passport_url || useUserStore().user.utility_bills_url || useUserStore().user.drivers_license_url || useUserStore().user.permanent_residence_card_url || useUserStore().user.proof_of_address_url),
-        },
-      ],
+    const stepDefinitions = reactive([
+      {
+        name: "signup",
+        text: "Sign up to Cowris",
+        isCompleted: true,
+        isClickable: false,
+      },
+      {
+        name: "email",
+        text: "Verify your email",
+        isCompleted: computed(() => user.value.is_verified_email),
+        isClickable: computed(() => !user.value.is_verified_email),
+      },
+      {
+        name: "phone",
+        text: "Add and verify phone number",
+        isCompleted: computed(() => user.value.is_verified_phone_number),
+        isClickable: computed(() => !user.value.is_verified_phone_number),
+      },
+      {
+        name: "document",
+        text: "Upload means of identification",
+        isCompleted: computed(
+          () =>
+            user.value.nin_slip_url ||
+            user.value.international_passport_url ||
+            user.value.utility_bills_url ||
+            user.value.drivers_license_url ||
+            user.value.permanent_residence_card_url ||
+            user.value.proof_of_address_url
+        ),
+        isClickable: computed(
+          () =>
+            !(
+              user.value.nin_slip_url ||
+              user.value.international_passport_url ||
+              user.value.utility_bills_url ||
+              user.value.drivers_license_url ||
+              user.value.permanent_residence_card_url ||
+              user.value.proof_of_address_url
+            )
+        ),
+      },
+    ]);
 
-      notifications: [
-        {
-          state: () => !this.userStore.is_verified_email,
-          message: "Verify your email address to explore Ajo by Cowris.",
-          label: "Verify Email",
-          dialog: ConfirmEmailDialog,
-        },
-        {
-          state: () => !this.userStore.is_verified_phone_number,
-          message: "Verify your phone number to explore Ajo by Cowris.",
-          label: "Verify Phone",
-          dialog: ConfirmPhoneDialog,
-        },
-        {
-          state: () => !(useUserStore().user.nin_slip_url || useUserStore().user.international_passport_url || useUserStore().user.utility_bills_url || useUserStore().user.drivers_license_url || useUserStore().user.permanent_residence_card_url || useUserStore().user.proof_of_address_url),
-          message: "Upload your document to explore Ajo by Cowris.",
-          label: "Upload Document",
-          dialog: UploadDialog,
-        },
-      ],
-    };
-  },
-  computed: {
-    currentNotification() {
-      console.log(this.userStore);
-      return this.notifications.find((notification) => notification.state());
-    },
-  },
-  methods: {
-    handleVerification(type) {
+    const notifications = reactive([
+      {
+        state: () => !user.value.is_verified_email,
+        message: "Verify your email address to explore Ajo by Cowris.",
+        label: "Verify Email",
+        dialog: ConfirmEmailDialog,
+      },
+      {
+        state: () => !user.value.is_verified_phone_number,
+        message: "Verify your phone number to explore Ajo by Cowris.",
+        label: "Verify Phone",
+        dialog: ConfirmPhoneDialog,
+      },
+      {
+        state: () =>
+          !(
+            user.value.nin_slip_url ||
+            user.value.international_passport_url ||
+            user.value.utility_bills_url ||
+            user.value.drivers_license_url ||
+            user.value.permanent_residence_card_url ||
+            user.value.proof_of_address_url
+          ),
+        message: "Upload your document to explore Ajo by Cowris.",
+        label: "Upload Document",
+        dialog: UploadDialog,
+      },
+    ]);
+
+    const currentNotification = computed(() => notifications.find((notification) => notification.state()));
+
+    const handleVerification = (type) => {
       eventBus.emit("open-dialog", {
         default: type,
         position: "right",
       });
-    },
+    };
 
-    handleFundWallet() {
+    const handleFundWallet = () => {
       eventBus.emit("open-dialog", {
         default: FundWalletDialog,
         title: "Fund wallet",
         position: "right",
       });
-    },
+    };
+
+    return {
+      user,
+      series,
+      chartOptions,
+      stepDefinitions,
+      notifications,
+      currentNotification,
+      handleVerification,
+      handleFundWallet,
+    };
   },
 };
 </script>

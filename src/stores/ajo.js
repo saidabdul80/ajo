@@ -17,7 +17,7 @@ export const useAjoStore = defineStore("ajoStore", {
     },
 
     async createAjo(data) {
-      const notificationStore = useNotificationStore(); // Declare inside action
+      const notificationStore = useNotificationStore();
       try {
         this.loading = true;
         const response = await useClient().http({
@@ -33,7 +33,7 @@ export const useAjoStore = defineStore("ajoStore", {
     },
 
     async fetchAllAjo(id) {
-      const notificationStore = useNotificationStore(); // Declare inside action
+      const notificationStore = useNotificationStore();
       try {
         this.loading = true;
         const response = await useClient().http({
@@ -52,7 +52,7 @@ export const useAjoStore = defineStore("ajoStore", {
     },
 
     async fetchAjoFrequencies() {
-      const notificationStore = useNotificationStore(); // Declare inside action
+      const notificationStore = useNotificationStore();
       try {
         const response = await useClient().http({
           method: "get",
@@ -68,7 +68,7 @@ export const useAjoStore = defineStore("ajoStore", {
     },
 
     async inviteAjoParticipant(data) {
-      const notificationStore = useNotificationStore(); // Declare inside action
+      const notificationStore = useNotificationStore();
       try {
         const response = await useClient().http({
           method: "post",
@@ -85,7 +85,7 @@ export const useAjoStore = defineStore("ajoStore", {
     },
 
     async fetchAjoRules() {
-      const notificationStore = useNotificationStore(); // Declare inside action
+      const notificationStore = useNotificationStore();
       try {
         const response = await useClient().http({
           method: "get",
@@ -101,7 +101,7 @@ export const useAjoStore = defineStore("ajoStore", {
     },
 
     async createAjoRules(data) {
-      const notificationStore = useNotificationStore(); // Declare inside action
+      const notificationStore = useNotificationStore();
       try {
         const response = await useClient().http({
           method: "post",
@@ -115,7 +115,7 @@ export const useAjoStore = defineStore("ajoStore", {
 
     async updateBankDetails(id, data) {
       this.loading = true;
-      const notificationStore = useNotificationStore(); // Declare inside action
+      const notificationStore = useNotificationStore();
       try {
         const response = await useClient().http({
           method: "put",
@@ -137,7 +137,7 @@ export const useAjoStore = defineStore("ajoStore", {
     },
 
     async updateNotificationSetting(id, data) {
-      const notificationStore = useNotificationStore(); // Declare inside action
+      const notificationStore = useNotificationStore();
       try {
         const response = await useClient().http({
           method: "put",
