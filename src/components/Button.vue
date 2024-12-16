@@ -1,12 +1,5 @@
 <template>
-  <Button
-    :label="label"
-    :outlined="outlined"
-    :severity="color"
-    v-bind="$props"
-    :size="size"
-    :class="computedClass">
-  </Button>
+  <Button :label="label" :outlined="outlined" :severity="color" v-bind="$props" :size="size" :class="computedClass"></Button>
 </template>
 
 <script>

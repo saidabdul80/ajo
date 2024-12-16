@@ -53,7 +53,7 @@
                 </div>
                 <div class="tw-flex tw-flex-col tw-gap-2">
                   <label for="bankName" class="tw-text-sm tw-text-[#586283]">Bank name</label>
-                  <Select id="bankName" v-model="form.selectedBank" :options="bankName" placeholder="Frist Bank" class="tw-w-full !tw-py-3 !tw-h-[48px] !tw-rounded-2xl" />
+                  <Select id="bankName" v-model="form.selectedBank" :options="bankName" placeholder="Select Bank" class="tw-w-full !tw-py-3 !tw-h-[48px] !tw-rounded-2xl tw-font-light" />
                 </div>
                 <div class="tw-flex tw-flex-col tw-gap-2">
                   <label for="acctNmae" class="tw-text-sm tw-text-[#586283]">Account name</label>
@@ -62,7 +62,7 @@
               </div>
             </div>
             <div class="tw-mt-6">
-              <Button label="Update bank details" :isFullWidth="false" type="submit" />
+              <Button label="Update bank details" :isFullWidth="false" type="submit" :disabled="!validateForm() || ajoStore.loading" :loading="ajoStore.loading" />
             </div>
           </form>
         </TabPanel>
@@ -74,7 +74,7 @@
               </h5>
               <div class="tw-flex tw-justify-between tw-items-center">
                 <p>{{ alert.description }}</p>
-                <ToggleSwitch v-model="alert.model" />
+                <ToggleSwitch v-model="alert.model" :onchange="() => handleModelChange(alert)" />
               </div>
             </div>
           </div>
@@ -85,7 +85,10 @@
 </template>
 
 <script>
+import { ref, computed } from "vue";
 import eventBus from "@/eventBus";
+import { useAuthStore } from "@/stores/auth.js";
+import { useAjoStore } from "@/stores/ajo.js";
 import Button from "@/components/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import Tabs from "primevue/tabs";
@@ -97,8 +100,6 @@ import Input from "@/components/Input.vue";
 import ChangePasswordDialog from "@/components/Dialog/ChangePasswordDialog.vue";
 import Select from "primevue/select";
 import ToggleSwitch from "primevue/toggleswitch";
-
-import { useAuthStore } from "@/stores/auth.js";
 
 export default {
   components: {
@@ -115,49 +116,97 @@ export default {
     ToggleSwitch,
   },
 
-  data() {
-    return {
-      user: useAuthStore().user,
-      form: {
-        selectedBank: null,
-        acctName: null,
-        acctNumber: null,
+  setup() {
+    const authStore = useAuthStore();
+    const ajoStore = useAjoStore();
+    const user = computed(() => authStore.user);
+    const form = ref({
+      selectedBank: user.value.bank_name || null,
+      acctName: user.value.account_name || null,
+      acctNumber: user.value.account_number || null,
+    });
+    const bankName = ["First Bank", "GTBank"];
+    const alerts = ref([
+      {
+        title: "Security alerts",
+        description: "Get notified about important security alerts, such as password resets.",
+        model: user.value.notify_security_alerts,
       },
-      bankName: ["First Bank", "GTBank"],
-      alerts: [
-        {
-          title: "Security alerts",
-          description: "Get notified about important security alerts, such as password resets.",
-          model: false,
-        },
-        {
-          title: "Ajo alerts",
-          description: "Get notified about all Ajo group invitations and swap requests.",
-          model: false,
-        },
-        {
-          title: "Product announcements",
-          description: "Get notified about new features on Cowris, including mobile app launch and features.",
-          model: false,
-        },
-        {
-          title: "Support tickets",
-          description: "Get notified about support responses and enquiries replies.",
-          model: false,
-        },
-      ],
-    };
-  },
+      {
+        title: "Ajo alerts",
+        description: "Get notified about all Ajo group invitations and swap requests.",
+        model: user.value.notify_ajo_alerts,
+      },
+      {
+        title: "Product announcements",
+        description: "Get notified about new features on Cowris, including mobile app launch and features.",
+        model: user.value.notify_product_announcements,
+      },
+      {
+        title: "Support tickets",
+        description: "Get notified about support responses and enquiries replies.",
+        model: user.value.notify_support_tickets,
+      },
+    ]);
 
-  methods: {
-    changePasswordDialog() {
+    const changePasswordDialog = () => {
       eventBus.emit("open-dialog", {
         default: ChangePasswordDialog,
         position: "right",
       });
-    },
+    };
 
-    handleUpdateBankDetails() {},
+    const validateForm = () => {
+      const { selectedBank, acctName, acctNumber } = form.value;
+      if (!selectedBank || !acctName || !acctNumber) {
+        return false;
+      }
+      return true;
+    };
+
+    const handleUpdateBankDetails = async () => {
+      if (validateForm()) {
+        const data = {
+          account_number: form.value.acctNumber,
+          bank_name: form.value.selectedBank,
+          account_name: form.value.acctName,
+        };
+        await ajoStore.updateBankDetails(user.value.id, data);
+      }
+    };
+
+    const handleModelChange = async (value) => {
+      const title = value.title;
+
+      switch (title) {
+        case "Security alerts":
+          await ajoStore.updateNotificationSetting(user.value.id, { notify_security_alerts: value.model });
+          break;
+        case "Ajo alerts":
+          await ajoStore.updateNotificationSetting(user.value.id, { notify_ajo_alerts: value.model });
+          break;
+        case "Product announcements":
+          await ajoStore.updateNotificationSetting(user.value.id, { notify_product_announcements: value.model });
+          break;
+        case "Support tickets":
+          await ajoStore.updateNotificationSetting(user.value.id, { notify_support_tickets: value.model });
+          break;
+        default:
+          break;
+      }
+    };
+
+    return {
+      ajoStore,
+      user,
+      form,
+      bankName,
+      alerts,
+      changePasswordDialog,
+      handleUpdateBankDetails,
+      validateForm,
+      handleModelChange,
+    };
   },
 };
 </script>

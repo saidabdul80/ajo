@@ -5,7 +5,7 @@
       <h4 class="tw-font-medium tw-text-xl">Ajo Groups</h4>
       <span class="tw-font-bold tw-text-lg">See all</span>
     </div>
-    <div
+    <div  v-if="ajos.length == 0" 
       class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full">
       <div>
         <img src="/images/groups.svg" alt="icon" />
@@ -13,15 +13,44 @@
       <h5 class="tw-text-2xl tw-text-[#0F1419] tw-font-medium tw-pb-2">
         No Ajo group yet
       </h5>
+     
       <p class="tw-max-w-[30ch] tw-text-center tw-text-[#333333]">
         You will find the ajo groups you have joined here
       </p>
     </div>
+    <ul v-else class="tw-max-w-[30ch] tw-text-center tw-text-[#333333]">
+        <li v-for="ajo in ajos" :key="ajo.id">
+          <router-link :to="`/ajo/${ajo.id}`" class="tw-text-lg tw-font-medium tw-text-[#0F1419]">
+            {{ ajo.name }}
+          </router-link>
+        </li>
+      </ul>
   </div>
 </template>
 
 <script>
+import { useClient } from "@/stores/client";
 export default {
   name: "AjoGroupList",
+  data() {
+    return {
+      ajos:[]
+    }
+  },
+  created() {
+    this.fetchMyAjos();
+  },
+  methods: {
+    async fetchMyAjos() {
+      const res = await useClient().http({
+        path: "/ajos/my",
+        method: "GET",
+
+      })
+      if(res){
+        this.ajos = res;
+      }
+    }
+  },
 };
 </script>

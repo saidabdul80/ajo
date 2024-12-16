@@ -3,7 +3,6 @@
     <div class="tw-basis-full">
       <div class="tw-flex tw-flex-col-reverse tw-justify-end xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full tw-h-full">
         <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full">
-        
           <form class="tw-bg-white tw-h-full tw-p-6 tw-flex tw-flex-col">
             <h2 class="tw-text-[22px] tw-text-black">
               Step {{ currentStep }}:
@@ -17,7 +16,12 @@
               <div class="tw-space-y-8 tw-pt-8">
                 <Input placeholder="Group Name" size="medium" v-model="intialValues.name" :errorMessage="globalStore.nameRules.name" />
 
-                <Select v-model="intialValues.category" :options="categories" :errorMessage="globalStore.nameRules.category" placeholder="Select a Category" class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
+                <Select
+                  v-model="intialValues.category"
+                  :options="categories"
+                  :errorMessage="globalStore.nameRules.category"
+                  placeholder="Select a Category"
+                  class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
                 <Input placeholder="Goal of Contribution / Description" size="medium" v-model="intialValues.description" :errorMessage="globalStore.nameRules.description" />
 
@@ -26,9 +30,12 @@
 
                   <InputNumber v-model="intialValues.amount" placeholder="Contribution Per Person" inputId="integeronly" fluid />
                 </div>
+<<<<<<< HEAD
 {{ ajoDate }}
+=======
+>>>>>>> 98e3fc0a7eb24bfc7f9dbd514f601b732050ec40
                 <Select
-                  v-model="selectedFrequency"
+                  v-model="frequency"
                   :options="frequencyOptions"
                   optionLabel="name"
                   :option-value="null"
@@ -37,7 +44,7 @@
                   placeholder="Select Contribution Frequency"
                   class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
-                <PDate v-model="ajoDate" @change="onAjoDateChange" :view="dateView" width="100%" />
+                <PDate @change="onAjoDateChange" :view="dateView" width="100%" />
               </div>
             </div>
 
@@ -107,7 +114,7 @@
               </div>
             </div>
             <div class="tw-pt-8">
-              <Button label="Continue" @click="nextStep" class="tw-w-full tw-mt-auto" :disabled="!isFormValid" />
+              <Button label="Continue" @click="nextStep" class="tw-w-full tw-mt-auto" :disabled="!isFormValid || ajoStore.loading" :loading="ajoStore.loading" />
             </div>
           </form>
         </div>
@@ -120,12 +127,10 @@
 </template>
 
 <script>
+import { ref, reactive, computed, onMounted } from "vue";
 import { useUserStore } from "@/stores/user.js";
 import { useAjoStore } from "@/stores/ajo.js";
 import { useGlobalsStore } from "@/stores/globals.js";
-
-import { helpers } from "@/helpers/utilities.js";
-
 import eventBus from "@/eventBus";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import AjoGroupList from "@/components/AjoGroupList.vue";
@@ -136,11 +141,9 @@ import Button from "@/components/Button.vue";
 import AccountSetup from "@/components/AccountSetup.vue";
 import Checkbox from "@/components/Checkbox.vue";
 import PDate from "@/components/PDate.vue";
-
 import AjoGroupDialog from "@/components/Dialog/AjoGroupDialog.vue";
 import RadioButton from "primevue/radiobutton";
 import InputNumber from "primevue/inputnumber";
-import { error } from "highcharts";
 
 export default {
   name: "StartAjo",
@@ -158,236 +161,252 @@ export default {
     InputNumber,
   },
 
-  data() {
-    return {
-      userStore: useUserStore(),
-      ajoStore: useAjoStore(),
-      globalStore: useGlobalsStore(),
-      currentStep: 1,
-      newEmail: "",
-      searchString: "",
-      filteredRules: [],
-      draggedItem: null,
-      draggedIndex: null,
-      minDate: new Date(),
-      
-      intialValues: {
-        ajo_rules: [],
-        is_public: false,
-        rules: [],
+  setup() {
+    const userStore = useUserStore();
+    const ajoStore = useAjoStore();
+    const globalStore = useGlobalsStore();
+
+    const currentStep = ref(1);
+    const newEmail = ref("");
+    const searchString = ref("");
+    const filteredRules = ref([]);
+    const draggedItem = ref(null);
+    const draggedIndex = ref(null);
+    const minDate = ref(new Date());
+    const frequency = ref(null);
+
+    const intialValues = reactive({
+      ajo_rules: [],
+      is_public: false,
+      name: "",
+      category: "",
+      description: "",
+      amount: null,
+      frequency: null,
+      start_date: null,
+      end_date: null,
+      rules: [],
+    });
+
+    const categories = ["Personal savings", "Education", "Housing", "Business", "Health", "Trips or vacations", "Event", "Charity", "Investment", "Emergency fund"];
+
+    const contributionFrequencies = ref(null);
+
+    const currentStepTitle = {
+      1: { name: "Fill in Basic Details" },
+      2: {
+        name: "Manage participants",
+        subTitle: "Invitation to join your Ajo group will be sent to the email addresses you add.",
       },
-      categories: ["Personal savings", "Education", "Housing", "Business", "Health", "Trips or vacations", "Event", "Charity", "Investment", "Emergency fund"],
-      contributionFrequencies: null,
-      currentStepTitle: {
-        1: { name: "Fill in Basic Details" },
-        2: {
-          name: "Manage participants",
-          subTitle: "Invitation to join your Ajo group will be sent to the email addresses you add.",
-        },
-        3: {
-          name: "Set rules",
-          subTitle: "You can search and select from the rules below.",
-        },
+      3: {
+        name: "Set rules",
+        subTitle: "You can search and select from the rules below.",
       },
-      otherParticipants: [],
-      steps: [
-        {
-          text: "Fill in basic details",
-          isCompleted: false,
-        },
-        {
-          text: "Manage participants",
-          isCompleted: false,
-        },
-        {
-          text: "Set rules",
-          isCompleted: false,
-        },
-      ],
-      dateView: "date",
     };
-  },
 
-  computed: {
-    participantsEmail() {
-      return [this.userStore.user?.email, ...this.otherParticipants];
-    },
-    isFormValid() {
-      if (this.currentStep === 1) {
-        return (
-          this.intialValues.name &&
-          this.intialValues.category &&
-          this.intialValues.description &&
-          this.intialValues.amount &&
-          this.intialValues.frequency &&
-          this.intialValues.start_date &&
-          this.intialValues.end_date
-        );
+    const otherParticipants = ref([]);
+
+    const steps = reactive([
+      { text: "Fill in basic details", isCompleted: false },
+      { text: "Manage participants", isCompleted: false },
+      { text: "Set rules", isCompleted: false },
+    ]);
+
+    const dateView = ref("date");
+
+    const participantsEmail = computed(() => [userStore.user?.email, ...otherParticipants.value]);
+
+    const isFormValid = computed(() => {
+      if (currentStep.value === 1) {
+        return intialValues.name && intialValues.category && intialValues.description && intialValues.amount && intialValues.frequency && intialValues.start_date && intialValues.end_date;
       }
 
-      if (this.currentStep === 2) {
-        return this.participantsEmail.length > 1;
+      if (currentStep.value === 2) {
+        return participantsEmail.value.length > 1;
       }
 
-      return this.intialValues.ajo_rules.length > 0;
-    },
+      return intialValues.ajo_rules.length > 0;
+    });
 
-    frequencyOptions() {
-      if (this.contributionFrequencies) {
-        return Object.values(this.contributionFrequencies);
+    const frequencyOptions = computed(() => {
+      if (contributionFrequencies.value) {
+        return Object.values(contributionFrequencies.value);
       }
-    },
-  },
+    });
 
-  methods: {
-    validateDate(date) {
-      const startDate = new Date(date[0]); 
-      const endDate = new Date(date[1]);   
-
+    const validateDate = (date) => {
+      const startDate = new Date(date[0]);
+      const endDate = new Date(date[1]);
       const timeDifference = endDate - startDate;
       const totalDays = timeDifference / (1000 * 3600 * 24);
-      if(totalDays% this.dateView !==0){
-        return false;
-      }else{
-        return true;
-      }
-    },
-    onAjoDateChange(date) {
-      this.validateDate(date);
-      this.intialValues.start_date = date[0];
-      this.intialValues.end_date = date[1];
-      //this.end_date = helpers.calculateEndDate(date, this.selectedFrequency?.name);
-    },
-    // onEndDateChange(date) {
-    //   this.end_date = date;
-    //   this.start_date = helpers.calculateStartDate(date, this.selectedFrequency?.name);
-    // },
-    onFrequencyChange(frequency) {
-      this.intialValues.frequency = Number(this.selectedFrequency?.value);
-      switch (this.selectedFrequency?.name) {
+      return totalDays % dateView.value === 0;
+    };
+
+    const onAjoDateChange = (date) => {
+      validateDate(date);
+      intialValues.start_date = date[0];
+      intialValues.end_date = date[1];
+    };
+
+    const onFrequencyChange = (frequency) => {
+      intialValues.frequency = Number(frequency.value.value);
+      switch (frequency.value.name) {
         case "YEARLY":
-          this.dateView = "year";
-          
+          dateView.value = "year";
           break;
         case "MONTHLY":
-          this.dateView = "month";
+          dateView.value = "month";
           break;
         case "WEEKLY":
-          // this.intialValues.startDate = helpers.calculateStartDate(this.minDate, frequency);
-          this.dateView = "date";
-          break;
         case "DAILY":
-          // this.intialValues.startDate = helpers.calculateStartDate(this.minDate, frequency);
-          this.dateView = "date";
+          dateView.value = "date";
           break;
         default:
-          this.dateView = "date";
+          dateView.value = "date";
           break;
       }
-    },
-    addEmail() {
-      if (this.isValidEmail(this.newEmail) && !this.otherParticipants.includes(this.newEmail)) {
-        this.otherParticipants.push(this.newEmail);
-        this.newEmail = "";
+    };
+
+    const addEmail = () => {
+      if (isValidEmail(newEmail.value) && !otherParticipants.value.includes(newEmail.value)) {
+        otherParticipants.value.push(newEmail.value);
+        newEmail.value = "";
       }
-    },
-    removeEmail(email) {
-      this.otherParticipants = this.otherParticipants.filter((item) => item !== email);
-    },
-    isValidEmail(email) {
+    };
+
+    const removeEmail = (email) => {
+      otherParticipants.value = otherParticipants.value.filter((item) => item !== email);
+    };
+
+    const isValidEmail = (email) => {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailPattern.test(email);
-    },
+    };
 
-    async nextStep() {
-      const { formattedDate, calculateEndDate } = helpers;
-
-      if (this.isFormValid && this.currentStep <= 2) {
-        this.steps[this.currentStep - 1].isCompleted = true;
-        this.currentStep += 1;
+    const nextStep = async () => {
+      if (isFormValid.value && currentStep.value <= 2) {
+        steps[currentStep.value - 1].isCompleted = true;
+        currentStep.value += 1;
       }
 
-      if (this.currentStep === 3 && this.isFormValid) {
-        this.steps[this.currentStep - 1].isCompleted = true;
+      if (currentStep.value === 3 && isFormValid.value) {
+        steps[currentStep.value - 1].isCompleted = true;
+
         try {
-          this.intialValues.members =  this.participantsEmail;
-          const res = await this.ajoStore.createAjo(this.intialValues);
+          intialValues.members = participantsEmail.value;
+
+          console.log(intialValues);
+
+          const res = await ajoStore.createAjo(intialValues);
           if (!res || res.success === false) {
             throw new Error("Failed to create Ajo.");
           }
 
-          this.openDialog();
+          await setAjoRules(user.user_id);
+
+          openDialog();
         } catch (error) {
           console.error("Error creating Ajo group:", error);
         }
       }
-    },
+    };
 
-  
-    async setAjoRules(ajoId) {
+    const setAjoRules = async (ajoId) => {
       if (ajoId) {
-        for (const rule of this.intialValues.ajo_rules) {
+        for (const rule of intialValues.ajo_rules) {
           try {
             const data = { ajo_id: ajoId, value: rule };
-            await this.ajoStore.createAjoRules(data);
-
-            console.log(rule);
+            await ajoStore.createAjoRules(data);
           } catch (error) {
             throw new Error("Failed to set Ajo rules.", error);
           }
         }
       }
-    },
+    };
 
-    openDialog() {
+    const openDialog = () => {
       eventBus.emit("open-dialog", {
         default: AjoGroupDialog,
         title: "All done!",
         position: "center",
-        props: { title: this.intialValues.groupName },
+        props: { title: intialValues.name },
       });
-    },
+    };
 
-    searchRules() {
-      const lowerSearch = this.searchString.toLowerCase();
-      this.filteredRules = this.intialValues.rules.filter((rule) => rule.label.toLowerCase().startsWith(lowerSearch));
-    },
+    const searchRules = () => {
+      const lowerSearch = searchString.value.toLowerCase();
+      filteredRules.value = intialValues.rules.filter((rule) => rule.label.toLowerCase().startsWith(lowerSearch));
+    };
 
-    onDrag(email, index) {
+    const onDrag = (email, index) => {
       if (index > 0) {
-        this.draggedItem = email;
-        this.draggedIndex = index - 1;
+        draggedItem.value = email;
+        draggedIndex.value = index - 1;
       } else {
-        this.draggedItem = null;
-        this.draggedIndex = null;
+        draggedItem.value = null;
+        draggedIndex.value = null;
       }
-    },
+    };
 
-    onDrop(dropIndex) {
+    const onDrop = (dropIndex) => {
       const adjustedDropIndex = dropIndex - 1;
 
-      if (this.draggedIndex !== null && adjustedDropIndex >= 0 && adjustedDropIndex !== this.draggedIndex) {
-        const reorderedParticipants = [...this.otherParticipants];
-
-        const [draggedParticipant] = reorderedParticipants.splice(this.draggedIndex, 1);
-
+      if (draggedIndex.value !== null && adjustedDropIndex >= 0 && adjustedDropIndex !== draggedIndex.value) {
+        const reorderedParticipants = [...otherParticipants.value];
+        const [draggedParticipant] = reorderedParticipants.splice(draggedIndex.value, 1);
         reorderedParticipants.splice(adjustedDropIndex, 0, draggedParticipant);
-
-        this.otherParticipants = reorderedParticipants;
+        otherParticipants.value = reorderedParticipants;
       }
+      draggedItem.value = null;
+      draggedIndex.value = null;
+    };
 
-      this.draggedItem = null;
-      this.draggedIndex = null;
-    },
-  },
+    onMounted(async () => {
+      intialValues.rules = await ajoStore.fetchAjoRules();
 
-  async mounted() {
-    this.intialValues.rules = await this.ajoStore.fetchAjoRules();
-    this.filteredRules = this.intialValues.rules;
-    const numberInputs = document.querySelectorAll(".p-inputnumber-input");
-    numberInputs.forEach((input) => (input.value = ""));
+      filteredRules.value = intialValues.rules;
 
-    this.contributionFrequencies = await this.ajoStore.fetchAjoFrequencies();
+      const numberInputs = document.querySelectorAll(".p-inputnumber-input");
+      numberInputs.forEach((input) => (input.value = ""));
+
+      contributionFrequencies.value = await ajoStore.fetchAjoFrequencies();
+    });
+
+    return {
+      userStore,
+      ajoStore,
+      globalStore,
+      currentStep,
+      newEmail,
+      searchString,
+      filteredRules,
+      draggedItem,
+      draggedIndex,
+      minDate,
+      intialValues,
+      categories,
+      contributionFrequencies,
+      currentStepTitle,
+      otherParticipants,
+      steps,
+      dateView,
+      participantsEmail,
+      isFormValid,
+      frequencyOptions,
+      frequency,
+      validateDate,
+      onAjoDateChange,
+      onFrequencyChange,
+      addEmail,
+      removeEmail,
+      isValidEmail,
+      nextStep,
+      setAjoRules,
+      openDialog,
+      searchRules,
+      onDrag,
+      onDrop,
+    };
   },
 };
 </script>
