@@ -224,7 +224,6 @@ export default {
       this.confirmSelection();
       if (this.view === 'year') {
         // Ensure start is January 1st and end is December 31st of the same year
-
         start = new Date(new Date(this.startDate).getFullYear(), 0, 1); // January 1st of the selected year
         end = new Date(new Date(this.endDate).getFullYear(), 11, 31); // December 31st of the selected year
       } else if (this.view === 'month') {
@@ -235,6 +234,9 @@ export default {
         const dd = this.monthDays[d.getMonth()+1]
         end = new Date(d.getFullYear()+'-'+(d.getMonth() + 1 )+'-'+ dd); // Last day of the selected month
 
+      }else{
+        start = new Date(new Date(this.startDate)); // January 1st of the selected year
+        end = new Date(new Date(this.endDate)); // Dece
       }
 
       start = this.formatDate(start,true);
