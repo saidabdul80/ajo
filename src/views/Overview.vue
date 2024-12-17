@@ -107,6 +107,15 @@ export default {
       },
     });
 
+    const documentRequirements = reactive([
+      { key: 'nin_slip_url', name: 'NIN Slip' },
+      //{ key: 'international_passport_url', name: 'International Passport' },
+      // { key: 'utility_bills_url', name: 'Utility Bills' },
+      // { key: 'drivers_license_url', name: 'Driver\'s License' },
+      // { key: 'permanent_residence_card_url', name: 'Permanent Residence Card' },
+      // { key: 'proof_of_address_url', name: 'Proof of Address' }
+    ]);
+
     const stepDefinitions = reactive([
       {
         name: "signup",
@@ -129,26 +138,8 @@ export default {
       {
         name: "document",
         text: "Upload means of identification",
-        isCompleted: computed(
-          () =>
-            user.value.nin_slip_url ||
-            user.value.international_passport_url ||
-            user.value.utility_bills_url ||
-            user.value.drivers_license_url ||
-            user.value.permanent_residence_card_url ||
-            user.value.proof_of_address_url
-        ),
-        isClickable: computed(
-          () =>
-            !(
-              user.value.nin_slip_url ||
-              user.value.international_passport_url ||
-              user.value.utility_bills_url ||
-              user.value.drivers_license_url ||
-              user.value.permanent_residence_card_url ||
-              user.value.proof_of_address_url
-            )
-        ),
+        isCompleted:computed(() => documentRequirements.every(doc => user.value[doc.key])),//some(doc => user.value[doc.key])),
+        isClickable: computed(() => !documentRequirements.every(doc => user.value[doc.key]))//documentRequirements.some(doc => user.value[doc.key])),
       },
     ]);
 
@@ -166,15 +157,7 @@ export default {
         dialog: ConfirmPhoneDialog,
       },
       {
-        state: () =>
-          !(
-            user.value.nin_slip_url ||
-            user.value.international_passport_url ||
-            user.value.utility_bills_url ||
-            user.value.drivers_license_url ||
-            user.value.permanent_residence_card_url ||
-            user.value.proof_of_address_url
-          ),
+        state: () => !documentRequirements.some(doc => user.value[doc.key]),
         message: "Upload your document to explore Ajo by Cowris.",
         label: "Upload Document",
         dialog: UploadDialog,
