@@ -30,6 +30,10 @@
 
                   <InputNumber v-model="intialValues.amount" placeholder="Contribution Per Person" inputId="integeronly" fluid />
                 </div>
+<<<<<<< HEAD
+{{ ajoDate }}
+=======
+>>>>>>> 98e3fc0a7eb24bfc7f9dbd514f601b732050ec40
                 <Select
                   v-model="frequency"
                   :options="frequencyOptions"

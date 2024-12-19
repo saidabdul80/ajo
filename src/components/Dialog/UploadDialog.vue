@@ -8,8 +8,9 @@
         <div class="tw-flex tw-flex-col tw-gap-4">
           <div class="tw-flex tw-flex-col tw-items-start tw-gap-5" v-for="document in filteredDocumentTypes" :key="document.value">
             <div>
-              <RadioButton v-model="uploadDocument" :inputId="document.name" name="document" :value="document.value" variant="filled" />
+              <RadioButton  v-model="uploadDocument" :inputId="document.name" name="document" :value="document.value" variant="filled" />
               <label :for="document.name" class="tw-ml-2">{{ document.name }}</label>
+              <a v-if="user?.[document.type+'_url']" target="_blank" class="tw-text-[blue]/60 tw-ms-3 hover:tw-underline" :href="user?.[document.type+'_url']">View</a>
             </div>
 
             <Input v-if="document.value === 7 && uploadDocument === 7" placeholder="Please, specify here..." v-model="customDocumentName" />
