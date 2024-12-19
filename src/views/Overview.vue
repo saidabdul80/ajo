@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { reactive, computed } from "vue";
 import { useUserStore } from "@/stores/user.js";
 import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
@@ -41,7 +42,6 @@ import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
 import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
 import UploadDialog from "@/components/Dialog/UploadDialog.vue";
-import { reactive, computed } from "vue";
 
 export default {
   name: "Overview",

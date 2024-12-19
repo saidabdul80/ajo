@@ -244,36 +244,17 @@ export const helpers = {
 
   formattedDate(val) {
     const date = new Date(val);
-    const formatDate = date.toISOString().split("T")[0];
-    return formatDate;
+    return new Intl.DateTimeFormat("en-US", {
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    }).format(date);
   },
 
-  calculateEndDate(initialDate, frequency) {
-    const startDate = new Date(initialDate);
-    let endDate;
-
-    switch (frequency) {
-      case "Daily":
-        endDate = new Date(startDate);
-        endDate.setDate(startDate.getDate() + 1);
-        break;
-      case "Weekly":
-        endDate = new Date(startDate);
-        endDate.setDate(startDate.getDate() + 7);
-        break;
-      case "Monthly":
-        endDate = new Date(startDate);
-        endDate.setMonth(startDate.getMonth() + 1);
-        break;
-      case "Yearly":
-        endDate = new Date(startDate);
-        endDate.setFullYear(startDate.getFullYear() + 1);
-        break;
-      default:
-        console.log("Invalid frequency");
-        return null;
-    }
-
-    return endDate;
+  formatCurrency(value) {
+    return value.toLocaleString("en-NG", {
+      style: "currency",
+      currency: "NGN",
+    });
   },
 };

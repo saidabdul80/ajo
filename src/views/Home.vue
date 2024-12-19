@@ -1,43 +1,50 @@
 <template>
   <Nav />
-  <ion-content class="scroller-body-inner" color="white" :fullscreen="true">
+  <ion-content v-bind="$attrs" class="scroller-body-inner" color="white" :fullscreen="true">
     <main id="container">
+      <!-- Grid Section -->
       <div class="tw-grid tw-gap-5 md:tw-px-20 tw-px-4" :class="lg ? 'tw-grid-cols-2' : ''">
         <AjoLandContent />
         <div class="tw-grid tw-gap-2 tw-h-full md:tw-h-[90dvh] md:tw-overflow-hidden" :class="lg ? 'tw-grid-cols-2' : ''">
+          <!-- Marquee Section -->
           <div class="tw-overflow-y-hidden">
-            <vue3-marquee :gradient="true" :duration="110" :vertical="lg" pauseOnHover>
+            <vue3-marquee :gradient="true" :duration="110" :vertical="lg" pauseOnHover class="custom-marquee">
               <div v-for="x in 10" :key="x" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
-                <Card class="tw-cursor-pointer" :style="lg ? 'width:100%' : 'width: 95% !important'" />
+                <Card class="tw-cursor-pointer" :style="{ width: lg ? '100%' : '95%' }" />
               </div>
             </vue3-marquee>
           </div>
           <div class="tw-overflow-y-hidden tw-w-full">
-            <vue3-marquee :duration="110" direction="reverse" :vertical="lg" pauseOnHover>
+            <vue3-marquee :duration="110" direction="reverse" :vertical="lg" pauseOnHover class="custom-marquee">
               <div v-for="x in 10" :key="'down-' + x" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
-                <Card class="tw-cursor-pointer" :style="lg ? 'width:100%' : 'width: 95% !important'" />
+                <Card class="tw-cursor-pointer" :style="{ width: lg ? '100%' : '95%' }" />
               </div>
             </vue3-marquee>
           </div>
         </div>
       </div>
 
+      <!-- Counter Section -->
       <div class="tw-bg-[#36454F] tw-py-20 tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-4 md:tw-px-20 tw-px-4">
         <Counter v-for="(counterItem, index) in counterItems" :key="index" :item="counterItem" />
       </div>
 
+      <!-- Body Content Section -->
       <div class="tw-bg-[#F8F9D7] md:tw-px-20 tw-px-4 tw-py-20 md:tw-py-[120px]">
         <BodyContent />
       </div>
 
+      <!-- Ajo Guide Section -->
       <div class="md:tw-px-20 tw-px-4 tw-py-20 md:tw-py-[120px]">
         <AjoGuide />
       </div>
 
+      <!-- Join Ajo Tradition Section -->
       <div class="tw-bg-[#36454F] md:tw-px-20 tw-px-4 tw-py-10">
         <joinAjoTradition />
       </div>
 
+      <!-- Footer Section -->
       <div class="tw-flex tw-flex-col tw-justify-center tw-min-h-[48px] tw-bg-[#E1E1E1] tw-py-4 md:tw-px-20 tw-px-4">
         <AjoFooter />
       </div>
@@ -55,8 +62,6 @@ import AjoGuide from "@/components/AjoGuide.vue";
 import joinAjoTradition from "@/components/joinAJoTradition.vue";
 import AjoFooter from "@/components/AjoFooter.vue";
 import Nav from "@/components/Nav.vue";
-//import { Swiper, SwiperSlide } from 'swiper/vue';
-
 import { Vue3Marquee } from "vue3-marquee";
 
 export default {
@@ -72,6 +77,7 @@ export default {
     AjoFooter,
     Nav,
   },
+  inheritAttrs: false,
   data() {
     return {
       counterItems: [
@@ -104,11 +110,12 @@ export default {
   },
   computed: {
     lg() {
-      return this.$vuetify.display.lgAndUp;
+      return this.$vuetify?.display?.lgAndUp ?? false;
     },
   },
 };
 </script>
+
 <style scoped>
 ion-content {
   display: flex;
@@ -120,7 +127,6 @@ ion-content {
   0% {
     transform: translateY(-50%);
   }
-
   100% {
     transform: translateY(50%);
   }
@@ -130,7 +136,6 @@ ion-content {
   0% {
     transform: translateY(-100%);
   }
-
   100% {
     transform: translateY(0);
   }
@@ -150,10 +155,9 @@ ion-content {
 
 .tw-overflow-hidden {
   position: relative;
-  /* Ensure this is applied to allow animation movement */
   height: 100vh;
-  /* Ensure enough height to allow card movement */
 }
+
 .vue3-marquee.vertical {
   width: 100% !important;
 }

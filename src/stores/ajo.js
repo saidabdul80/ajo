@@ -32,13 +32,32 @@ export const useAjoStore = defineStore("ajoStore", {
       }
     },
 
-    async fetchAllAjo(id) {
+    async fetchAllAjo() {
       const notificationStore = useNotificationStore();
       try {
         this.loading = true;
         const response = await useClient().http({
           method: "get",
-          path: "/ajos",
+          path: `/ajos/my`,
+        });
+
+        if (response) {
+          return response;
+        }
+      } catch (e) {
+        this.handleError("Error fetching Ajo groups", e, notificationStore);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async fetchAjoById(id) {
+      const notificationStore = useNotificationStore();
+      try {
+        this.loading = true;
+        const response = await useClient().http({
+          method: "get",
+          path: `/ajos/${id}`,
         });
 
         if (response) {
