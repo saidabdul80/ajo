@@ -8,9 +8,9 @@
         <div class="tw-flex tw-flex-col tw-gap-4">
           <div class="tw-flex tw-flex-col tw-items-start tw-gap-5" v-for="document in filteredDocumentTypes" :key="document.value">
             <div>
-              <RadioButton  v-model="uploadDocument" :inputId="document.name" name="document" :value="document.value" variant="filled" />
+              <RadioButton v-model="uploadDocument" :inputId="document.name" name="document" :value="document.value" variant="filled" />
               <label :for="document.name" class="tw-ml-2">{{ document.name }}</label>
-              <a v-if="user?.[document.type+'_url']" target="_blank" class="tw-text-[blue]/60 tw-ms-3 hover:tw-underline" :href="user?.[document.type+'_url']">View</a>
+              <a v-if="user?.[document.type + '_url']" target="_blank" class="tw-text-[blue]/60 tw-ms-3 hover:tw-underline" :href="user?.[document.type + '_url']">View</a>
             </div>
 
             <Input v-if="document.value === 7 && uploadDocument === 7" placeholder="Please, specify here..." v-model="customDocumentName" />
@@ -67,16 +67,16 @@ export default {
       uploadDocument: "",
       customDocumentName: "",
       userCountry: "Nigeria",
-      file:null,
-      fileType:null,
+      file: null,
+      fileType: null,
       uploadDocumentTypes: [
-        {type: 'nin_slip',  name: "National Identification Number (NIN) Slip", value: 1, countries: ["Nigeria"] },
-        {type: 'international_passport',  name: "International Passport", value: 2, countries: ["Canada", "Nigeria"] },
-        {type: 'utility_bills',  name: "Utility Bills", value: 3, countries: ["Nigeria"] },
-        {type: 'drivers_license',  name: "Driver's License", value: 4, countries: ["Canada"] },
-        {type: 'permanent_residence_card',  name: "Permanent Residence Card", value: 5, countries: ["Canada"] },
-        {type: 'proof_of_address',  name: "Proof of Address", value: 6, countries: ["Canada"] },
-        {type: 'others',  name: "Others", value: 7, countries: ["Canada"] },
+        { type: "nin_slip", name: "National Identification Number (NIN) Slip", value: 1, countries: ["Nigeria"] },
+        // {type: 'international_passport',  name: "International Passport", value: 2, countries: ["Canada", "Nigeria"] },
+        // {type: 'utility_bills',  name: "Utility Bills", value: 3, countries: ["Nigeria"] },
+        // {type: 'drivers_license',  name: "Driver's License", value: 4, countries: ["Canada"] },
+        // {type: 'permanent_residence_card',  name: "Permanent Residence Card", value: 5, countries: ["Canada"] },
+        // {type: 'proof_of_address',  name: "Proof of Address", value: 6, countries: ["Canada"] },
+        // {type: 'others',  name: "Others", value: 7, countries: ["Canada"] },
       ],
     };
   },
@@ -103,7 +103,7 @@ export default {
     },
 
     verifyDocument() {
-      if(!this.file){
+      if (!this.file) {
         alert("Please upload a document.");
         return;
       }
@@ -111,8 +111,8 @@ export default {
       formData.append("file", this.file);
       formData.append("id", useUserStore().user.id);
       formData.append("type", this.fileType);
-      const res = useClient().http({method:'post', path:'/upload_documents', data: formData})
-      if(res){
+      const res = useClient().http({ method: "post", path: "/upload_documents", data: formData });
+      if (res) {
         this.currentStep = "verified";
       }
       this.currentStep = "verified";

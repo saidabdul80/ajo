@@ -1,15 +1,5 @@
 <template>
   <div :class="[currentStep !== 'verified' && 'md:tw-pt-28']">
-    <!-- Confirm Email -->
-    <form @submit.prevent="goToVerify" v-if="currentStep === 'confirm'" class="tw-space-y-2 tw-pb-12">
-      <h5 class="tw-text-[28px] tw-text-black">Confirm email address</h5>
-      <p class="tw-text-[#586283] tw-max-w-[40ch]">Please, confirm your email address before verification. A code will be sent to confirm you own the email.</p>
-      <div class="tw-space-y-8 tw-pt-4">
-        <Input placeholder="Email Address" v-model="form.email" size="medium" />
-        <Button type="submit" label="Continue" size="medium" class="tw-w-full" />
-      </div>
-    </form>
-
     <!-- Verify Email -->
     <form @submit.prevent v-if="currentStep === 'verify'" class="tw-space-y-2 tw-pb-12">
       <h5 class="tw-text-[28px] tw-text-black">Verify email address</h5>
@@ -59,7 +49,7 @@ export default {
     const notificationStore = useNotificationStore();
     const user = computed(() => userStore.user);
 
-    const currentStep = ref("confirm");
+    const currentStep = ref("verify");
     const form = reactive({
       email: userStore.user.email,
       otp: "",
@@ -80,11 +70,6 @@ export default {
         type: "error",
         message: "Email was not sent successfully. Please try again.",
       });
-    };
-
-    const goToVerify = () => {
-      currentStep.value = "verify";
-      sendCode();
     };
 
     const completeVerification = async () => {
@@ -114,7 +99,6 @@ export default {
       form,
       user,
       sendCode,
-      goToVerify,
       completeVerification,
       closeDialog,
       openPhoneVerification,
