@@ -26,7 +26,7 @@
       <p class="tw-text-[#586283] tw-max-w-[40ch]">Upload your document here.</p>
       <div class="tw-space-y-8 tw-py-10">
         <FileUpload v-model="file" />
-        <Button label="Continue" size="medium" class="tw-w-full" @click="verifyDocument" />
+        <Button :loading="loading" label="Continue" size="medium" class="tw-w-full" @click="verifyDocument" />
       </div>
     </div>
 
@@ -63,6 +63,7 @@ export default {
 
   data() {
     return {
+      loading:false,
       user: useUserStore().user,
       currentStep: "confirm",
       uploadDocument: "",
@@ -103,7 +104,7 @@ export default {
       this.currentStep = "verify";
     },
 
-    verifyDocument() {
+    async verifyDocument() {
       if(!this.file){
         alert("Please upload a document.");
         return;
@@ -112,10 +113,12 @@ export default {
       formData.append("file", this.file);
       formData.append("id", useUserStore().user.id);
       formData.append("type", this.fileType);
-      const res = useClient().http({method:'post', path:'/upload_documents', data: formData})
+      this.loading = true;
+      const res = await useClient().http({method:'post', path:'/upload_documents', data: formData})
+      this.loading = false;
       setTimeout(() => {
         this.$router.go()
-      }, 2000);
+      }, 1000);
       if(res){
         this.currentStep = "verified";
       }
