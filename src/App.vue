@@ -15,7 +15,7 @@
   </ion-app>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import NotificationRoot from "@/components/notifications/NotificationRoot.vue";

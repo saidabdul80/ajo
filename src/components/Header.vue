@@ -5,7 +5,7 @@
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-label color="dark" slot="start">
-        <h1 class="tw-m-0 md:!tw-text-[22px] !tw-text-[16px]">{{ title }}</h1>
+        <h1 class="tw-m-0 md:!tw-text-[22px] !tw-text-[16px] tw-capitalize">{{ title }}</h1>
         <p class="tw-text-xs tw-mt-1">{{ description }}</p>
       </ion-label>
 

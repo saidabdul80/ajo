@@ -13,16 +13,16 @@
 
   <div v-if="contentType == 'card'" class="tw-grid md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-4 tw-mt-4">
     <AjoCard
-      v-for="(data, idx) in ajoContributions"
-      :key="data.ajoType"
+      v-for="data in ajos"
+      :key="data.id"
       :ajoId="data.id"
-      :ajoType="data.ajoType"
-      :ajoName="data.ajoName"
-      :ajoContributedAmount="data.ajoContributedAmount"
-      :ajoTotalAmount="data.ajoTotalAmount"
-      :ajoTimeline="data.ajoTimeline"
-      :ajoLastUpate="data.ajoLastUpate"
-      :images="data.images" />
+      :ajoType="data.category"
+      :ajoName="data.name"
+      :ajoContributedAmount="parseFloat(data.total_contribution)"
+      :ajoTotalAmount="parseFloat(data.total_contribution_expected)"
+      :ajoTimeline="data.time_left"
+      :ajoLastUpate="data.last_contributed_time"
+      :images="['/images/avatar.png', '/images/avatar.png', '/images/avatar.png', '/images/avatar.png', '/images/avatar.png']" />
   </div>
 
   <div v-if="contentType == 'table'" class="tw-border-b tw-border-l tw-border-r tw-border-[#DBDEE2CC]">
@@ -58,8 +58,10 @@
 </template>
 
 <script>
+import { ref, onMounted, computed } from "vue";
 import { useAjoStore } from "@/stores/ajo.js";
-import { ref, onMounted } from "vue";
+import { useUserStore } from "@/stores/user.js";
+import { helpers } from "@/helpers/utilities.js";
 
 import Pills from "@/components/Pills.vue";
 import Select from "primevue/select";
@@ -96,9 +98,13 @@ export default {
 
   setup(props) {
     const ajoStore = useAjoStore();
+    const userStore = useUserStore();
+    const user = computed(() => userStore.user);
+    const { formatCurrency } = helpers;
 
     // Reactive state
     const ajos = ref(null);
+
     const statusOptions = ref(["All", "Type"]);
     const contributors = ref([
       {
@@ -183,63 +189,18 @@ export default {
         image: "/images/avatar.png",
       },
     ]);
-    const ajoContributions = ref([
-      {
-        id: 1,
-        ajoType: "Savings Group",
-        ajoName: "My Ajo 1",
-        ajoContributedAmount: 80000,
-        ajoTotalAmount: 120000,
-        ajoTimeline: "2 weeks",
-        ajoLastUpate: "3 days",
-        images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
-      },
-      {
-        id: 2,
-        ajoType: "Investment Group",
-        ajoName: "Investment Ajo",
-        ajoContributedAmount: 50000,
-        ajoTotalAmount: 100000,
-        ajoTimeline: "1 month",
-        ajoLastUpate: "5 days",
-        images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
-      },
-      {
-        id: 3,
-        ajoType: "Cooperative",
-        ajoName: "Cooperative Ajo",
-        ajoContributedAmount: 30000,
-        ajoTotalAmount: 60000,
-        ajoTimeline: "1 week",
-        ajoLastUpate: "2 days",
-        images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
-      },
-      {
-        id: 4,
-        ajoType: "Loan Group",
-        ajoName: "Loan Ajo",
-        ajoContributedAmount: 100000,
-        ajoTotalAmount: 200000,
-        ajoTimeline: "3 weeks",
-        ajoLastUpate: "1 day",
-        images: ["/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png", "/images/avatar.png"],
-      },
-    ]);
 
     // Methods
     const handlePillSelection = (value) => {
-      console.log(value);
+      if (value == "Newest") {
+        ajoStore.value = ajos.value.sort((a, b) => new Date(b.id) - new Date(a.id));
+      } else {
+        ajoStore.value = ajos.value.sort((a, b) => new Date(a.id) - new Date(b.id));
+      }
     };
 
     const hndleStatusSelection = (e) => {
-      console.log(e.value);
-    };
-
-    const formatCurrency = (value) => {
-      return value.toLocaleString("en-NG", {
-        style: "currency",
-        currency: "NGN",
-      });
+      console.log(ajos);
     };
 
     const getSeverity = (status) => {
@@ -260,14 +221,13 @@ export default {
 
     // Fetch Ajo data on mount
     onMounted(async () => {
-      ajos.value = await ajoStore.fetchAllAjo();
+      ajos.value = await ajoStore.fetchAllAjo(user.value.id);
     });
 
     return {
       ajos,
       statusOptions,
       contributors,
-      ajoContributions,
       handlePillSelection,
       hndleStatusSelection,
       formatCurrency,

@@ -1,13 +1,9 @@
 <template>
-  <div
-    class="tw-inline-flex tw-w-fit tw-items-center tw-h-[40px] tw-rounded-2xl tw-bg-[#E8EBEF] tw-overflow-hidden">
+  <div class="tw-inline-flex tw-w-fit tw-items-center tw-h-[40px] tw-rounded-2xl tw-bg-[#E8EBEF] tw-overflow-hidden">
     <button
       v-for="(title, idx) in buttonsTitle"
       :key="title"
-      :class="[
-        'tw-px-3 tw-h-full tw-inline-flex tw-items-center tw-transition-all',
-        { active: activeButton === idx },
-      ]"
+      :class="['tw-px-3 tw-h-full tw-inline-flex tw-items-center tw-transition-all', { active: activeButton === idx }]"
       @click="handleButtonClick(idx, title)">
       {{ title }}
     </button>
@@ -25,7 +21,7 @@ export default {
 
   data() {
     return {
-      activeButton: 0,
+      activeButton: 1,
     };
   },
 

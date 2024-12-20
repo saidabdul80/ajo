@@ -5,7 +5,7 @@
         <p class="tw-text-[#C4C4C4]">{{ ajoType }}</p>
         <img class="tw-inline-block" src="/images/cart.svg" alt="icon" />
       </div>
-      <h5 class="tw-font-medium tw-text-[22px]">{{ ajoName }}</h5>
+      <h5 class="tw-font-medium tw-text-[22px] tw-capitalize">{{ ajoName }}</h5>
     </div>
 
     <div class="tw-py-5">
@@ -17,7 +17,7 @@
     <div class="tw-space-y-2">
       <div class="tw-flex tw-items-center tw-justify-between tw-text-base md:tw-text-lg tw-text-[#6A6A6A]">
         <p>
-          <span class="tw-text-black">{{ globalStore.toCurrency(ajoContributedAmount) }} contributed</span>
+          <span class="tw-text-black">{{ globalStore.toCurrency(ajoContributedAmount) }} contributed {{ " " }}</span>
           <span>of {{ globalStore.toCurrency(ajoTotalAmount) }}</span>
         </p>
         <p>{{ amountPercentage }} %</p>
@@ -28,12 +28,13 @@
           <img class="tw-inline-block" src="/images/clock.svg" alt="icon" />
           <span class="">{{ ajoTimeline }} left</span>
         </p>
-        <p>Last contribution {{ ajoLastUpate }} ago</p>
+        <p>{{ ajoLastUpate }}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { computed } from "vue";
 import { useGlobalsStore } from "@/stores/globals.js";
 import ProgressBar from "primevue/progressbar";
 import Avatar from "primevue/avatar";
@@ -44,12 +45,6 @@ export default {
     ProgressBar,
     Avatar,
     AvatarGroup,
-  },
-
-  data() {
-    return {
-      globalStore: useGlobalsStore(),
-    };
   },
 
   props: {
@@ -88,20 +83,26 @@ export default {
     },
   },
 
-  methods: {
-    handleCardDetails(id) {
-      alert(id);
-    },
-  },
+  setup(props) {
+    const globalStore = useGlobalsStore();
 
-  computed: {
-    amountPercentage() {
-      if (this.ajoTotalAmount === 0) {
+    const handleCardDetails = (id) => {
+      alert(id);
+    };
+
+    const amountPercentage = computed(() => {
+      if (props.ajoTotalAmount === 0) {
         return 0;
       }
-      const percentage = (this.ajoContributedAmount / this.ajoTotalAmount) * 100;
+      const percentage = (props.ajoContributedAmount / props.ajoTotalAmount) * 100;
       return percentage.toFixed(2);
-    },
+    });
+
+    return {
+      globalStore,
+      handleCardDetails,
+      amountPercentage,
+    };
   },
 };
 </script>
