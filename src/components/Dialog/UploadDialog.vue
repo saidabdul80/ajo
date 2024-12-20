@@ -52,6 +52,7 @@ import FileUpload from "@/components/FileUpload.vue";
 import RadioButton from "primevue/radiobutton";
 import { useClient } from "@/stores/client";
 import { useUserStore } from "@/stores/user.js";
+import { useGlobalsStore } from "@/stores/globals";
 export default {
   components: {
     Button,
@@ -112,6 +113,9 @@ export default {
       formData.append("id", useUserStore().user.id);
       formData.append("type", this.fileType);
       const res = useClient().http({method:'post', path:'/upload_documents', data: formData})
+      setTimeout(() => {
+        this.$router.go()
+      }, 2000);
       if(res){
         this.currentStep = "verified";
       }

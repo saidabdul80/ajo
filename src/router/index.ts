@@ -53,6 +53,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: false },
   },
   {
+    path: "/status/:name/:status",
+    name: "Statuses",
+    component: () => import("@/views/statuses/Index.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
     path: "/app",
     component: () => import("@/views/IndexPage.vue"),
     children: [

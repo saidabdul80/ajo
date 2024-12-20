@@ -15,12 +15,12 @@
       <h5 class="tw-text-[28px] tw-text-black">Verify email address</h5>
       <p class="tw-text-[#586283] tw-max-w-[40ch]">We sent a 6-digit code to {{ form.email }}. Please enter the code to verify your email address.
 
-        <a @click="sendCode" class="tw-text-[#586283] tw-underline tw-cursor-pointer">Resend code</a>
+        <v-btn  variant='plain' :loading="globals?.sendCodeLoading" color="black" @click="globals.sendCode()" class=" !tw-bg-white !tw-border-none hover:tw-underline tw-cursor-pointer">Resend code</v-btn>
       </p>
       <div class="tw-space-y-8 tw-pt-4">
         <Input placeholder="Your 6-digit code" v-model="form.otp" size="medium" />
         <Button @click="completeVerification" type="submit" label="Submit" size="medium" class="tw-w-full" />
-        <Button label="Resend code" size="medium" class="tw-w-full !tw-text-black" link />
+        <!-- <Button label="Resend code" size="medium" class="tw-w-full !tw-text-black" link /> -->
       </div>
     </form>
 
@@ -47,7 +47,7 @@ import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
 
 import { useClient } from "@/stores/client";
 import { useUserStore } from "@/stores/user.js";
-import { useNotificationStore } from "@/stores/notification";
+import { useGlobalsStore } from "@/stores/globals";
 export default {
   components: {
     Button,
@@ -62,19 +62,12 @@ export default {
         email: "",
         otp: "",
       },
+      globals: useGlobalsStore(),
     };
   },
 
   methods: {
-    async sendCode() {
-
-       const res = await useClient().http({method:'post', path:'/resend_email_verification', data: {email: useUserStore().user.email}}) 
-       const notificationStore = useNotificationStore();
-        notificationStore.showNotification({
-          type: "success",
-          message: "Email Sent successfully.",
-        });
-    },
+   
     goToVerify() {
       this.currentStep = "verify";
     },
@@ -99,7 +92,7 @@ export default {
 
     openPhoneVerification() {
       eventBus.emit("open-dialog", {
-        default: ConfirmPhoneDialog,
+        default: ConfirmPhoneDialo,
         position: "right",
       });
     },
@@ -107,4 +100,4 @@ export default {
 };
 </script>
 
-<style></style>
+

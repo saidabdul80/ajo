@@ -401,94 +401,8 @@ export const useGlobalsStore = defineStore("globals", {
         return null;
       }
     },
-    async fetchBusinessCategoriesList(params = null, path = null) {
-      this.businessCategoryLoading = true;
-      const response = await useClient().http({
-        method: "get",
-        path: path || "/business_categories",
-        data: params || {},
-        fullPath: path ? true : false,
-      });
-      this.businessCategoryLoading = false;
-      if (response) {
-        this.businessCategories = response.data.map((category) => ({
-          label: category.name,
-          value: category.id,
-        }));
-      }
-    },
-    async fetchBusinessSubCategoriesList(category, params = null, path = null) {
-      this.businessSubCategoryLoading = true;
-      const response = await useClient().http({
-        method: "get",
-        path: path || "/business_sub_categories/" + category,
-        data: params || {},
-        fullPath: path ? true : false,
-      });
-      this.businessSubCategoryLoading = false;
-      if (response) {
-        this.businessSubCategories = response.data.map((sub) => ({
-          label: sub.name,
-          value: sub.id,
-        }));
-      }
-    },
-    async fetchCountriesList(params = null, path = null) {
-      const response = await useClient().http({
-        method: "get",
-        path: path || "/countries",
-        data: params || {},
-        fullPath: path ? true : false,
-      });
-      if (response) {
-        this.countriesList = response.map((country) => ({
-          label: country.name,
-          value: country.id,
-        }));
-        console.log("Countries list Successfully fetched");
-      }
-    },
 
-    async fetchStateList(nationality, params = null, path = null) {
-      const response = await useClient().http({
-        method: "get",
-        path: path || "/states/" + nationality,
-        data: params || {},
-        fullPath: path ? true : false,
-      });
-      if (response) {
-        this.stateList = response.map((nationality) => ({
-          label: nationality.name,
-          value: nationality.id,
-        }));
-        console.log("State list Successfully fetched");
-      }
-    },
-    async fetchLgasList(state, params = null, path = null) {
-      const response = await useClient().http({
-        method: "get",
-        path: path || "/lgas/" + state,
-        data: params || {},
-        fullPath: path ? true : false,
-      });
-      if (response) {
-        this.lgaList = response.data.map((state) => ({
-          label: state.name,
-          value: state.id,
-        }));
-        console.log("LGA list Successfully fetched");
-      }
-    },
-    async fetchBusinessSub(id) {
-      // this.bSubIsLoading = true
-      // this.corporateTaxPayerStore.corporateTaxPayerData.business_sub_category_id = null
-      const response = await useClient().http({
-        method: "get",
-        path: "/business_sub_categories/" + id,
-      });
-      // this.bSubIsLoading = false
-      this.business_sub_categories = response.data;
-    },
+ 
     async downloadInvoice(id) {
       try {
         this.downloadInvoiceLoading = true;
@@ -511,6 +425,16 @@ export const useGlobalsStore = defineStore("globals", {
         console.error("Error downloading invoice pdf:", error);
       }
     },
+    async sendCode() {
+      this.sendCodeLoading = true;
+      const res = await useClient().http({method:'post', path:'/resend_email_verification', data: {email: useUserStore().user.email}}) 
+      this.sendCodeLoading = false;
+      const notificationStore = useNotificationStore();
+       notificationStore.showNotification({
+         type: "success",
+         message: "Email Sent successfully.",
+       });
+   },
     async verifyEmail(params) {
       const response = await useClient().http({
         method: "post",

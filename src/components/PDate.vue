@@ -229,6 +229,7 @@ export default {
         start = formatDate(start, false);
         end = formatDate(end, false);
         displayValue.value = `${start} ⇢ ${end}`;
+        dpSelect.value.hide();
       }
     };
 

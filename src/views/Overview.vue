@@ -3,7 +3,7 @@
     <div class="tw-mb-7" v-if="currentNotification">
       <Notify :message="currentNotification.message" type="warning">
         <template #end>
-          <PButton :label="currentNotification.label" size="small" @click="handleVerification(currentNotification.dialog)" />
+          <PButton :label="currentNotification.label" size="small" @click="handleVerification(currentNotification)" />
         </template>
       </Notify>
     </div>
@@ -42,7 +42,7 @@ import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
 import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
 import UploadDialog from "@/components/Dialog/UploadDialog.vue";
 import { reactive, computed } from "vue";
-
+import { useGlobalsStore } from "@/stores/globals";
 export default {
   name: "Overview",
   components: {
@@ -109,7 +109,7 @@ export default {
 
     const documentRequirements = reactive([
       { key: 'nin_slip_url', name: 'NIN Slip' },
-      //{ key: 'international_passport_url', name: 'International Passport' },
+      { key: 'international_passport_url', name: 'International Passport' },
       // { key: 'utility_bills_url', name: 'Utility Bills' },
       // { key: 'drivers_license_url', name: 'Driver\'s License' },
       // { key: 'permanent_residence_card_url', name: 'Permanent Residence Card' },
@@ -167,8 +167,12 @@ export default {
     const currentNotification = computed(() => notifications.find((notification) => notification.state()));
 
     const handleVerification = (type) => {
+
+      if(type.label == "Verify Email"){
+        useGlobalsStore().sendCode()
+      }
       eventBus.emit("open-dialog", {
-        default: type,
+        default: type.dialog,
         position: "right",
       });
     };
