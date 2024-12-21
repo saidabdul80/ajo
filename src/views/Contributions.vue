@@ -10,7 +10,7 @@
     <div class="tw-flex tw-flex-col">
       <div class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
         <WalletBalanceCard title="Wallet Balance" balance="&#x20A6; 5,000.00" buttonLabel="Fund Wallet" :chartOptions="chartOptions" :series="series" />
-        <WalletBalanceCard title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
+        <AjoBalanceCard :ajos="globals.ajos" title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
       </div>
 
       <FiltersTab contentType="card" />
@@ -25,6 +25,8 @@ import DefaultLayout from "@/components/DefaultLayout.vue";
 import FiltersTab from "@/components/FiltersTab.vue";
 import Notify from "@/components/Notify.vue";
 import WalletBalanceCard from "@/components/WalletBalanceCard.vue";
+import AjoBalanceCard from "@/components/AjoBalanceCard.vue";
+import {useGlobalsStore} from "@/stores/globals";
 
 export default {
   components: {
@@ -34,6 +36,7 @@ export default {
     WalletBalanceCard,
     AjoCard,
     FiltersTab,
+    AjoBalanceCard,
   },
 
   data() {
@@ -81,7 +84,11 @@ export default {
           enabled: true,
         },
       },
+      globals: useGlobalsStore(),
     };
+  },
+  created() {
+    this.globals.fetchMyAjos();
   },
 };
 </script>

@@ -5,7 +5,7 @@
       <h4 class="tw-font-medium tw-text-xl">Ajo Groups</h4>
       <span class="tw-font-bold tw-text-lg">See all</span>
     </div>
-    <div  v-if="ajos.length == 0" 
+    <div  v-if="globals.ajos.length == 0" 
       class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full">
       <div>
         <img src="/images/groups.svg" alt="icon" />
@@ -18,10 +18,10 @@
         You will find the ajo groups you have joined here
       </p>
     </div>
-    <ul v-else class="tw-max-w-[30ch] tw-text-center tw-text-[#333333]">
-        <li v-for="ajo in ajos" :key="ajo.id">
+    <ul v-else class="tw-max-w-full tw-text-center tw-text-[#333333] tw-max-h-[300px] tw-py-4 tw-overflow-y-auto">
+        <li v-for="ajo in globals.ajos" :key="ajo.id" class="tw-mb-2">
           <router-link :to="`/ajo/${ajo.id}`" class="tw-text-lg tw-font-medium tw-text-[#0F1419]">
-            {{ ajo.name }}
+            <Chip :label="ajo.name " class="tw-w-full hover:tw-bg-slate-300" />
           </router-link>
         </li>
       </ul>
@@ -29,28 +29,25 @@
 </template>
 
 <script>
-import { useClient } from "@/stores/client";
+import { useGlobalsStore } from "@/stores/globals";
+
+import Chip from 'primevue/chip';
+
 export default {
   name: "AjoGroupList",
   data() {
     return {
-      ajos:[]
+      globals: useGlobalsStore(),
     }
   },
   created() {
-    this.fetchMyAjos();
+    this.globals.fetchMyAjos();
   },
   methods: {
-    async fetchMyAjos() {
-      const res = await useClient().http({
-        path: "/ajos/my",
-        method: "GET",
-
-      })
-      if(res){
-        this.ajos = res;
-      }
-    }
+    
   },
+  components: {
+    Chip
+  }
 };
 </script>

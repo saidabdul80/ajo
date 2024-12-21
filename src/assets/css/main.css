@@ -244,3 +244,46 @@ ion-content {
 .vti__dropdown:hover {
   background-color: transparent !important;
 }
+
+
+.ubt-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.ubt-slider-container {
+display: flex;
+/* justify-content:center; */
+width:100%;
+transition: transform 0.3s ease-in-out;
+}
+
+.ubt-slide {
+min-width: 100%;
+box-sizing: border-box;
+text-align:center;
+}
+
+.caret {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+/* background-image: linear-gradient(to right, #CCDFD666, #CCDFD611); */
+/* background-color: rgb(29 29 29 / 18%); */
+color: white;
+height: 38px;
+padding: 0px;
+display: flex;
+align-items: center;
+cursor: pointer;
+z-index: 1;
+}
+
+.caret-left {
+left: 0px;
+}
+
+.caret-right {
+right: 0px;
+}

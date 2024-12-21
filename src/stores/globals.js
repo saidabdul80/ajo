@@ -32,14 +32,6 @@ export const useGlobalsStore = defineStore("globals", {
     }),
     countries: [],
     isEdit: false,
-    businessCategoryLoading: false,
-    businessSubCategories: [],
-    business_sub_categories: [],
-    countriesList: [],
-    stateList: [],
-    lgaList: [],
-    refresh: false,
-    mdas: [],
     alert: {
       show: false,
       text: "",
@@ -53,8 +45,8 @@ export const useGlobalsStore = defineStore("globals", {
     isOnlineStatus: false,
     balance: 0,
     downloadInvoiceLoading: false,
-    fiscal_years: [],
-    current_fiscal_year: null,
+    ajos:[],
+    fetchingAjos: false,
   }),
   actions: {
     goBack(route) {
@@ -116,7 +108,6 @@ export const useGlobalsStore = defineStore("globals", {
             mainUserStore.user = response?.user;
           }
 
-          this.mdas = response.mdas;
           this.configurations = response.configurations;
           this.setConfig();
         }
@@ -506,6 +497,11 @@ export const useGlobalsStore = defineStore("globals", {
         this.alertPromiseResolve = { callback, resolve };
       });
     },
+    toTitleCase(str) {
+        return str?.split(' ')
+            ?.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            ?.join(' ');
+    },
     async handleAlertResponse(response) {
       if (this.alertPromiseResolve) {
         if (response) {
@@ -520,6 +516,18 @@ export const useGlobalsStore = defineStore("globals", {
         }, 200);
       }
     },
+    async fetchMyAjos() {
+      this.fetchingAjos = true;
+      const res = await useClient().http({
+        path: "/ajos/my",
+        method: "GET",
+      })
+      this.fetchingAjos = false;
+      if(res){
+        this.ajos = res;
+        return res;
+      }
+    }
   },
 });
 

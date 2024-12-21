@@ -55,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/status/:name/:status",
     name: "Statuses",
-    component: () => import("@/views/statuses/Index.vue"),
+    component: () => import("@/views/statuses/index.vue"),
     meta: { requiresAuth: false },
   },
   {

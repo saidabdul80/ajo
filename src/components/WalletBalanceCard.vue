@@ -16,7 +16,7 @@
     </div>
     <p class="tw-text-[40px] tw-block tw-text-white">{{ balance }}</p>
 
-    <div class="tw-absolute -tw-bottom-[1px] tw-h-[144px] tw-w-full">
+    <div class="tw-absolute  -tw-left-[0.09rem] -tw-bottom-[1px] tw-h-[144px] tw-w-full">
       <apexchart
         height="100%"
         width="100%"
