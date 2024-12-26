@@ -81,11 +81,11 @@ export const useClient = defineStore("client", () => {
           useGlobalsStore().logout(userRootPath);
         }
       }
-      if (!error?.response) {
-        useGlobalsStore().isOnlineStatus = false;
-      } else {
-        useGlobalsStore().isOnlineStatus = true;
-      }
+      // if (!error?.response) {
+      //   useGlobalsStore().isOnlineStatus = false;
+      // } else {
+      //   useGlobalsStore().isOnlineStatus = true;
+      // }
 
       handleError(error);
       return false;
