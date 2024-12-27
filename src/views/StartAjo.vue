@@ -165,6 +165,7 @@ export default {
       selectedFrequency:null,
       currentStep: 1,
       newEmail: "",
+      loading:false,
       searchString: "",
       filteredRules: [],
       draggedItem: null,
