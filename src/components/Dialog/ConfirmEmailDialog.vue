@@ -74,6 +74,7 @@ export default {
     completeVerification() {
       const res = useClient().http({method:'get', path:'/verify_email', data: {email: useUserStore().user.email, token: this.form.otp}}) 
       if(res){
+        this.globals.bootstrap();
         this.currentStep = "verified";
       }
       // const notificationStore = useNotificationStore();
