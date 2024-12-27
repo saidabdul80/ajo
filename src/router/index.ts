@@ -55,7 +55,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/status/:name/:status",
     name: "Statuses",
+<<<<<<< HEAD
     component: () => import("@/views/statuses/Index.vue"),
+=======
+    component: () => import("@/views/statuses/Index.vue"), 
+>>>>>>> 3a992ccde8cc59c431e8f32724e9eea4d5bf3b0d
     meta: { requiresAuth: false },
   },
   {

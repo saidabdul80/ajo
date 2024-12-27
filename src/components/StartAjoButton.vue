@@ -26,7 +26,6 @@ export default {
     const navigateToStartAjo = () => {
       if (user.value.is_verified_email && user.value.is_verified_phone_number && (user.value.drivers_license_url || user.value.international_passport_url || user.value.nin_slip_url)) {
         globals.to("/app/start");
-
         return;
       }
 

@@ -47,7 +47,7 @@ import eventBus from "@/eventBus";
 import UploadDialog from "@/components/Dialog/UploadDialog.vue";
 import { useClient } from "@/stores/client";
 import { useNotificationStore } from "@/stores/notification";
-
+import { useGlobalsStore } from "@/stores/globals";
 export default {
   components: {
     Button,
@@ -63,6 +63,7 @@ export default {
         otp: "",
       },
       loaidng: false,
+      globalStore: useGlobalsStore(),
     };
   },
 
@@ -104,6 +105,7 @@ export default {
       this.loaidng = false
       if(res){
         this.currentStep = "verified";
+        this.globalStore.bootstrap();
         const notificationStore = useNotificationStore();
          notificationStore.showNotification({
            type: "success",
