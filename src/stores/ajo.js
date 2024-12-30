@@ -25,7 +25,6 @@ export const useAjoStore = defineStore("ajoStore", {
           path: "/ajos",
           data,
         });
-
         return response;
       } catch (e) {
         this.handleError("Error creating Ajo group", e, notificationStore);

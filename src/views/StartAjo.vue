@@ -166,8 +166,10 @@ export default {
       userStore: useUserStore(),
       ajoStore: useAjoStore(),
       globalStore: useGlobalsStore(),
+      selectedFrequency: null,
       currentStep: 1,
       newEmail: "",
+      loading: false,
       searchString: "",
       filteredRules: [],
       draggedItem: null,
@@ -317,11 +319,9 @@ export default {
           this.loading = true;
           const res = await this.ajoStore.createAjo(this.intialValues);
           this.loading = false;
-          if (!res) {
-            throw new Error("Failed to create Ajo.");
+          if (res) {
+            this.openDialog();
           }
-
-          this.openDialog();
         } catch (error) {
           console.error("Error creating Ajo group:", error);
         }
