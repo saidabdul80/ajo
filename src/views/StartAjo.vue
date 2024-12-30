@@ -3,7 +3,6 @@
     <div class="tw-basis-full">
       <div class="tw-flex tw-flex-col-reverse tw-justify-end xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full tw-h-full">
         <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full">
-        
           <form class="tw-bg-white tw-h-full tw-p-6 tw-flex tw-flex-col">
             <h2 class="tw-text-[22px] tw-text-black">
               Step {{ currentStep }}:
@@ -17,7 +16,12 @@
               <div class="tw-space-y-8 tw-pt-8">
                 <Input placeholder="Group Name" size="medium" v-model="intialValues.name" :errorMessage="globalStore.nameRules.name" />
 
-                <Select v-model="intialValues.category" :options="categories" :errorMessage="globalStore.nameRules.category" placeholder="Select a Category" class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
+                <Select
+                  v-model="intialValues.category"
+                  :options="categories"
+                  :errorMessage="globalStore.nameRules.category"
+                  placeholder="Select a Category"
+                  class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
 
                 <Input placeholder="Goal of Contribution / Description" size="medium" v-model="intialValues.description" :errorMessage="globalStore.nameRules.description" />
 
@@ -169,7 +173,7 @@ export default {
       draggedItem: null,
       draggedIndex: null,
       minDate: new Date(),
-      
+
       intialValues: {
         ajo_rules: [],
         is_public: false,
@@ -240,14 +244,14 @@ export default {
 
   methods: {
     validateDate(date) {
-      const startDate = new Date(date[0]); 
-      const endDate = new Date(date[1]);   
+      const startDate = new Date(date[0]);
+      const endDate = new Date(date[1]);
 
       const timeDifference = endDate - startDate;
       const totalDays = timeDifference / (1000 * 3600 * 24);
-      if(totalDays% this.dateView !==0){
+      if (totalDays % this.dateView !== 0) {
         return false;
-      }else{
+      } else {
         return true;
       }
     },
@@ -266,7 +270,7 @@ export default {
       switch (this.selectedFrequency?.name) {
         case "YEARLY":
           this.dateView = "year";
-          
+
           break;
         case "MONTHLY":
           this.dateView = "month";
@@ -309,11 +313,11 @@ export default {
       if (this.currentStep === 3 && this.isFormValid) {
         this.steps[this.currentStep - 1].isCompleted = true;
         try {
-          this.intialValues.members =  this.participantsEmail;
+          this.intialValues.members = this.participantsEmail;
           this.loading = true;
           const res = await this.ajoStore.createAjo(this.intialValues);
           this.loading = false;
-          if (!res || res.success === false) {
+          if (!res) {
             throw new Error("Failed to create Ajo.");
           }
 
@@ -324,7 +328,6 @@ export default {
       }
     },
 
-  
     async setAjoRules(ajoId) {
       if (ajoId) {
         for (const rule of this.intialValues.ajo_rules) {
@@ -345,7 +348,7 @@ export default {
         default: AjoGroupDialog,
         title: "All done!",
         position: "center",
-        props: { title: this.intialValues.groupName },
+        props: { title: this.intialValues.name },
       });
     },
 
