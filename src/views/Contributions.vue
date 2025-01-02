@@ -26,7 +26,7 @@ import FiltersTab from "@/components/FiltersTab.vue";
 import Notify from "@/components/Notify.vue";
 import WalletBalanceCard from "@/components/WalletBalanceCard.vue";
 import AjoBalanceCard from "@/components/AjoBalanceCard.vue";
-import {useGlobalsStore} from "@/stores/globals";
+import { useGlobalsStore } from "@/stores/globals";
 
 export default {
   components: {

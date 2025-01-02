@@ -199,9 +199,7 @@ export default {
       }
     };
 
-    const hndleStatusSelection = (e) => {
-      console.log(ajos);
-    };
+    const hndleStatusSelection = (e) => {};
 
     const getSeverity = (status) => {
       switch (status) {

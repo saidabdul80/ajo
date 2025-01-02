@@ -1,26 +1,28 @@
 <template>
   <DefaultLayout>
-    <div class="tw-mb-7" v-if="currentNotification">
-      <Notify :message="currentNotification.message" type="warning">
-        <template #end>
-          <PButton :label="currentNotification.label" size="small" @click="handleVerification(currentNotification)" />
-        </template>
-      </Notify>
-    </div>
-
-    <div class="tw-flex tw-flex-col-reverse xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
-      <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full tw-pb-6 xl:tw-pb-0">
-        <div class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
-          <WalletBalanceCard title="Wallet Balance" balance="&#x20A6; 5,000.00" buttonLabel="Fund Wallet" :chartOptions="chartOptions" :series="series" @button-click="handleFundWallet" />
-          <WalletBalanceCard title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
-        </div>
-        <div class="tw-h-full">
-          <RecentTransactionTable />
-        </div>
+    <div class="custom-height">
+      <div class="tw-mb-7" v-if="currentNotification">
+        <Notify :message="currentNotification.message" type="warning">
+          <template #end>
+            <PButton :label="currentNotification.label" size="small" @click="handleVerification(currentNotification)" />
+          </template>
+        </Notify>
       </div>
-      <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
-        <AccountSetup title="Complete account setup" description="Finish setting up your account to fully enjoy Ajo by Cowris." :steps="stepDefinitions" />
-        <AjoGroupList />
+
+      <div class="tw-flex tw-flex-col-reverse xl:tw-grid xl:tw-grid-cols-6 tw-gap-8">
+        <div class="xl:tw-col-span-4 tw-flex tw-flex-col tw-pb-6 xl:tw-pb-0">
+          <div class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
+            <WalletBalanceCard title="Wallet Balance" balance="&#x20A6; 5,000.00" buttonLabel="Fund Wallet" :chartOptions="chartOptions" :series="series" @button-click="handleFundWallet" />
+            <WalletBalanceCard title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
+          </div>
+          <div class="tw-h-full">
+            <RecentTransactionTable />
+          </div>
+        </div>
+        <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
+          <AccountSetup title="Complete account setup" description="Finish setting up your account to fully enjoy Ajo by Cowris." :steps="stepDefinitions" />
+          <AjoGroupList />
+        </div>
       </div>
     </div>
   </DefaultLayout>
@@ -108,8 +110,8 @@ export default {
     });
 
     const documentRequirements = reactive([
-      { key: 'nin_slip_url', name: 'NIN Slip' },
-      { key: 'international_passport_url', name: 'International Passport' },
+      { key: "nin_slip_url", name: "NIN Slip" },
+      { key: "international_passport_url", name: "International Passport" },
       // { key: 'utility_bills_url', name: 'Utility Bills' },
       // { key: 'drivers_license_url', name: 'Driver\'s License' },
       // { key: 'permanent_residence_card_url', name: 'Permanent Residence Card' },
@@ -138,8 +140,8 @@ export default {
       {
         name: "document",
         text: "Upload means of identification",
-        isCompleted:computed(() => documentRequirements.every(doc => user.value[doc.key])),//some(doc => user.value[doc.key])),
-        isClickable: computed(() => !documentRequirements.every(doc => user.value[doc.key]))//documentRequirements.some(doc => user.value[doc.key])),
+        isCompleted: computed(() => documentRequirements.every((doc) => user.value[doc.key])), //some(doc => user.value[doc.key])),
+        isClickable: computed(() => !documentRequirements.every((doc) => user.value[doc.key])), //documentRequirements.some(doc => user.value[doc.key])),
       },
     ]);
 
@@ -157,7 +159,7 @@ export default {
         dialog: ConfirmPhoneDialog,
       },
       {
-        state: () => !documentRequirements.some(doc => user.value[doc.key]),
+        state: () => !documentRequirements.some((doc) => user.value[doc.key]),
         message: "Upload your document to explore Ajo by Cowris.",
         label: "Upload Document",
         dialog: UploadDialog,
@@ -167,9 +169,8 @@ export default {
     const currentNotification = computed(() => notifications.find((notification) => notification.state()));
 
     const handleVerification = (type) => {
-
-      if(type.label == "Verify Email"){
-        useGlobalsStore().sendCode()
+      if (type.label == "Verify Email") {
+        useGlobalsStore().sendCode();
       }
       eventBus.emit("open-dialog", {
         default: type.dialog,
@@ -200,6 +201,10 @@ export default {
 </script>
 
 <style scoped>
+.custom-height {
+  height: calc(100vh - 140px);
+  overflow: hidden;
+}
 .chart-card {
   width: 350px;
   padding: 20px;

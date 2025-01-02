@@ -6,7 +6,7 @@
       </template>
     </Header>
     <ion-content color="light">
-      <div :class="['tw-px-5 tw-py-4 tw-flex tw-flex-col', heightStyle]">
+      <div class="tw-px-5 tw-py-4 tw-flex tw-flex-col tw-overflow-hidden">
         <slot></slot>
       </div>
     </ion-content>
@@ -26,18 +26,14 @@ export default {
       type: String,
       default: "Experience the power of group savings.",
     },
-
-    heightStyle: {
-      type: String,
-    },
   },
   components: {
     Header,
   },
   data() {
     return {
-      userStore: useUserStore()
-    }
+      userStore: useUserStore(),
+    };
   },
 
   computed: {
