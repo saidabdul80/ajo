@@ -38,7 +38,7 @@
     </div>
 
     <Button
-      label="Send request"
+      :label="btn"
       @click="submitRequest"
       :disabled="!selectedOption" />
   </div>
@@ -67,11 +67,20 @@ export default {
   components: {
     Button,
   },
+  props: {
+    btn: {
+      type: String,
+      default: "Send request",
+    },
+    slotNumber: {
+      type: Number,
+      default: null,
+    },
+  },
 
   data() {
     return {
       currentStep: true,
-      slotNumber: 2,
       options: [1, 2, 3, 4, 5, 6, 7],
       selectedOption: null,
     };
@@ -79,6 +88,12 @@ export default {
 
   methods: {
     submitRequest() {
+      if(this.btn == 'Send request'){
+        eventBus.emit("requested", this.selectedOption);
+      }else{
+        eventBus.emit("selected", this.selectedOption);
+      }
+
       if (this.selectedOption) {
         this.currentStep = false;
       }

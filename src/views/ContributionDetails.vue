@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="tw-col-span-1">
-        <ParticipantsCard :participants="ajo.ajo_members" />
+        <ParticipantsCard :participants="ajo.ajo_members" :ajo-id="ajo.id" :isAjoOwner="isAjoOwner" />
       </div>
     </div>
   </DefaultLayout>
@@ -68,6 +68,7 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useAjoStore } from "@/stores/ajo.js";
 import { useGlobalsStore } from "@/stores/globals.js";
+import { useUserStore } from "@/stores/user.js";
 import { helpers } from "@/helpers/utilities.js";
 import eventBus from "@/eventBus";
 import Button from "@/components/Button.vue";
@@ -91,8 +92,10 @@ export default {
     const ajoStore = useAjoStore();
     const route = useRoute();
     const ajo = ref(null);
+    const isAjoOwner = ref(false)
     const { formattedDate } = helpers;
     const globalStore = useGlobalsStore();
+    const userStore = useUserStore()
 
     const handleContributionDialog = () => {
       eventBus.emit("open-dialog", {
@@ -122,6 +125,12 @@ export default {
 
     onMounted(async () => {
       ajo.value = await ajoStore.fetchAjoById(route.params.id);
+      isAjoOwner.value = false
+
+      if(ajo.value.user_id == userStore.user.id){
+        isAjoOwner.value = true
+      }
+
     });
 
     return {

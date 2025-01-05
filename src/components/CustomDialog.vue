@@ -29,9 +29,9 @@ export default {
       isDialogOpen: false,
       slotContent: {
         default: null,
-        props: null,
       },
       position: "center",
+      props:null,
       title: "",
     };
   },
