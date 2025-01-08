@@ -152,6 +152,24 @@ Select {
   background-size: contain;
 }
 
+.ajo-transaction-white{
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/transaction-white.svg") no-repeat center center;
+  background-size: contain;
+}
+
+
+.ajo-transaction {
+  width: 24px; /* Adjust the size as needed */
+  height: 24px; /* Adjust the size as needed */
+  display: inline-block;
+  background: url("/icons/transaction.svg") no-repeat center center;
+  background-size: contain;
+}
+
+
 .ajo-piggy-white {
   width: 24px; /* Adjust the size as needed */
   height: 24px; /* Adjust the size as needed */

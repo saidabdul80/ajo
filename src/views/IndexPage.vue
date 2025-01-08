@@ -16,6 +16,7 @@
                 lines="none"
                 :detail="false"
                 class="hydrated tw-w-[75%] tw-mx-auto tw-block tw-my-3 tw-rounded-xl tw-me-10">
+              
                 <ion-label class="!tw-flex tw-gap-4 !tw-text-base tw-items-center">
                   <span :class="isActive(p) ? p.mdIcon + '-white' : p.mdIcon"></span>
                   {{ p.title }}
@@ -80,7 +81,7 @@
           :fullscreen="true"
           class="tw-w-full tw-h-[90vh]"
           style="--padding-top: 0px !important"> -->
-        <ion-router-outlet></ion-router-outlet>
+        <ion-router-outlet :key="$globals.pageReset"></ion-router-outlet>
         <!-- </ion-content> -->
       </ion-page>
     </ion-split-pane>
@@ -174,6 +175,13 @@ export default {
           name: "notifications",
           iosIcon: "ajo-bell",
           mdIcon: "ajo-bell",
+        },
+        {
+          title: "Transactions",
+          url: "/app/transactions",
+          name: "transactions",
+          iosIcon: "ajo-transaction",
+          mdIcon: "ajo-transaction",
         },
         {
           title: "Settings",

@@ -14,7 +14,10 @@
         :rounded="false"
         @click="onButtonClick" />
     </div>
-    <p class="tw-text-[40px] tw-block tw-text-white">{{ balance }}</p>
+    <p class="tw-text-[40px] tw-gap-1 tw-text-white  tw-flex tw-items-baseline">
+      {{ $globals.formatNumber(balance) }} 
+      <span class="tw-text-sm">{{ currency }}</span>
+    </p>
 
     <div class="tw-absolute  -tw-left-[0.09rem] -tw-bottom-[1px] tw-h-[144px] tw-w-full">
       <apexchart
@@ -62,6 +65,10 @@ export default {
       type: String,
       default: "#000000",
     },
+    currency:{
+      type:String,
+      default:'CAD'
+    }
   },
   methods: {
     onButtonClick() {

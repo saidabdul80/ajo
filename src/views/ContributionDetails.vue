@@ -76,7 +76,8 @@ import DefaultLayout from "@/components/DefaultLayout.vue";
 import ParticipantsCard from "@/components/ParticipantsCard.vue";
 import RecentTransactionTable from "@/components/RecentTransactionTable.vue";
 import ContributionProcess from "@/components/Dialog/ContributionProcess.vue";
-
+import { useNotificationStore } from "@/stores/notification";
+import { useClient } from "@/stores/client";
 export default {
   components: {
     DefaultLayout,
@@ -86,7 +87,28 @@ export default {
     ContributionProcess,
     helpers,
   },
-
+  methods: {
+    async handleContributionDialog() {
+      const res = await useClient().http({
+        path: "/make/contribution",
+        method: "POST",
+        data: {
+          ajo_id: this.$route.params.id,
+        },
+      });
+      if (res) {
+        const notificationStore = useNotificationStore();
+        notificationStore.showNotification({
+          type: "success",
+          message: "Contribution Done",
+        });
+      }
+      // eventBus.emit("open-dialog", {
+      //   default: ContributionProcess,
+      //   position: "right",
+      // });
+    },
+  },
   setup() {
     const isMemeber = ref(null);
     const ajoStore = useAjoStore();
@@ -96,13 +118,6 @@ export default {
     const { formattedDate } = helpers;
     const globalStore = useGlobalsStore();
     const userStore = useUserStore();
-
-    const handleContributionDialog = () => {
-      eventBus.emit("open-dialog", {
-        default: ContributionProcess,
-        position: "right",
-      });
-    };
 
     const getFrequency = (startDate, endDate) => {
       const start = new Date(startDate);
@@ -126,21 +141,19 @@ export default {
     onMounted(async () => {
       ajo.value = await ajoStore.fetchAjoById(route.params.id);
       isAjoOwner.value = false;
-
-      if (ajo.value.user_id == userStore.user.id) {
-        isAjoOwner.value = true;
-      }
+      isAjoOwner.value = ajo.value.user_id == userStore.user.id;
     });
 
     return {
       ajo,
       isMemeber,
       globalStore,
-      handleContributionDialog,
       formattedDate,
       getFrequency,
+      isAjoOwner,
     };
   },
+  mounted() {},
 };
 </script>
 

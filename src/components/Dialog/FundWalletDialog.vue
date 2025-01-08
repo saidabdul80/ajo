@@ -4,35 +4,53 @@
       src="@/assets/images/logo.svg"
       alt="logo"
       class="tw-h-20 tw-w-20 tw-inline-block" />
-    <h4 class="tw-text-black tw-text-2xl">300,000.00 NGN</h4>
+      <div class="tw-text-black tw-text-2xl tw-flex tw-items-baseline tw-gap-1">
+
+        {{ $globals.formatNumber(userStore.user?.my_wallet?.balance || 0) }}
+        <span class="tw-text-sm">{{ userStore.user.my_wallet.currency }}</span>
+      </div>
     <Button :is-full-width="false" label="Wallet Balance" />
 
-    <div class="tw-mt-10 tw-mb-6 tw-w-full">
-      <Divider />
+    <div v-if="!transactionInitiated" class="tw-mt-10 tw-text-center">
+      <p class="tw-text-[#333333] tw-mb-4">
+        To fund your wallet, click the button below to generate your transaction reference and bank details.
+      </p>
+      <Button :loading="loading" @click="initiateTransaction" label="Initiate Transaction" />
     </div>
 
-    <div>
-      <h4 class="tw-text-lg tw-text-black tw-font-semibold">
-        Cowris account details
-      </h4>
-      <p class="tw-text-[#333333]">
-        Send money to the account details below. Once the money transfer is
-        successful, it will reflect on your wallet balance.
-      </p>
-      <ul class="tw-py-8 tw-flex tw-flex-col tw-gap-4">
-        <li
-          v-for="(value, key) in fundingDetails"
-          :key="key"
-          class="tw-flex tw-justify-between tw-items-center">
-          <p class="tw-text-[#636363]">{{ formatKey(key) }}</p>
-          <TextClipboard :text="value" />
-        </li>
-      </ul>
+    <div v-if="transactionInitiated" class="tw-w-full">
+      <div class="tw-mt-10 tw-mb-6">
+        <Divider />
+      </div>
 
-      <Button @click="closeDialog" label="Close" />
+      <div>
+        <h4 class="tw-text-lg tw-text-black tw-font-semibold">
+          Cowris Account Details
+        </h4>
+        <p class="tw-text-[#333333]">
+          Send money to the account details below. Once the money transfer is
+          successful, it will reflect on your wallet balance.
+        </p>
+        <ul class="tw-py-8 tw-flex tw-flex-col tw-gap-4">
+          <li
+            v-for="(value, key) in fundingDetails"
+            :key="key"
+            class="tw-flex tw-justify-between tw-items-center">
+            <p class="tw-text-[#636363]">{{ formatKey(key) }}</p>
+            <TextClipboard :text="value" />
+          </li>
+          <li class="tw-flex tw-justify-between tw-items-center">
+            <p class="tw-text-[#636363]">Remark Narration:</p>
+            <TextClipboard :text="reference" />
+            </li>
+        </ul>
+    
+        <Button @click="closeDialog" label="Close" />
+      </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import eventBus from "@/eventBus";
@@ -40,22 +58,22 @@ import Button from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
 import Divider from "primevue/divider";
 import TextClipboard from "../TextClipboard.vue";
-
+import { useClient } from "@/stores/client";
+import {useUserStore} from "@/stores/user";
 export default {
   components: {
     Button,
-    Input,
     Divider,
     TextClipboard,
   },
 
   data() {
     return {
-      fundingDetails: {
-        accountNumber: "333 222 3322",
-        bankName: "Wema Bank",
-        accountName: "Rhoda Ogunesan",
-      },
+      fundingDetails: null,
+      loading: false,
+      reference: "",
+      transactionInitiated: false,
+      userStore: useUserStore(),
     };
   },
 
@@ -64,6 +82,35 @@ export default {
       return key
         .replace(/([A-Z])/g, " $1")
         .replace(/^./, (str) => str.toUpperCase());
+    },
+
+    async initiateTransaction() {
+      try {
+        this.loading = true;
+        const response = await useClient().http({method:'post', path:"/transactions/initiate", data:{ 
+          gateway: "COWRISPAY",
+          type: "deposit",
+          currency: "CAD",
+          channel: "E_TRANSFER",
+          amount:0,
+        }
+
+      });
+      this.loading = false;
+      if(response){
+          this.fundingDetails = {
+            accountNumber: response.number,
+            bankName: response.bank_name,
+            accountName: response.name,
+          };
+          this.reference = response.reference;
+          this.transactionInitiated = true;
+
+      }
+      } catch (error) {
+        console.error("Error initiating transaction:", error);
+        alert("Failed to initiate transaction. Please try again.");
+      }
     },
 
     closeDialog() {
