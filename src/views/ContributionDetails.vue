@@ -41,6 +41,12 @@
                 <h5 class="tw-text-2xl tw-text-black">{{ formattedDate(ajo.start_date) }}</h5>
               </div>
             </div>
+            <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
+              <div class="tw-space-2">
+                <p class="tw-text-sm tw-text-[#333333]">Frequency of contribution</p>
+                <h5 class="tw-text-2xl tw-text-black">{{ globalStore.toCurrency(ajo.total_contribution) }}</h5>
+              </div>
+            </div>
           </div>
 
           <div class="tw-space-y-1">
@@ -53,7 +59,7 @@
           </div>
         </div>
         <div>
-          <RecentTransactionTable title="Group activities" />
+          <RecentTransactionTable tableTitle="Group activities" />
         </div>
       </div>
       <div class="tw-col-span-1">

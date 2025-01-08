@@ -11,11 +11,18 @@
     <div class="tw-flex tw-flex-col-reverse xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
       <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full tw-pb-6 xl:tw-pb-0">
         <div class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
-          <WalletBalanceCard title="Wallet Balance" :currency="user?.my_wallet?.currency" :balance="user?.my_wallet?.balance||0" buttonLabel="Fund Wallet" :chartOptions="chartOptions" :series="series" @button-click="handleFundWallet" />
+          <WalletBalanceCard
+            title="Wallet Balance"
+            :currency="user?.my_wallet?.currency"
+            :balance="user?.my_wallet?.balance || 0"
+            buttonLabel="Fund Wallet"
+            :chartOptions="chartOptions"
+            :series="series"
+            @button-click="handleFundWallet" />
           <WalletBalanceCard title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
         </div>
         <div class="tw-h-full">
-          <RecentTransactionTable />
+          <RecentTransactionTable tableTitle="Recent activities" />
         </div>
       </div>
       <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">

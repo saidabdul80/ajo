@@ -1,5 +1,5 @@
 <template>
-  <div @click="$globals.to(`/contributions/${ajoId}`)" class="tw-max-w-full tw-bg-white tw-p-6 tw-rounded tw-shrink-0 tw-cursor-pointer">
+  <div @click="$globals.to(`/contributions/${ajoId}`)" class="tw-max-w-full tw-bg-white tw-p-6 tw-rounded tw-shrink-0 tw-cursor-pointer tw-border">
     <div class="tw-space-y-2">
       <div class="tw-flex tw-justify-between tw-items-center">
         <p class="tw-text-[#C4C4C4]">{{ ajoType }}</p>
