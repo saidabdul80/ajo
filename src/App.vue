@@ -12,6 +12,16 @@
 
     <NotificationRoot />
     <CustomDialog />
+    <Alert
+    :text="$globals.alert?.text"
+    :icon="$globals.alert?.icon"
+    :title="$globals.alert?.title"
+    :confirmBtnText="$globals.alert?.confirmBtnText"
+    :cancelBtnText="$globals.alert?.cancelBtnText"
+    v-model="$globals.alert.show"
+    :loading="$globals.alert.loading"
+    :img-path="$globals.alert.imgpath"
+  />
   </ion-app>
 </template>
 
@@ -19,6 +29,7 @@
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import NotificationRoot from "@/components/notifications/NotificationRoot.vue";
+import Alert from "@/components/Alert.vue";
 import CustomDialog from "@/components/CustomDialog.vue";
 import { IonApp, IonContent, IonRouterOutlet } from "@ionic/vue";
 
@@ -35,6 +46,7 @@ export default defineComponent({
     IonContent,
     IonRouterOutlet,
     CustomDialog,
+    Alert
   },
   setup() {
     const route = useRoute();

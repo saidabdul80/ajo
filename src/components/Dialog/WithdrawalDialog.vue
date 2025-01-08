@@ -1,7 +1,11 @@
 <template>
   <div v-if="!withdrawalStatus" class="tw-flex tw-items-center tw-flex-col tw-gap-3">
     <img src="@/assets/images/logo.svg" alt="logo" class="tw-h-20 tw-w-20 tw-inline-block" />
-    <h4 class="tw-text-black tw-text-2xl">300,000.00 NGN</h4>
+    <div class="tw-text-black tw-text-2xl tw-flex tw-items-baseline tw-gap-1">
+
+      {{ $globals.formatNumber(userStore.user?.my_wallet?.balance || 0) }}
+      <span class="tw-text-sm">{{ userStore.user.my_wallet.currency }}</span>
+      </div>
     <Button :is-full-width="false" label="Wallet Balance" />
 
     <div class="tw-mt-10 tw-mb-3 tw-w-full">
@@ -51,7 +55,7 @@ import Divider from "primevue/divider";
 import TextClipboard from "../TextClipboard.vue";
 import InputNumber from "primevue/inputnumber";
 import Select from "primevue/select";
-
+import {useUserStore} from "@/stores/user"
 export default {
   components: {
     Button,
@@ -72,6 +76,7 @@ export default {
         accountName: "Rhoda Ogunesan",
       },
       amount: null,
+      userStore:useUserStore()
     };
   },
 

@@ -1,4 +1,6 @@
 <template>
+  <div class="tw-overflow-y-auto tw-h-[80vh]">
+  
   <div v-if="currentStep == 'paymentOptions'">
     <div class="tw-space-y-2 tw-mt-8 md:tw-mt-16">
       <h5 class="tw-text-[28px] tw-text-black">
@@ -125,6 +127,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>

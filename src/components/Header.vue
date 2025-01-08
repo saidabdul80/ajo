@@ -1,12 +1,17 @@
 <template>
   <ion-header class="tw-bg-white tw-shadow-none">
-    <ion-toolbar color="white" class="tw-h-[104px] tw-flex tw-px-8 tw-border-b !tw-border-[#E8EBEF]">
+    <ion-toolbar color="white" class="tw-h-[104px] tw-flex tw-px-5 tw-border-b !tw-border-[#E8EBEF]">
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-label color="dark" slot="start">
-        <h1 class="tw-m-0 md:!tw-text-[22px] !tw-text-[16px] tw-capitalize">{{ title }}</h1>
-        <p class="tw-text-xs tw-mt-1">{{ description }}</p>
+        <div class="tw-flex tw-items-center tw-gap-0 tw-cursor-pointer tw-select-none" @click="$router.push('/app/profile')">
+            <img :alt="'data.representative.name'" :src="`https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png`" style="width: 32px" />
+            <div class="tw-ml-2">
+              <h1 class="!tw-m-0 md:!tw-text-[15px] !tw-text-[13px] !tw-font-semibold tw-capitalize">{{ title }}</h1>
+              <p class="md:tw-text-xs tw-text-[11px] tw-mt-0">{{ description }}</p>
+            </div>
+        </div>
       </ion-label>
 
       <ion-label slot="end" v-if="!isValidLink">

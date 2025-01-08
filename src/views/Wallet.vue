@@ -4,10 +4,10 @@
       <div class="tw-bg-white tw-border tw-border-[#DBDEE2CC] tw-rounded-[5px] tw-p-3 tw-h-[280px]">
         <div class="tw-flex tw-flex-col tw-justify-between tw-h-full tw-bg-[#C1B2F2] tw-w-full tw-rounded-[5px] tw-p-6">
           <div class="tw-font-semibold">
-            <p class="tw-text-xs">Wallet balance &#8226; 6 Gropus</p>
+            <p class="tw-text-xs">Wallet balance</p>
             <h2 class="tw-text-[32px]">
-              ₦5,000,000
-              <span class="tw-text-base">NGN</span>
+              {{ $globals.formatNumber(userStore.user?.my_wallet?.balance || 0) }}
+              <span class="tw-text-base">{{ userStore.user.my_wallet.currency }}</span>
             </h2>
           </div>
 
@@ -19,7 +19,28 @@
       </div>
 
       <div>
-        <FiltersTab contentType="table" title="Wallet activities" />
+        <!-- <FiltersTab contentType="table" title="Wallet activities" path="/transactions/wallet_funding" /> -->
+        <DataTable
+            :loading="loadingTransactions"
+            :paginationData="transactions"
+            :headers="headers"
+            @row-click="handleRowClick"
+            @page-change="handlePageChangeR"
+            :search-options="searchOptions"
+            :search-options-dropdown="searchOptionsDropdown"
+          >
+          <template v-slot:td-status="{ row }">
+              <span class="tw-rounded-[33px] tw-bg-white tw-block">
+                  <v-chip
+                  size="small"
+                  :color="getChipColor(row.status)"
+                  class="tw-py-0 tw-flex tw-justify-center tw-font-bold tw-capitalize"
+                  >
+                  {{ row?.status.toLowerCase() }}
+                  </v-chip>
+              </span>
+          </template>
+      </DataTable>
       </div>
     </div>
   </DefaultLayout>
@@ -33,6 +54,9 @@ import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 import FiltersTab from "@/components/FiltersTab.vue";
 import WithdrawalDialog from "@/components/Dialog/WithdrawalDialog.vue";
 import ActionMenu from "@/components/ActionMenu.vue";
+import {useUserStore} from "@/stores/user";
+import DataTable from "@/components/Table/Table.vue";
+import { useClient } from "@/stores/client";
 
 export default {
   components: {
@@ -42,10 +66,35 @@ export default {
     FundWalletDialog,
     Button,
     ActionMenu,
+    DataTable
   },
-
+  watch: {
+    'global.filters': {
+        handler: function (newFilters) {
+        let status = newFilters?.status == "All" ? "" : newFilters?.status;
+        this.filters = {
+          transaction_status: status||'',
+          sort: newFilters.sort||'',
+          transaction_type: this.type||'',
+          ...newFilters
+          // transaction_number: newFilters.search||'',
+        };
+        this.getTrasactions(this.filters);
+      },
+      deep: true,
+    },
+    
+  },
   data() {
     return {
+      headers: [
+        { key: "reference", title: "Reference" },
+        { key: "created_at", title: "Date" },
+        { key: "type", title: "Type" },
+        { key: "amount", title: "Amount" },
+        { key: "status", title: "Status" },
+      ],
+      loadingTransactions:false,
       series: [
         {
           name: "Balance",
@@ -89,10 +138,46 @@ export default {
           enabled: true,
         },
       },
+      userStore: useUserStore(),
     };
   },
-
+  created() {
+    this.getTrasactions(this.filters);
+  },
   methods: {
+    getChipColor(status) {
+      const lowerStatus = status.toLowerCase();
+      if (lowerStatus === 'successful') {
+        return '#065F46'; // Green for completed
+      } else if (lowerStatus === 'pending') {
+        return 'orange'; // Orange for pending
+      } else if (lowerStatus === 'failed') {
+        return '#991B1B'; // Red for failed
+      }
+      return '#ccc'; // Default color (e.g., gray)
+    },
+    async getTrasactions(data = null,path=null){
+      this.loadingTransactions = true
+      const response = await useClient().http({ method: 'get', path:path?path:'/transactions/wallet_funding', data, fullPath:path?true:false })                
+      this.loadingTransactions =false
+      if(response){
+        this.transactions = response
+      }
+    },
+    handleRowClick(row) {
+      this.showdrawer = true;
+      this.transaction = row;
+    },
+    handlePageChangeR(path) {
+      this.filters.transaction_type=this.type ;
+      console.log(this.type,'rece')
+      this.global.getTrasactions(this.filters, path);
+    },
+    handlePageChangeS(path) {
+
+      this.filters.transaction_type=this.type;
+      this.global.getTrasactions(this.filters, path);
+    },
     handleFundWallet() {
       eventBus.emit("open-dialog", {
         default: FundWalletDialog,

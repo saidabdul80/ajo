@@ -109,6 +109,12 @@ const routes: Array<RouteRecordRaw> = [
         name: "support",
         component: () => import("@/views/Support.vue"),
         meta: { requiresAuth: true },
+      },  
+       {
+        path: "profile",
+        name: "profile",
+        component: () => import("@/views/profile/Index.vue"),
+        meta: { requiresAuth: true },
       },
     ],
   },

@@ -26,17 +26,18 @@
   </div>
 
   <div v-if="contentType == 'table'" class="tw-border-b tw-border-l tw-border-r tw-border-[#DBDEE2CC]">
-    <DataTable :value="contributors" paginator :rows="3" tableStyle="min-width: 60rem">
-      <Column field="name" header="Account Name">
-        <template #body="slotProps">
-          <div class="tw-inline-flex tw-items-center tw-gap-3">
-            <Avatar :image="slotProps.data.image" shape="circle" class="!tw-h-10 !tw-w-10" />
-            <p>{{ slotProps.data.name }}</p>
-          </div>
-        </template>
+    <DataTable :value="transactions"
+        paginator
+        :rows="paginationMeta.per_page"
+        :total-records="paginationMeta.total"
+        :lazy="true"
+        :first="(paginationMeta.current_page - 1) * paginationMeta.per_page"
+        @page="onPageChange"
+        tableStyle="min-width: 60rem">
+      <Column field="reference" header="Tranx Reference">
       </Column>
-      <Column field="date" header="Date"></Column>
-      <Column field="id" header="Transaction ID"></Column>
+      <Column field="created_at" header="Date"></Column>
+      <!-- <Column field="id" header="Transaction ID"></Column> -->
       <Column field="type" header="Transaction Type"></Column>
       <Column field="amount" header="Amount">
         <template #body="slotProps">
@@ -62,7 +63,7 @@ import { ref, onMounted, computed } from "vue";
 import { useAjoStore } from "@/stores/ajo.js";
 import { useUserStore } from "@/stores/user.js";
 import { helpers } from "@/helpers/utilities.js";
-
+import { useClient } from "@/stores/client";
 import Pills from "@/components/Pills.vue";
 import Select from "primevue/select";
 import DataTable from "primevue/datatable";
@@ -89,10 +90,13 @@ export default {
       type: String,
       validator: (value) => ["card", "table"].includes(value),
     },
-
+    path:{
+      type:String,
+      default:'/transactions/contributions'
+    },
     title: {
       type: String,
-      default: "Your Contributions",
+      default: "Contribution Activities",
     },
   },
 
@@ -101,95 +105,113 @@ export default {
     const userStore = useUserStore();
     const user = computed(() => userStore.user);
     const { formatCurrency } = helpers;
+    const transactionLoading = ref(false);
 
     // Reactive state
     const ajos = ref(null);
 
     const statusOptions = ref(["All", "Type"]);
-    const contributors = ref([
-      {
-        id: "CWR93768Y43",
-        name: "Rhoda Ogunesan",
-        date: "Nov 8, 10:35 AM",
-        type: "Withdrawal",
-        amount: 34244,
-        status: "pending",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR12345A67",
-        name: "James Smith",
-        date: "Nov 9, 2:15 PM",
-        type: "Deposit",
-        amount: 12000,
-        status: "successful",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR98765B78",
-        name: "Linda Johnson",
-        date: "Nov 10, 11:30 AM",
-        type: "Withdrawal",
-        amount: 5400,
-        status: "failed",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR54321C89",
-        name: "Michael Brown",
-        date: "Nov 11, 9:45 AM",
-        type: "Deposit",
-        amount: 28750,
-        status: "pending",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR76543D90",
-        name: "Sarah Davis",
-        date: "Nov 12, 3:00 PM",
-        type: "Withdrawal",
-        amount: 1000,
-        status: "successful",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR45678E01",
-        name: "David Wilson",
-        date: "Nov 13, 4:20 PM",
-        type: "Deposit",
-        amount: 10500,
-        status: "pending",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR67890F12",
-        name: "Emma Garcia",
-        date: "Nov 14, 1:00 PM",
-        type: "Withdrawal",
-        amount: 8750,
-        status: "successful",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR23456G23",
-        name: "Sophia Martinez",
-        date: "Nov 15, 5:10 PM",
-        type: "Deposit",
-        amount: 15000,
-        status: "pending",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR34567H34",
-        name: "William Rodriguez",
-        date: "Nov 16, 8:15 AM",
-        type: "Withdrawal",
-        amount: 2500,
-        status: "successful",
-        image: "/images/avatar.png",
-      },
-    ]);
+    const transactions = ref([]);
+    const paginationMeta = ref({})
+    const contributors = ref([]
+      // [
+      // {
+      //   id: "CWR93768Y43",
+      //   name: "Rhoda Ogunesan",
+      //   date: "Nov 8, 10:35 AM",
+      //   type: "Withdrawal",
+      //   amount: 34244,
+      //   status: "pending",
+      //   image: "/images/avatar.png",
+      // },
+      // {
+      //   id: "CWR12345A67",
+      //   name: "James Smith",
+      //   date: "Nov 9, 2:15 PM",
+      //   type: "Deposit",
+      //   amount: 12000,
+      //   status: "successful",
+      //   image: "/images/avatar.png",
+      // },
+      // {
+      //   id: "CWR98765B78",
+      //   name: "Linda Johnson",
+      //   date: "Nov 10, 11:30 AM",
+      //   type: "Withdrawal",
+      //   amount: 5400,
+      //   status: "failed",
+      //   image: "/images/avatar.png",
+      // },
+      // {
+      //   id: "CWR54321C89",
+      //   name: "Michael Brown",
+      //   date: "Nov 11, 9:45 AM",
+      //   type: "Deposit",
+      //   amount: 28750,
+      //   status: "pending",
+      //   image: "/images/avatar.png",
+      // },
+      // {
+      //   id: "CWR76543D90",
+      //   name: "Sarah Davis",
+      //   date: "Nov 12, 3:00 PM",
+      //   type: "Withdrawal",
+      //   amount: 1000,
+      //   status: "successful",
+      //   image: "/images/avatar.png",
+      // },
+      // {
+      //   id: "CWR45678E01",
+      //   name: "David Wilson",
+      //   date: "Nov 13, 4:20 PM",
+      //   type: "Deposit",
+      //   amount: 10500,
+      //   status: "pending",
+      //   image: "/images/avatar.png",
+      // },
+      // {
+      //   id: "CWR67890F12",
+      //   name: "Emma Garcia",
+      //   date: "Nov 14, 1:00 PM",
+      //   type: "Withdrawal",
+      //   amount: 8750,
+      //   status: "successful",
+      //   image: "/images/avatar.png",
+      // },
+      // {
+      //   id: "CWR23456G23",
+      //   name: "Sophia Martinez",
+      //   date: "Nov 15, 5:10 PM",
+      //   type: "Deposit",
+      //   amount: 15000,
+      //   status: "pending",
+      //   image: "/images/avatar.png",
+      // },
+      // {
+      //   id: "CWR34567H34",
+      //   name: "William Rodriguez",
+      //   date: "Nov 16, 8:15 AM",
+      //   type: "Withdrawal",
+      //   amount: 2500,
+      //   status: "successful",
+      //   image: "/images/avatar.png",
+      // },
+      // ]
+  );
 
+   const fetchTransactions = () => {
+      transactionLoading.value = true;
+      useClient().http({
+        method: "get",
+        path: props.path,
+      }).then((response) => {
+        console.log(response,900000);
+        transactionLoading.value = false;
+        transactions.value = response.data;
+        paginationMeta.value = response.meta;
+      });
+    }
+    fetchTransactions();
     // Methods
     const handlePillSelection = (value) => {
       if (value == "Newest") {
@@ -226,6 +248,8 @@ export default {
       ajos,
       statusOptions,
       contributors,
+      transactions,
+      paginationMeta,
       handlePillSelection,
       hndleStatusSelection,
       formatCurrency,

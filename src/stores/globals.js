@@ -12,6 +12,7 @@ export const useGlobalsStore = defineStore("globals", {
     notifications: [],
     pageTransition: { name: "router-view", mode: "in-out" },
     pageLoading: false,
+    pageReset: 0,
     subPageName: null,
     nameRules: ref({}),
     currentPageName: {},
@@ -478,8 +479,10 @@ export const useGlobalsStore = defineStore("globals", {
       title,
       cancelBtnText,
       confirmBtnText,
+      icon,
       loading = false,
       callback = () => {},
+      clickEvent=()=>{},
       imgpath = null,
     }) {
       return new Promise((resolve) => {
@@ -488,8 +491,10 @@ export const useGlobalsStore = defineStore("globals", {
           text,
           title,
           imgpath,
+          icon,
           cancelBtnText,
           confirmBtnText,
+          clickEvent,
           callback,
           loading,
         };
@@ -502,18 +507,25 @@ export const useGlobalsStore = defineStore("globals", {
             ?.map(word => word.charAt(0).toUpperCase() + word.slice(1))
             ?.join(' ');
     },
+    alertClickEvent(e){
+      if(this.alert.clickEvent){
+        this.alert.clickEvent(e);
+      }
+    },
     async handleAlertResponse(response) {
       if (this.alertPromiseResolve) {
         if (response) {
           this.alert.loading = true;
-          await this.alertPromiseResolve.callback();
+          await this.alertPromiseResolve.callback(response)
           this.alert.loading = false;
+        }else{
+          this.alertPromiseResolve.callback(response)
         }
         setTimeout(() => {
-          this.alertPromiseResolve?.resolve(response);
+          //this.alertPromiseResolve?.resolve(response);
           this.alertPromiseResolve = null;
           this.alert.show = false;
-        }, 200);
+        }, 50)
       }
     },
     async fetchMyAjos() {
@@ -527,7 +539,11 @@ export const useGlobalsStore = defineStore("globals", {
         this.ajos = res;
         return res;
       }
+    },
+    formatNumber(number) {
+        return new Intl.NumberFormat('en-US').format(number);
     }
+  
   },
 });
 
