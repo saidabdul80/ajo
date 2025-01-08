@@ -33,6 +33,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { computed } from "vue";
 import { useGlobalsStore } from "@/stores/globals.js";
@@ -50,45 +51,38 @@ export default {
   props: {
     ajoId: {
       type: Number,
+      required: true,
     },
-
     ajoType: {
       type: String,
+      required: true,
     },
-
     ajoName: {
       type: String,
+      required: true,
     },
-
     ajoContributedAmount: {
       type: Number,
       default: 8000,
     },
-
     ajoTotalAmount: {
       type: Number,
       default: 12000,
     },
-
     ajoTimeline: {
       type: String,
     },
-
     ajoLastUpate: {
       type: String,
     },
-
     images: {
       type: Array,
+      default: () => [],
     },
   },
 
   setup(props) {
     const globalStore = useGlobalsStore();
-
-    const handleCardDetails = (id) => {
-      alert(id);
-    };
 
     const amountPercentage = computed(() => {
       if (props.ajoTotalAmount === 0) {
@@ -100,7 +94,6 @@ export default {
 
     return {
       globalStore,
-      handleCardDetails,
       amountPercentage,
     };
   },

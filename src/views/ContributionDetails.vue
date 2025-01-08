@@ -92,10 +92,10 @@ export default {
     const ajoStore = useAjoStore();
     const route = useRoute();
     const ajo = ref(null);
-    const isAjoOwner = ref(false)
+    const isAjoOwner = ref(false);
     const { formattedDate } = helpers;
     const globalStore = useGlobalsStore();
-    const userStore = useUserStore()
+    const userStore = useUserStore();
 
     const handleContributionDialog = () => {
       eventBus.emit("open-dialog", {
@@ -125,12 +125,11 @@ export default {
 
     onMounted(async () => {
       ajo.value = await ajoStore.fetchAjoById(route.params.id);
-      isAjoOwner.value = false
+      isAjoOwner.value = false;
 
-      if(ajo.value.user_id == userStore.user.id){
-        isAjoOwner.value = true
+      if (ajo.value.user_id == userStore.user.id) {
+        isAjoOwner.value = true;
       }
-
     });
 
     return {

@@ -6,8 +6,8 @@ export const useAjoStore = defineStore("ajoStore", {
   state: () => ({
     loading: false,
   }),
+
   actions: {
-    // Centralized error handler to avoid repeated code
     handleError(message, error, notificationStore) {
       console.error(message, error);
       notificationStore.showNotification({
@@ -16,163 +16,66 @@ export const useAjoStore = defineStore("ajoStore", {
       });
     },
 
-    async createAjo(data) {
+    async makeRequest(method, path, data = null) {
       const notificationStore = useNotificationStore();
       try {
         this.loading = true;
-        const response = await useClient().http({
-          method: "post",
-          path: "/ajos",
-          data,
-        });
+        const response = await useClient().http({ method, path, data });
         return response;
       } catch (e) {
-        this.handleError("Error creating Ajo group", e, notificationStore);
+        this.handleError(`Error ${method === "get" ? "fetching" : "processing"} data`, e, notificationStore);
       } finally {
         this.loading = false;
       }
     },
 
-    async fetchAllAjo() {
-      const notificationStore = useNotificationStore();
-      try {
-        this.loading = true;
-        const response = await useClient().http({
-          method: "get",
-          path: `/ajos/my`,
-        });
-
-        if (response) {
-          return response;
-        }
-      } catch (e) {
-        this.handleError("Error fetching Ajo groups", e, notificationStore);
-      } finally {
-        this.loading = false;
-      }
+    createAjo(data) {
+      return this.makeRequest("post", "/ajos", data);
     },
 
-    async fetchAjoById(id) {
-      const notificationStore = useNotificationStore();
-      try {
-        this.loading = true;
-        const response = await useClient().http({
-          method: "get",
-          path: `/ajos/${id}`,
-        });
-
-        if (response) {
-          return response;
-        }
-      } catch (e) {
-        this.handleError("Error fetching Ajo groups", e, notificationStore);
-      } finally {
-        this.loading = false;
-      }
+    fetchAllAjo() {
+      return this.makeRequest("get", "/ajos/my");
     },
 
-    async fetchAjoFrequencies() {
-      const notificationStore = useNotificationStore();
-      try {
-        const response = await useClient().http({
-          method: "get",
-          path: "/frequencies",
-        });
-
-        if (response) {
-          return response;
-        }
-      } catch (e) {
-        this.handleError("Error fetching Ajo frequencies", e, notificationStore);
-      }
+    fetchAjoById(id) {
+      return this.makeRequest("get", `/ajos/${id}`);
     },
 
-    async inviteAjoParticipant(data) {
-      const notificationStore = useNotificationStore();
-      try {
-        const response = await useClient().http({
-          method: "post",
-          path: "/ajo-invites/request",
-          data: data,
-        });
-
-        if (response) {
-          return response;
-        }
-      } catch (e) {
-        this.handleError("Error inviting Ajo participant", e, notificationStore);
-      }
+    fetchAjoFrequencies() {
+      return this.makeRequest("get", "/frequencies");
     },
 
-    async fetchAjoRules() {
-      const notificationStore = useNotificationStore();
-      try {
-        const response = await useClient().http({
-          method: "get",
-          path: "/rules",
-        });
-
-        if (response) {
-          return response;
-        }
-      } catch (e) {
-        this.handleError("Error fetching Ajo rules", e, notificationStore);
-      }
+    inviteAjoParticipant(data) {
+      return this.makeRequest("post", "/ajo-invites/request", data);
     },
 
-    async createAjoRules(data) {
-      const notificationStore = useNotificationStore();
-      try {
-        const response = await useClient().http({
-          method: "post",
-          path: "/ajo-rules",
-          data: data,
-        });
-      } catch (e) {
-        this.handleError("Error creating Ajo rules", e, notificationStore);
-      }
+    fetchAjoRules() {
+      return this.makeRequest("get", "/rules");
+    },
+
+    createAjoRules(data) {
+      return this.makeRequest("post", "/ajo-rules", data);
     },
 
     async updateBankDetails(id, data) {
-      this.loading = true;
+      const response = await this.makeRequest("put", `/users/${id}/account-details`, data);
       const notificationStore = useNotificationStore();
-      try {
-        const response = await useClient().http({
-          method: "put",
-          path: `/users/${id}/account-details`,
-          data: data,
+      if (response) {
+        notificationStore.showNotification({
+          type: "success",
+          message: response.message || "Bank details updated successfully!",
         });
-
-        if (response) {
-          notificationStore.showNotification({
-            type: "success",
-            message: response.message || "Bank details updated successfully!",
-          });
-        }
-      } catch (e) {
-        this.handleError("Error updating bank details", e, notificationStore);
-      } finally {
-        this.loading = false;
       }
     },
 
     async updateNotificationSetting(id, data) {
+      const response = await this.makeRequest("put", `/users/${id}/notifications`, data);
       const notificationStore = useNotificationStore();
-      try {
-        const response = await useClient().http({
-          method: "put",
-          path: `/users/${id}/notifications`,
-          data: data,
+      if (response) {
+        notificationStore.showNotification({
+          type: "success",
+          message: response.message || "Notification settings updated successfully!",
         });
-
-        if (response) {
-          notificationStore.showNotification({
-            type: "success",
-            message: response.message || "Bank details updated successfully!",
-          });
-        }
-      } catch (e) {
-        this.handleError("Error turning off notification", e, notificationStore);
       }
     },
   },

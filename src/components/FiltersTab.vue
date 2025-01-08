@@ -4,9 +4,8 @@
     <div class="tw-flex tw-flex-col tw-gap-3 md:tw-flex-row md:tw-items-center">
       <div>
         <label>Status:</label>
-        <Select placeholder="All" :options="statusOptions" @change="hndleStatusSelection" class="tw-w-fit !tw-shadow-none !tw-rounded-2xl !tw-border-none !tw-bg-transparent" />
+        <Select placeholder="All" :options="statusOptions" @change="handleStatusSelection" class="tw-w-fit !tw-shadow-none !tw-rounded-2xl !tw-border-none !tw-bg-transparent" />
       </div>
-
       <Pills :buttonsTitle="['Newest', 'Oldest']" @pill-selected="handlePillSelection" />
     </div>
   </div>
@@ -21,7 +20,7 @@
       :ajoContributedAmount="parseFloat(data.total_contribution)"
       :ajoTotalAmount="parseFloat(data.total_contribution_expected)"
       :ajoTimeline="data.time_left"
-      :ajoLastUpate="data.last_contributed_time"
+      :ajoLastUpdate="data.last_contributed_time"
       :images="['/images/avatar.png', '/images/avatar.png', '/images/avatar.png', '/images/avatar.png', '/images/avatar.png']" />
   </div>
 
@@ -58,11 +57,9 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
-import { useAjoStore } from "@/stores/ajo.js";
-import { useUserStore } from "@/stores/user.js";
-import { helpers } from "@/helpers/utilities.js";
-
+import { ref, onMounted } from "vue";
+import { useAjoStore } from "@/stores/ajo";
+import { helpers } from "@/helpers/utilities";
 import Pills from "@/components/Pills.vue";
 import Select from "primevue/select";
 import DataTable from "primevue/datatable";
@@ -89,7 +86,6 @@ export default {
       type: String,
       validator: (value) => ["card", "table"].includes(value),
     },
-
     title: {
       type: String,
       default: "Your Contributions",
@@ -98,13 +94,9 @@ export default {
 
   setup(props) {
     const ajoStore = useAjoStore();
-    const userStore = useUserStore();
-    const user = computed(() => userStore.user);
     const { formatCurrency } = helpers;
 
-    // Reactive state
     const ajos = ref(null);
-
     const statusOptions = ref(["All", "Type"]);
     const contributors = ref([
       {
@@ -125,101 +117,29 @@ export default {
         status: "successful",
         image: "/images/avatar.png",
       },
-      {
-        id: "CWR98765B78",
-        name: "Linda Johnson",
-        date: "Nov 10, 11:30 AM",
-        type: "Withdrawal",
-        amount: 5400,
-        status: "failed",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR54321C89",
-        name: "Michael Brown",
-        date: "Nov 11, 9:45 AM",
-        type: "Deposit",
-        amount: 28750,
-        status: "pending",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR76543D90",
-        name: "Sarah Davis",
-        date: "Nov 12, 3:00 PM",
-        type: "Withdrawal",
-        amount: 1000,
-        status: "successful",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR45678E01",
-        name: "David Wilson",
-        date: "Nov 13, 4:20 PM",
-        type: "Deposit",
-        amount: 10500,
-        status: "pending",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR67890F12",
-        name: "Emma Garcia",
-        date: "Nov 14, 1:00 PM",
-        type: "Withdrawal",
-        amount: 8750,
-        status: "successful",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR23456G23",
-        name: "Sophia Martinez",
-        date: "Nov 15, 5:10 PM",
-        type: "Deposit",
-        amount: 15000,
-        status: "pending",
-        image: "/images/avatar.png",
-      },
-      {
-        id: "CWR34567H34",
-        name: "William Rodriguez",
-        date: "Nov 16, 8:15 AM",
-        type: "Withdrawal",
-        amount: 2500,
-        status: "successful",
-        image: "/images/avatar.png",
-      },
     ]);
 
-    // Methods
     const handlePillSelection = (value) => {
-      if (value == "Newest") {
-        ajoStore.value = ajos.value.sort((a, b) => new Date(b.id) - new Date(a.id));
-      } else {
-        ajoStore.value = ajos.value.sort((a, b) => new Date(a.id) - new Date(b.id));
-      }
+      ajos.value = value === "Newest" ? ajos.value.sort((a, b) => new Date(b.id) - new Date(a.id)) : ajos.value.sort((a, b) => new Date(a.id) - new Date(b.id));
     };
 
-    const hndleStatusSelection = (e) => {};
+    const handleStatusSelection = () => {};
 
     const getSeverity = (status) => {
       switch (status) {
         case "successful":
           return "success";
-
         case "pending":
           return "secondary";
-
         case "failed":
           return "danger";
-
         default:
           return null;
       }
     };
 
-    // Fetch Ajo data on mount
     onMounted(async () => {
-      ajos.value = await ajoStore.fetchAllAjo(user.value.id);
+      ajos.value = await ajoStore.fetchAllAjo();
     });
 
     return {
@@ -227,7 +147,7 @@ export default {
       statusOptions,
       contributors,
       handlePillSelection,
-      hndleStatusSelection,
+      handleStatusSelection,
       formatCurrency,
       getSeverity,
       props,

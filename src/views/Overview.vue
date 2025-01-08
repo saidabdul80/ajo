@@ -108,8 +108,8 @@ export default {
     });
 
     const documentRequirements = reactive([
-      { key: 'nin_slip_url', name: 'NIN Slip' },
-      { key: 'international_passport_url', name: 'International Passport' },
+      { key: "nin_slip_url", name: "NIN Slip" },
+      { key: "international_passport_url", name: "International Passport" },
       // { key: 'utility_bills_url', name: 'Utility Bills' },
       // { key: 'drivers_license_url', name: 'Driver\'s License' },
       // { key: 'permanent_residence_card_url', name: 'Permanent Residence Card' },
@@ -138,8 +138,8 @@ export default {
       {
         name: "document",
         text: "Upload means of identification",
-        isCompleted:computed(() => documentRequirements.every(doc => user.value[doc.key])),//some(doc => user.value[doc.key])),
-        isClickable: computed(() => !documentRequirements.every(doc => user.value[doc.key]))//documentRequirements.some(doc => user.value[doc.key])),
+        isCompleted: computed(() => documentRequirements.every((doc) => user.value[doc.key])), //some(doc => user.value[doc.key])),
+        isClickable: computed(() => !documentRequirements.every((doc) => user.value[doc.key])), //documentRequirements.some(doc => user.value[doc.key])),
       },
     ]);
 
@@ -157,7 +157,7 @@ export default {
         dialog: ConfirmPhoneDialog,
       },
       {
-        state: () => !documentRequirements.some(doc => user.value[doc.key]),
+        state: () => !documentRequirements.some((doc) => user.value[doc.key]),
         message: "Upload your document to explore Ajo by Cowris.",
         label: "Upload Document",
         dialog: UploadDialog,
@@ -167,9 +167,8 @@ export default {
     const currentNotification = computed(() => notifications.find((notification) => notification.state()));
 
     const handleVerification = (type) => {
-
-      if(type.label == "Verify Email"){
-        useGlobalsStore().sendCode()
+      if (type.label == "Verify Email") {
+        useGlobalsStore().sendCode();
       }
       eventBus.emit("open-dialog", {
         default: type.dialog,

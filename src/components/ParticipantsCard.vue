@@ -2,25 +2,27 @@
   <div v-if="participants && participants.length > 0" class="tw-w-full tw-bg-white tw-p-6 tw-border tw-border-[#E8EBEF] tw-space-y-3">
     <h4 class="tw-text-xl tw-text-[#0F1419]">Participants ({{ participants.length }})</h4>
 
-    <p class="tw-text-base tw-text-[#333333]">
-      Participants will be able to withdraw their contributions in the order of the number assigned below. You can request to swap slots.
-    </p>
+    <p class="tw-text-base tw-text-[#333333]">Participants will be able to withdraw their contributions in the order of the number assigned below. You can request to swap slots.</p>
 
     <ul class="tw-space-y-6 tw-pt-4">
       <li v-for="(participant, index) in participants" :key="participant.id" class="tw-flex tw-items-center tw-gap-3">
         <p
           @click="assignSlot(participant)"
           :class="participant.new_slot ? 'bgR' : 'bgP'"
-          class="tw-w-8 tw-h-8 tw-shrink-0 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-text-white tw-font-medium"
-        >
-          {{ participant.slot == null? '?' : participant.slot }}
+          class="tw-w-8 tw-h-8 tw-shrink-0 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-text-white tw-font-medium">
+          {{ participant.slot == null ? "?" : participant.slot }}
         </p>
         <p class="tw-text-base tw-text-[#000000] tw-flex">
-          {{ participant.email?.slice(0, 20) }}
+          {{ participant.email }}
           <span class="tw-ml-2 tw-flex tw-items-center tw-relative" v-if="participant.slot_request && isAjoOwner">
-            
-            <Button slotPos="left" icon="pi pi-arrow-right-arrow-left" :label="participant.slot_request+' Accept'" size="small" class=" tw-h-6 !tw-text-white "  color="danger"  @click="handleSwapSlot" >
-            </Button>
+            <Button
+              slotPos="left"
+              icon="pi pi-arrow-right-arrow-left"
+              :label="participant.slot_request + ' Accept'"
+              size="small"
+              class="tw-h-6 !tw-text-white"
+              color="danger"
+              @click="handleSwapSlot"></Button>
           </span>
         </p>
       </li>
@@ -31,7 +33,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import eventBus from "@/eventBus";
@@ -114,11 +115,10 @@ export default {
 </script>
 
 <style>
-.bgP{
-  
-  background: #36454F;
+.bgP {
+  background: #36454f;
 }
-.bgR{
-  background: #c5564F;
+.bgR {
+  background: #c5564f;
 }
 </style>
