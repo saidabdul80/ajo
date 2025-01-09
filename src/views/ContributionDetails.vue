@@ -24,27 +24,46 @@
             <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
               <div class="tw-space-2">
                 <p class="tw-text-sm tw-text-[#333333]">Overall target amount</p>
-                <h5 class="tw-text-2xl tw-text-black">{{ globalStore.toCurrency(ajo.total_contribution_expected) }}</h5>
+                <h5 class="tw-text-2xl tw-text-black">{{ globalStore.formatNumber(ajo.total_contribution_expected) }}</h5>
               </div>
               <div class="tw-space-2">
                 <p class="tw-text-sm tw-text-[#333333]">Amount per person</p>
-                <h5 class="tw-text-2xl tw-text-black">{{ globalStore.toCurrency(ajo.amount) }}</h5>
+                <h5 class="tw-text-2xl tw-text-black">{{ globalStore.formatNumber(ajo.amount) }}</h5>
               </div>
             </div>
             <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
               <div class="tw-space-2">
                 <p class="tw-text-sm tw-text-[#333333]">Frequency of contribution</p>
-                <h5 class="tw-text-2xl tw-text-black">{{ getFrequency(ajo.start_date, ajo.end_date) }}</h5>
+                <h5 class="tw-text-2xl tw-text-black">{{ ajo.frequency_name }}</h5>
               </div>
               <div class="tw-space-2">
                 <p class="tw-text-sm tw-text-[#333333]">Starting date</p>
                 <h5 class="tw-text-2xl tw-text-black">{{ formattedDate(ajo.start_date) }}</h5>
               </div>
+             
             </div>
             <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
               <div class="tw-space-2">
-                <p class="tw-text-sm tw-text-[#333333]">Frequency of contribution</p>
-                <h5 class="tw-text-2xl tw-text-black">{{ globalStore.toCurrency(ajo.total_contribution) }}</h5>
+                <p class="tw-text-sm tw-text-[#333333]">End date</p>
+                <h5 class="tw-text-2xl tw-text-black">{{ formattedDate(ajo.end_date) }}</h5>
+              </div>
+           
+              <div class="tw-space-2">
+                <p class="tw-text-sm tw-text-[#333333]">Overall contributed Amount</p>
+
+                <h5 class="tw-text-2xl tw-text-black">{{ globalStore.formatNumber(ajo.total_contribution) }}</h5>
+              </div>
+            </div>
+            <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
+              <div class="tw-space-2">
+                <p class="tw-text-sm tw-text-[#333333]">My total contributed Amount</p>
+                <h5 class="tw-text-2xl tw-text-black">{{ globalStore.formatNumber(ajo.my_detail?.contributed) }}</h5>
+              </div>
+            </div>
+            <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
+              <div class="tw-space-2">
+                <p class="tw-text-sm tw-text-[#333333]">Number of Missed contributions</p>
+                <h5 class="tw-text-2xl tw-text-black">{{ ajo.my_detail?.missed }}</h5>
               </div>
             </div>
           </div>
