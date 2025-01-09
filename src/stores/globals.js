@@ -529,6 +529,7 @@ export const useGlobalsStore = defineStore("globals", {
       }
     },
     async fetchMyAjos() {
+      alert
       this.fetchingAjos = true;
       const res = await useClient().http({
         path: "/ajos/my",

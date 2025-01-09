@@ -41,7 +41,7 @@ export default {
     };
   },
   created() {
-    this.globals.fetchMyAjos();
+    this.$globals.fetchMyAjos();
   },
   methods: {},
   components: {
