@@ -2,11 +2,9 @@
   <Nav />
   <ion-content v-bind="$attrs" class="scroller-body-inner" color="white" :fullscreen="true">
     <main id="container">
-      <!-- Grid Section -->
       <div class="tw-grid tw-gap-5 md:tw-px-20 tw-px-4" :class="lg ? 'tw-grid-cols-2' : ''">
         <AjoLandContent />
         <div class="tw-grid tw-gap-2 tw-h-full md:tw-h-[90dvh] md:tw-overflow-hidden" :class="lg ? 'tw-grid-cols-2' : ''">
-          <!-- Marquee Section -->
           <div class="tw-overflow-y-hidden">
             <vue3-marquee :gradient="true" :duration="110" :vertical="lg" pauseOnHover class="custom-marquee">
               <div v-for="x in 10" :key="x" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
@@ -24,27 +22,22 @@
         </div>
       </div>
 
-      <!-- Counter Section -->
       <div class="tw-bg-[#36454F] tw-py-20 tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-4 md:tw-px-20 tw-px-4">
         <Counter v-for="(counterItem, index) in counterItems" :key="index" :item="counterItem" />
       </div>
 
-      <!-- Body Content Section -->
       <div class="tw-bg-[#F8F9D7] md:tw-px-20 tw-px-4 tw-py-20 md:tw-py-[120px]">
         <BodyContent />
       </div>
 
-      <!-- Ajo Guide Section -->
       <div class="md:tw-px-20 tw-px-4 tw-py-20 md:tw-py-[120px]">
         <AjoGuide />
       </div>
 
-      <!-- Join Ajo Tradition Section -->
       <div class="tw-bg-[#36454F] md:tw-px-20 tw-px-4 tw-py-10">
-        <joinAjoTradition />
+        <JoinAjoTradition />
       </div>
 
-      <!-- Footer Section -->
       <div class="tw-flex tw-flex-col tw-justify-center tw-min-h-[48px] tw-bg-[#E1E1E1] tw-py-4 md:tw-px-20 tw-px-4">
         <AjoFooter />
       </div>
@@ -59,7 +52,7 @@ import Card from "@/components/Card.vue";
 import BodyContent from "@/components/AboutAjo.vue";
 import Counter from "@/components/Counter.vue";
 import AjoGuide from "@/components/AjoGuide.vue";
-import joinAjoTradition from "@/components/joinAJoTradition.vue";
+import JoinAjoTradition from "@/components/joinAJoTradition.vue";
 import AjoFooter from "@/components/AjoFooter.vue";
 import Nav from "@/components/Nav.vue";
 import { Vue3Marquee } from "vue3-marquee";
@@ -73,7 +66,7 @@ export default {
     Counter,
     BodyContent,
     AjoGuide,
-    joinAjoTradition,
+    JoinAjoTradition,
     AjoFooter,
     Nav,
   },
@@ -112,6 +105,13 @@ export default {
     lg() {
       return this.$vuetify?.display?.lgAndUp ?? false;
     },
+  },
+  created() {
+    if (this.$globals && typeof this.$globals.fetchMyAjos === "function") {
+      this.$globals.fetchMyAjos();
+    } else {
+      console.warn("fetchMyAjos function is not available in $globals.");
+    }
   },
 };
 </script>

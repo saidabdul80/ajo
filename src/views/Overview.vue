@@ -19,7 +19,7 @@
             :chartOptions="chartOptions"
             :series="series"
             @button-click="handleFundWallet" />
-          <WalletBalanceCard title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
+          <WalletBalanceCard title="Total contribution" balance="0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
         </div>
         <div class="tw-h-full">
           <RecentTransactionTable tableTitle="Recent activities" />

@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-inline-flex tw-w-fit tw-items-center tw-h-[40px] tw-rounded-2xl tw-bg-[#E8EBEF] tw-overflow-hidden">
+  <div class="tw-inline-flex tw-w-fit tw-items-center tw-h-[40px] tw-rounded-md tw-bg-[#E8EBEF] tw-overflow-hidden">
     <button
       v-for="(title, idx) in buttonsTitle"
       :key="title"

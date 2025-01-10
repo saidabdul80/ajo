@@ -20,26 +20,31 @@
         <AjoBalanceCard :ajos="globals.ajos" title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
       </div>
 
-      <DataTable
-        pageTitle="Contribution activities"
-        :loading="loadingTransactions"
-        :paginationData="transactions"
-        :headers="headers"
-        @row-click="handleRowClick"
-        @page-change="handlePageChangeR"
-        :search-options="searchOptions"
-        :search-options-dropdown="searchOptionsDropdown">
-        <template v-slot:td-by="{ row }">
-          {{ row.by.holder.full_name }}
-        </template>
-        <template v-slot:td-status="{ row }">
-          <span class="tw-rounded-[33px] tw-bg-white tw-block">
-            <v-chip size="small" :color="getChipColor(row.status)" class="tw-py-0 tw-flex tw-justify-center tw-font-bold tw-capitalize">
-              {{ row?.status.toLowerCase() }}
-            </v-chip>
-          </span>
-        </template>
-      </DataTable>
+      <div class="tw-flex tw-flex-col tw-gap-3 md:tw-flex-row md:tw-items-center tw-justify-between tw-bg-white tw-p-6 tw-border tw-border-[#DBDEE2CC]">
+        <h4 class="tw-text-xl tw-text-black">Your Contributions</h4>
+        <div class="tw-flex tw-flex-col tw-gap-3 md:tw-flex-row md:tw-items-center">
+          <div>
+            <label>Status:</label>
+            <Select v-model="selectedStatus" :options="statusOptions" class="tw-w-fit !tw-shadow-none !tw-rounded-2xl !tw-border-none !tw-bg-transparent" />
+          </div>
+
+          <Pills :buttonsTitle="['Newest', 'Oldest']" @pill-selected="handlePillSelection" />
+        </div>
+      </div>
+
+      <div class="tw-grid md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-4 tw-mt-4">
+        <AjoCard
+          v-for="data in globals.ajos"
+          :key="data.id"
+          :ajoId="data.id"
+          :ajoType="data.category ? data.category : ''"
+          :ajoName="data.name"
+          :ajoContributedAmount="parseFloat(data.total_contribution)"
+          :ajoTotalAmount="parseFloat(data.total_contribution_expected)"
+          :ajoTimeline="data.time_left"
+          :ajoLastUpate="data.last_contributed_time"
+          :images="['/images/avatar.png', '/images/avatar.png', '/images/avatar.png', '/images/avatar.png', '/images/avatar.png']" />
+      </div>
     </div>
   </DefaultLayout>
 </template>
@@ -54,9 +59,9 @@ import AjoBalanceCard from "@/components/AjoBalanceCard.vue";
 import { useGlobalsStore } from "@/stores/globals";
 import { useUserStore } from "@/stores/user";
 import eventBus from "@/eventBus";
-import DataTable from "@/components/Table/Table.vue";
-import { useClient } from "@/stores/client";
 import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
+import Select from "primevue/select";
+import Pills from "@/components/Pills.vue";
 
 export default {
   components: {
@@ -67,27 +72,12 @@ export default {
     AjoCard,
     FundWalletDialog,
     AjoBalanceCard,
-    DataTable,
+    Select,
+    Pills,
   },
-  watch: {
-    "global.filters": {
-      handler: function (newFilters) {
-        let status = newFilters?.status == "All" ? "" : newFilters?.status;
-        this.filters = {
-          transaction_status: status || "",
-          sort: newFilters.sort || "",
-          transaction_type: this.type || "",
-          ...newFilters,
-          // transaction_number: newFilters.search||'',
-        };
-        this.getTrasactions(this.filters);
-      },
-      deep: true,
-    },
-  },
+
   data() {
     return {
-      transactions: null,
       headers: [
         { key: "by", title: "Name" },
         { key: "created_at", title: "Date" },
@@ -95,7 +85,10 @@ export default {
         { key: "amount", title: "Amount" },
         { key: "status", title: "Status" },
       ],
-      loadingTransactions: false,
+
+      statusOptions: ["All", "Type"],
+      selectedStatus: "All",
+
       series: [
         {
           name: "Balance",
@@ -146,39 +139,6 @@ export default {
   },
 
   methods: {
-    getChipColor(status) {
-      const lowerStatus = status.toLowerCase();
-      if (lowerStatus === "successful") {
-        return "#065F46"; // Green for completed
-      } else if (lowerStatus === "pending") {
-        return "orange"; // Orange for pending
-      } else if (lowerStatus === "failed") {
-        return "#991B1B"; // Red for failed
-      }
-      return "#ccc"; // Default color (e.g., gray)
-    },
-    async getTrasactions(data = null, path = null) {
-      this.loadingTransactions = true;
-      const response = await useClient().http({ method: "get", path: path ? path : "/transactions/contributions", data, fullPath: path ? true : false });
-
-      this.loadingTransactions = false;
-      if (response) {
-        this.transactions = response;
-      }
-    },
-    handleRowClick(row) {
-      this.showdrawer = true;
-      this.transaction = row;
-    },
-    handlePageChangeR(path) {
-      this.filters.transaction_type = this.type;
-      console.log(this.type, "rece");
-      this.global.getTrasactions(this.filters, path);
-    },
-    handlePageChangeS(path) {
-      this.filters.transaction_type = this.type;
-      this.global.getTrasactions(this.filters, path);
-    },
     handleFundWallet() {
       eventBus.emit("open-dialog", {
         default: FundWalletDialog,
@@ -186,10 +146,13 @@ export default {
         position: "right",
       });
     },
+
+    handlePillSelection(value) {
+      // TODO: Sort ajos
+    },
   },
   created() {
     this.globals.fetchMyAjos();
-    this.getTrasactions(this.filters);
   },
 };
 </script>
