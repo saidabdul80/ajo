@@ -47,6 +47,7 @@ export const useGlobalsStore = defineStore("globals", {
     balance: 0,
     downloadInvoiceLoading: false,
     ajos:[],
+    all_ajos:[],
     fetchingAjos: false,
   }),
   actions: {
@@ -529,7 +530,7 @@ export const useGlobalsStore = defineStore("globals", {
       }
     },
     async fetchMyAjos() {
-      alert
+
       this.fetchingAjos = true;
       const res = await useClient().http({
         path: "/ajos/my",
@@ -538,6 +539,18 @@ export const useGlobalsStore = defineStore("globals", {
       this.fetchingAjos = false;
       if(res){
         this.ajos = res;
+        return res;
+      }
+    },
+    async fetchAjos() {
+      this.fetchingAjos = true;
+      const res = await useClient().http({
+        path: "/ajos",
+        method: "GET",
+      })
+      this.fetchingAjos = false;
+      if(res){
+        this.all_ajos = res;
         return res;
       }
     },

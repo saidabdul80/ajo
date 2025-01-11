@@ -1,6 +1,6 @@
 <template>
-  <div class="tw-bg-white tw-flex tw-flex-col tw-basis-full tw-border">
-    <div class="tw-flex tw-justify-between tw-items-center tw-px-6 tw-py-6 tw-text-[#0F1419] tw-border-b">
+  <div class=" tw-flex tw-flex-col tw-basis-full">
+    <div class="tw-flex tw-justify-between tw-bg-white tw-items-center tw-mb-3 tw-px-6 tw-py-6 tw-text-[#0F1419] tw-border-b">
       <h4 class="tw-font-medium tw-text-xl">Ajo Groups</h4>
       <span class="tw-font-bold tw-text-lg">See all</span>
     </div>
@@ -12,8 +12,9 @@
 
       <p class="tw-max-w-[30ch] tw-text-center tw-text-[#333333]">You will find the ajo groups you have joined here</p>
     </div>
-    <div v-else class="tw-max-w-full tw-text-[#333333] tw-max-h-[300px] tw-overflow-y-auto">
+    <div v-else class="tw-max-w-full tw-text-[#333333] tw-max-h-[80vh] tw-overflow-y-auto">
       <AjoCard
+      class="tw-mb-2"
         v-for="ajo in globals.ajos"
         :key="ajo.id"
         :ajoId="ajo.id"

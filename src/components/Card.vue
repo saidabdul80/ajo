@@ -1,13 +1,13 @@
 <template>
   <Card style="background-color: #faf9f9; overflow: hidden; width: 100%; display: flex; justify-content: center">
     <template #header>
-      <img class="tw-w-full tw-h-auto tw-object-cover" :src="item.image_url" />
+      <img class="tw-w-full tw-h-auto tw-object-cover" :src="'/images/card-example.png'" />
     </template>
 
     <template #title>
       <span class="tw-flex items-center tw-text-[#C4C4C4] tw-w-full tw-justify-between tw-text-gray tw-text-[16px]">
         {{ item.category }}
-        <img class="tw-h-[16.63px]" :src="item.category_icon" />
+        <img class="tw-h-[16.63px]" src="/images/hand-bag.png" />
       </span>
     </template>
 
@@ -17,12 +17,12 @@
 
     <template #content>
       <div>
-        <span v-for="(member, index) in item.members" :key="index" :style="{ marginLeft: `-${index * 5}px` }">
+        <span v-for="(member, index) in item.ajo_members" :key="index" :style="{ marginLeft: `-${index * 5}px` }">
           <!-- Show Badge if there's no picture or image failed to load -->
           <Badge
-            v-if="!member.picture_url || member.imageError"
+            v-if="!member?.user?.picture_url || member?.user?.imageError"
             :style="{
-              backgroundColor: getColorFromWord(getInitials(member.full_name)),
+              backgroundColor: getColorFromWord(getInitials(member?.user?.full_name)),
               borderRadius: '50%',
               width: '40px',
               marginBottom: '20px',
@@ -30,11 +30,11 @@
               marginTop: '10px',
             }"
             severity="contrast">
-            <span class="tw-text-[16px] tw-font-[500]">{{ getInitials(member.full_name) }}</span>
+            <span class="tw-text-[16px] tw-font-[500]">{{ getInitials(member?.user?.full_name) }}</span>
           </Badge>
 
           <!-- Show image if available and no error -->
-          <img v-else :src="member.picture_url" @error="handleImageError(member)" :alt="member.full_name" class="tw-h-[40px] tw-w-[40px] tw-rounded-full" />
+          <img v-else :src="member?.user?.picture_url" @error="handleImageError(member)" :alt="member?.user?.full_name" class="tw-h-[40px] tw-w-[40px] tw-rounded-full" />
         </span>
       </div>
     </template>
@@ -43,8 +43,12 @@
       <div>
         <div class="tw-flex tw-justify-between">
           <div class="tw-flex tw-w-[100%] tw-justify-between tw-text-[18px]">
-            {{ $globals.toCurrency(item.total_contributed) }} contributed of
-            <span class="tw-text-[#6A6A6A]">{{ $globals.toCurrency(item.total_contribution) }}%</span>
+            <p>
+
+              {{ $globals.toCurrency(item.total_contribution,false) }}<span class="tw-text-xs tw-ml-0">{{ currency }}</span>  contributed {{ " " }} of
+              <span class="tw-text-[#6A6A6A]">{{ $globals.toCurrency(item.total_contribution_expected,false) }}<span class="tw-text-xs tw-ml-0">{{ currency }}</span>  %</span>
+            </p>
+            <p class="tw-text-xs tw-ml-2">{{ amountPercentage }} %</p>
           </div>
         </div>
 
@@ -53,11 +57,11 @@
         <div class="tw-justify-between tw-w-full tw-flex">
           <span class="tw-flex tw-items-center">
             <span class="tw-mr-[6px]"><img src="/images/time.png" /></span>
-            <span class="tw-font-[400] tw-text-[14px]">{{ item.remaining_days }}</span>
+            <span class="tw-font-[400] tw-text-[14px]">{{ item.time_left }}</span>
           </span>
           <p class="tw-text-[#6A6A6A] tw-text-[14px]">
             Last contribution
-            <span class="tw-mr[1px]">{{ item.last_contribution_time }}</span>
+            <span class="tw-mr[1px]">{{ item.last_contributed_time }}</span>
             ago
           </p>
         </div>
@@ -70,6 +74,7 @@
 import Badge from "primevue/badge";
 import ProgressBar from "primevue/progressbar";
 import Card from "primevue/card";
+import { computed } from "vue";
 
 export default {
   components: {
@@ -87,25 +92,34 @@ export default {
         category: "Education",
         category_icon: "/images/hand-bag.png",
         description: "",
-        total_contributed: 8500000,
-        total_contribution: 12000000,
-        remaining_days: "3 Months left",
-        last_contribution_time: "55m ago",
-        members: [
+        total_contribution: 8500000,
+        total_contribution_expected: 12000000,
+        time_left: "3 Months left",
+        last_contributed_time: "55m ago",
+        ajo_members: [
           {
             id: 1,
-            full_name: "Ibrahim A Sule",
-            picture_url: "image.png",
+            user:{
+
+              full_name: "Ibrahim A Sule",
+              picture_url: "image.png",
+            }
           },
           {
             id: 2,
+            user:{
+
             full_name: "Mush Ilyas",
             picture_url: "image.png",
+            }
           },
           {
             id: 3,
+            user:{
+
             full_name: "Abdullahi Zawu",
             picture_url: "image.png",
+            }
           },
         ],
       },
@@ -118,6 +132,21 @@ export default {
   },
   created() {
     this.item = { ...this.ajo };
+  },
+  setup(props) {
+
+
+    const amountPercentage = computed(() => {
+      if (props.ajo.total_contribution === 0) {
+        return 0;
+      }
+      const percentage = (props.ajo.total_contribution / props.ajo.total_contribution_expected) * 100;
+      return percentage.toFixed(2);
+    });
+
+    return {
+      amountPercentage,
+    };
   },
   methods: {
     getInitials(fullName) {
@@ -149,7 +178,7 @@ export default {
 
     // Handle image error and show initials
     handleImageError(member) {
-      member.imageError = true; // Vue 3 automatically tracks this
+      member.user.imageError = true; // Vue 3 automatically tracks this
     },
   },
 };

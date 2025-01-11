@@ -7,15 +7,15 @@
         <div class="tw-grid tw-gap-2 tw-h-full md:tw-h-[90dvh] md:tw-overflow-hidden" :class="lg ? 'tw-grid-cols-2' : ''">
           <div class="tw-overflow-y-hidden">
             <vue3-marquee :gradient="true" :duration="110" :vertical="lg" pauseOnHover class="custom-marquee">
-              <div v-for="x in 10" :key="x" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
-                <Card class="tw-cursor-pointer" :style="{ width: lg ? '100%' : '95%' }" />
+              <div   v-for="ajo in topAjos" :key="ajo.id" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
+                <Card :ajo="ajo" class="tw-cursor-pointer" :style="{ width: lg ? '100%' : '95%' }" />
               </div>
             </vue3-marquee>
           </div>
           <div class="tw-overflow-y-hidden tw-w-full">
             <vue3-marquee :duration="110" direction="reverse" :vertical="lg" pauseOnHover class="custom-marquee">
-              <div v-for="x in 10" :key="'down-' + x" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
-                <Card class="tw-cursor-pointer" :style="{ width: lg ? '100%' : '95%' }" />
+              <div   v-for="ajo in bottomAjos" :key="'down-' + ajo.id" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
+                <Card :ajo="ajo" class="tw-cursor-pointer" :style="{ width: lg ? '100%' : '95%' }" />
               </div>
             </vue3-marquee>
           </div>
@@ -56,7 +56,7 @@ import JoinAjoTradition from "@/components/joinAJoTradition.vue";
 import AjoFooter from "@/components/AjoFooter.vue";
 import Nav from "@/components/Nav.vue";
 import { Vue3Marquee } from "vue3-marquee";
-
+import { useClient } from "@/stores/client";
 export default {
   components: {
     Vue3Marquee,
@@ -105,13 +105,17 @@ export default {
     lg() {
       return this.$vuetify?.display?.lgAndUp ?? false;
     },
+    topAjos() {
+      const splitPoint = Math.ceil((this.$globals?.all_ajos?.length || 0) / 2);
+      return this.$globals?.all_ajos?.slice(0, splitPoint) || [];
+    },
+    bottomAjos() {
+      const splitPoint = Math.ceil((this.$globals?.all_ajos?.length || 0) / 2);
+      return this.$globals?.all_ajos?.slice(splitPoint) || [];
+    },
   },
   created() {
-    if (this.$globals && typeof this.$globals.fetchMyAjos === "function") {
-      this.$globals.fetchMyAjos();
-    } else {
-      console.warn("fetchMyAjos function is not available in $globals.");
-    }
+    this.$globals.fetchAjos();
   },
 };
 </script>

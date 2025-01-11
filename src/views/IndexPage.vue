@@ -176,13 +176,13 @@ export default {
           iosIcon: "ajo-bell",
           mdIcon: "ajo-bell",
         },
-        {
-          title: "Transactions",
-          url: "/app/transactions",
-          name: "transactions",
-          iosIcon: "ajo-transaction",
-          mdIcon: "ajo-transaction",
-        },
+        // {
+        //   title: "Transactions",
+        //   url: "/app/transactions",
+        //   name: "transactions",
+        //   iosIcon: "ajo-transaction",
+        //   mdIcon: "ajo-transaction",
+        // },
         {
           title: "Settings",
           url: "/app/settings",

@@ -17,10 +17,10 @@
     <div class="tw-space-y-2">
       <div class="tw-flex tw-items-center tw-justify-between tw-text-base md:tw-text-lg tw-text-[#6A6A6A]">
         <p>
-          <span class="tw-text-black">{{ globalStore.toCurrency(ajoContributedAmount) }} contributed {{ " " }}</span>
-          <span>of {{ globalStore.toCurrency(ajoTotalAmount) }}</span>
+          <span class="tw-text-black">{{ globalStore.toCurrency(ajoContributedAmount, false) }}<span class="tw-text-xs tw-ml-0">{{ currency }}</span> contributed {{ " " }}</span>
+          <span>of {{ globalStore.toCurrency(ajoTotalAmount, false) }}<span class="tw-text-xs tw-ml-0">{{ currency }}</span> </span>
         </p>
-        <p>{{ amountPercentage }} %</p>
+        <p class="tw-text-xs tw-ml-2">{{ amountPercentage }} %</p>
       </div>
       <ProgressBar :value="parseInt(amountPercentage)" style="height: 9px" :show-value="false"></ProgressBar>
       <div class="tw-flex tw-justify-between tw-items-center tw-text-sm tw-text-[#6A6A6A]">
@@ -74,6 +74,10 @@ export default {
     },
     ajoLastUpate: {
       type: String,
+    },
+    currency:{
+      type:String,
+      default:'CAD'
     },
     images: {
       type: Array,

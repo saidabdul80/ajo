@@ -162,13 +162,11 @@ export default {
       this.transaction = row;
     },
     handlePageChangeR(path) {
-      this.filters.transaction_type = this.type;
-      console.log(this.type, "rece");
-      this.global.getTrasactions(this.filters, path);
+     
+      this.getTrasactions(this.filters, path);
     },
     handlePageChangeS(path) {
-      this.filters.transaction_type = this.type;
-      this.global.getTrasactions(this.filters, path);
+      this.getTrasactions(this.filters, path);
     },
     handleFundWallet() {
       eventBus.emit("open-dialog", {
