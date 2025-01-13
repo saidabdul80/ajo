@@ -34,15 +34,15 @@
         <p>
           <span class="tw-text-black">
             {{ globalStore.toCurrency(ajo.total_contribution, false) }}
-            <span class="tw-ml-0">{{ currency }}</span>
+            <span class="tw-ml-0 tw-text-xs tw-font-bold">{{ currency }}</span>
             contributed {{ " " }}
           </span>
           <span>
             of {{ globalStore.toCurrency(ajo.total_contribution_expected, false) }}
-            <span class="tw-ml-0">{{ currency }}</span>
+            <span class="tw-ml-0 tw-text-xs tw-font-bold">{{ currency }}</span>
           </span>
         </p>
-        <p class="tw-ml-2">{{ amountPercentage }} %</p>
+        <p class="tw-ml-1 tw-text-xs">{{ amountPercentage }} %</p>
       </div>
       <ProgressBar :value="parseInt(amountPercentage)" style="height: 9px" :show-value="false"></ProgressBar>
       <div class="tw-flex tw-justify-between tw-items-center tw-text-sm tw-text-[#6A6A6A]">
@@ -98,7 +98,7 @@ export default {
         return 0;
       }
       const percentage = (props.ajo.total_contribution / props.ajo.total_contribution_expected) * 100;
-      return percentage.toFixed(2);
+      return percentage.toFixed(1);
     });
 
     const getInitials = (fullName) => {
