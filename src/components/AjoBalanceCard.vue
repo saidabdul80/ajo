@@ -20,7 +20,7 @@
     <div class="tw-flex tw-flex-col tw-gap-5 tw-justify-between tw-text-white tw-text-sm tw-mb-5">
       <p class="tw-text-lg tw-font-normal">{{ title }}</p>
       <span>
-        <p class="tw-text-[40px] tw-mb-2 tw-block tw-text-white">{{ selectedAjo?.total_contribution }}</p>
+        <p class="tw-text-[40px] tw-mb-2 tw-block tw-text-white">{{ $globals.formatNumber(selectedAjo?.total_contribution) }}</p>
         <p class="tw-ms-1 tw-font-semibold">{{ selectedAjo?.currency }}</p>
       </span>
       <div class="tw-absolute -tw-left-[0.09rem] -tw-bottom-[1px] tw-h-[144px] tw-w-full">
