@@ -1,5 +1,7 @@
 <template>
-  <PButton @click="navigateToStartAjo" icon="pi pi-plus" label="Start new Ajo" />
+  <div class="xl:tw-min-w-[170px]">
+    <PButton @click="navigateToStartAjo" icon="pi pi-plus" label="Start new Ajo" />
+  </div>
 </template>
 
 <script>

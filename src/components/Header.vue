@@ -18,10 +18,10 @@
       </ion-label>
 
       <!-- Right Side Content (conditionally displayed) -->
-      <ion-label slot="end" v-if="!isValidLink">
+      <ion-label slot="end" v-if="isValidLink">
         <div class="tw-hidden min-[992px]:tw-flex tw-items-center tw-gap-10">
           <slot name="headerRightContent">
-            <Input v-if="!isValidLink" size="medium" placeholder="Search for group..." icon="pi pi-search" />
+            <Input size="medium" placeholder="Search for group..." icon="pi pi-search" />
             <StartAjoButton />
           </slot>
         </div>
