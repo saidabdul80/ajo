@@ -21,7 +21,7 @@
 <script>
 import { useUserStore } from "@/stores/user";
 import { useClient } from "@/stores/client";
-import { computed, ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import DataTable from "@/components/Table/Table.vue";
 
 export default {

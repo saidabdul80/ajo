@@ -1,45 +1,29 @@
 <template>
-  <div
-    class="tw-bg-white tw-overflow-x-auto tw-border-[#e6eaee] tw-rounded-[5px]">
-    <div
-      v-if="!loading"
-      class="table-shadow-sm tw-rounded-[5px] tw-overflow-auto">
-      <div
-        class="tw-border-b-[1px] tw-border-gray-200 tw-text-md md:tw-text-lg tw-font-bold tw-flex tw-flex-col md:tw-flex-row tw-justify-between tw-p-5">
+  <div class="tw-bg-white tw-overflow-x-auto tw-border-[#e6eaee] tw-rounded-[5px]">
+    <div v-if="!loading" class="table-shadow-sm tw-rounded-[5px] tw-overflow-auto">
+      <div class="tw-border-b-[1px] tw-border-gray-200 tw-text-md md:tw-text-lg tw-font-bold tw-flex tw-flex-col md:tw-flex-row tw-justify-between tw-p-5">
         <div class="tw-font-bold tw-mb-3 md:tw-mb-0">{{ pageTitle }}</div>
 
         <div class="tw-flex tw-flex-row">
-          <div
-            class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-gap-1 tw-border tw-border-gray-200 md:tw-border-none tw-p-2 tw-rounded-md">
+          <div class="tw-flex tw-flex-row tw-items-center tw-justify-between tw-gap-1 tw-border tw-border-gray-200 md:tw-border-none tw-p-2 tw-rounded-md">
             <div class="tw-font-bold tw-text-sm">Status:</div>
-            <select
-              v-model="status"
-              class="tw-text-sm focus:tw-ring-0 focus:tw-outline-none">
+            <select v-model="status" class="tw-text-sm focus:tw-ring-0 focus:tw-outline-none">
               <option v-for="status in statuses" :key="status" :value="status">
                 {{ status }}
               </option>
             </select>
           </div>
-          <div
-            class="tw-inline-flex tw-rounded-md tw-shadow-sm md:tw-ml-2 tw-ml-auto">
+          <div class="tw-inline-flex tw-rounded-md tw-shadow-sm md:tw-ml-2 tw-ml-auto">
             <button
               class="tw-px-4 tw-py-2 tw-border tw-text-sm tw-rounded-l-md"
               @click="changeSorting('newest')"
-              :class="
-                sortOrder == 'newest'
-                  ? 'tw-bg-black tw-text-white'
-                  : 'tw-bg-gray-200 tw-text-black'
-              ">
+              :class="sortOrder == 'newest' ? 'tw-bg-black tw-text-white' : 'tw-bg-gray-200 tw-text-black'">
               Newest
             </button>
             <button
               class="tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-text-black tw-text-sm tw-rounded-r-md"
               @click="changeSorting('oldest')"
-              :class="
-                sortOrder == 'oldest'
-                  ? 'tw-bg-black tw-text-white'
-                  : 'tw-bg-gray-200 tw-text-black'
-              ">
+              :class="sortOrder == 'oldest' ? 'tw-bg-black tw-text-white' : 'tw-bg-gray-200 tw-text-black'">
               Oldest
             </button>
           </div>
@@ -49,13 +33,7 @@
       <v-container class="tw-py-4 tw-block md:tw-hidden">
         <v-row class="tw-justify-center">
           <v-col cols="12" md="8">
-            <v-text-field
-              v-model="search"
-              variant="plain"
-              bg-color="#e8ecf0"
-              rounded="lg"
-              placeholder="Search transactions"
-              class="tw-rounded-full tw-border-0 tw-px-4">
+            <v-text-field v-model="search" variant="plain" bg-color="#e8ecf0" rounded="lg" placeholder="Search transactions" class="tw-rounded-full tw-border-0 tw-px-4">
               <template v-slot:prepend-inner>
                 <v-icon class="tw-ml-4 tw-mt-[-4px]">mdi-magnify</v-icon>
               </template>
@@ -65,17 +43,11 @@
       </v-container>
 
       <div v-if="paginationData?.data?.length > 0">
-        <table
-          class="tw-min-w-full tw-bg-white tw-overflow-hidden tw-rounded-lg tw-text-md">
+        <table class="tw-min-w-full tw-bg-white tw-overflow-hidden tw-rounded-lg tw-text-md">
           <thead v-if="showHeader">
             <tr>
-              <th
-                v-if="showSelect"
-                class="tw-px-4 tw-py-5 tw-text-right tw-bg-[#F9FAFB] tw-border-b-[1px] tw-border-gray-200 tw-w-[10px] tw-w-max-[10px]">
-                <input
-                  type="checkbox"
-                  @change="toggleAll"
-                  :checked="selectAll" />
+              <th v-if="showSelect" class="tw-px-4 tw-py-5 tw-text-right tw-bg-[#F9FAFB] tw-border-b-[1px] tw-border-gray-200 tw-w-[10px] tw-w-max-[10px]">
+                <input type="checkbox" @change="toggleAll" :checked="selectAll" />
               </th>
               <th
                 v-for="header in headers"
@@ -86,20 +58,11 @@
             </tr>
           </thead>
           <tbody class="tw-divide-y tw-divide-gray-200 tw-text-[14px]">
-            <tr
-              v-for="(row, index) in paginationData?.data"
-              :key="index"
-              @click="handleRowClick(row)"
-              class="tw-cursor-pointer hover:tw-bg-gray-50">
-              <td
-                v-if="showSelect"
-                class="tw-px-4 tw-py-5 tw-text-right tw-border-b-[1px] tw-border-gray-200 tw-w-[10px] tw-w-max-[10px]">
+            <tr v-for="(row, index) in paginationData?.data" :key="index" @click="handleRowClick(row)" class="tw-cursor-pointer hover:tw-bg-gray-50">
+              <td v-if="showSelect" class="tw-px-4 tw-py-5 tw-text-right tw-border-b-[1px] tw-border-gray-200 tw-w-[10px] tw-w-max-[10px]">
                 <input type="checkbox" v-model="selectedRows" :value="row" />
               </td>
-              <td
-                v-for="header in headers"
-                :key="header.key"
-                class="tw-px-6 tw-py-5 tw-border-b-[1px] tw-border-gray-200">
+              <td v-for="header in headers" :key="header.key" class="tw-px-6 tw-py-5 tw-border-b-[1px] tw-border-gray-200">
                 <span v-if="header.key === 'sn'">
                   {{ index + paginationData?.meta?.from }}
                 </span>
@@ -113,17 +76,14 @@
           </tbody>
         </table>
       </div>
-      <div v-else class="tw-flex tw-bg-white tw-justify-center">
-        <img
-          src="@/assets/notransaction.png"
-          class="tw-w-[100px] md:tw-w-[200px]"
-          alt="no transactions" />
+      <div v-else class="tw-flex tw-bg-white tw-justify-center tw-py-8">
+        <img src="@/assets/notransaction.png" class="tw-w-[100px] md:tw-w-[200px]" alt="no transactions" />
       </div>
     </div>
     <div v-else>
       <TableLoader :count="rows" :columns="headers.length + 1" />
     </div>
-    <div class="tw-mt-5">
+    <div v-if="paginationData" class="tw-mt-5">
       <Pagination
         :current-page="paginationData?.meta?.current_page"
         :total-pages="paginationData?.meta?.last_page"
