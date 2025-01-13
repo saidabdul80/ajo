@@ -11,6 +11,13 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/Home.vue"),
     meta: { requiresAuth: false },
   },
+  {
+    path: "/ajosummary/:id",
+    name: "Ajo Summary",
+    component: () => import("@/views/AjoSummary.vue"),
+    props: true,
+    meta: { requiresAuth: false },
+  },
 
   {
     path: "/join",

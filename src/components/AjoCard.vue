@@ -1,5 +1,5 @@
 <template>
-  <div @click="$globals.to(`/contributions/${ajo.id}`)" :class="[isWidthFull ? 'tw-h-full' : 'tw-h-fit', 'tw-max-w-full tw-bg-white tw-p-6 tw-rounded tw-shrink-0 tw-cursor-pointer tw-border']">
+  <div @click="$globals.to(`${pagePath}/${ajo.id}`)" :class="[isWidthFull ? 'tw-h-full' : 'tw-h-fit', 'tw-max-w-full tw-bg-white tw-p-6 tw-rounded tw-shrink-0 tw-cursor-pointer tw-border']">
     <div class="tw-space-y-2">
       <div class="tw-flex tw-justify-between tw-items-center">
         <p class="tw-text-[#C4C4C4]">{{ ajo.category ? ajo.category : "" }}</p>
@@ -86,6 +86,11 @@ export default {
     images: {
       type: Array,
       default: () => [],
+    },
+
+    pagePath: {
+      type: String,
+      default: "/contributions",
     },
   },
 

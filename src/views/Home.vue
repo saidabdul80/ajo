@@ -8,7 +8,7 @@
           <div class="tw-overflow-y-hidden">
             <vue3-marquee v-if="topAjos.length > 0" :gradient="true" :duration="110" :vertical="lg" pauseOnHover class="custom-marquee">
               <div v-for="ajo in topAjos" :key="ajo.id" class="tw-mb-3 tw-w-full tw-h-[280px]" :class="lg ? '' : 'tw-px-2'">
-                <AjoCard :ajo="ajo" :isWidthFull="true" />
+                <AjoCard :ajo="ajo" pagePath="/ajosummary" :isWidthFull="true" />
               </div>
             </vue3-marquee>
             <div v-else class="tw-flex tw-flex-col tw-gap-3 tw-py-3">
@@ -20,7 +20,7 @@
           <div class="tw-overflow-y-hidden tw-w-full">
             <vue3-marquee v-if="topAjos.length > 0" :duration="110" :gradient="true" direction="reverse" :vertical="lg" pauseOnHover class="custom-marquee">
               <div v-for="ajo in bottomAjos" :key="'down-' + ajo.id" class="tw-mb-3 tw-w-full tw-h-[280px]" :class="lg ? '' : 'tw-px-2'">
-                <AjoCard :ajo="ajo" :isWidthFull="true" />
+                <AjoCard :ajo="ajo" pagePath="/ajosummary" :isWidthFull="true" />
               </div>
             </vue3-marquee>
 

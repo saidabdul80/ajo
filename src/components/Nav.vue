@@ -2,11 +2,13 @@
   <ion-header mode="ios">
     <ion-toolbar color="white" class="tw-py-0 tw-flex tw-h-24 tw-items-center">
       <ion-label color="dark" slot="start" class="tw-px-2 tw-py-[0px] tw-flex tw-items-center tw-gap-3 md:tw-gap-7">
-        <img class="tw-w-4/6 md:tw-w-4/5" src="@/assets/images/logo-name.svg" />
+        <div @click="$router.push('/')" class="tw-cursor-pointer">
+          <img class="tw-w-full" src="@/assets/images/logo-name.svg" />
+        </div>
 
         <Tag style="background-color: #d80027; color: #fff" rounded value="Beta"></Tag>
       </ion-label>
-      <div slot="secondary" class="tw-ms-[10%] tw-hidden lg:tw-block">
+      <div v-if="isNavLinkVisible" slot="secondary" class="tw-ms-[10%] tw-hidden lg:tw-block">
         <a class="tw-mx-5 tw-text-base tw-font-semibold tw-cursor-pointer" @click="$globals.scrollTo('about-ajo')">About Ajo</a>
         <a class="tw-mx-5 tw-text-base tw-font-semibold tw-cursor-pointer" @click="$globals.scrollTo('how-ajo-work')">How Ajo Works</a>
       </div>
@@ -45,6 +47,13 @@ export default {
     return {
       visibleRight: false,
     };
+  },
+
+  props: {
+    isNavLinkVisible: {
+      type: Boolean,
+      default: true,
+    },
   },
   components: {
     Drawer,
