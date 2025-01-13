@@ -6,14 +6,16 @@
       </template>
     </Header>
     <ion-content color="light">
-      <div class="tw-px-5 tw-py-4 tw-flex tw-flex-col tw-overflow-hidden">
+      <div :class="[isContentHeightFull && 'tw-h-full', 'tw-px-5 tw-py-4 tw-flex tw-flex-col tw-overflow-hidden']">
         <slot></slot>
       </div>
     </ion-content>
   </main>
 </template>
+
 <script>
 import Header from "@/components/Header.vue";
+import { computed } from "vue";
 import { useUserStore } from "@/stores/user.js";
 
 export default {
@@ -26,25 +28,28 @@ export default {
       type: String,
       default: "Experience the power of group savings.",
     },
+
+    isContentHeightFull: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     Header,
   },
-  data() {
+  setup() {
+    const userStore = useUserStore();
+
+    const fullName = computed(() => `${userStore.user.first_name} ${userStore.user.last_name}`);
+
+    const computedHeaderTitle = computed(() => {
+      return userStore.user.first_name ? fullName.value : "Default Header Title";
+    });
+
     return {
-      userStore: useUserStore(),
+      fullName,
+      computedHeaderTitle,
     };
-  },
-
-  computed: {
-    fullName() {
-      const fullName = `${useUserStore().user.first_name} ${useUserStore().user.last_name}`;
-      return fullName;
-    },
-
-    computedHeaderTitle() {
-      return this.HeaderTitle ? this.HeaderTitle : this.fullName;
-    },
   },
 };
 </script>

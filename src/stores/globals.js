@@ -46,8 +46,8 @@ export const useGlobalsStore = defineStore("globals", {
     isOnlineStatus: false,
     balance: 0,
     downloadInvoiceLoading: false,
-    ajos:[],
-    all_ajos:[],
+    ajos: [],
+    all_ajos: [],
     fetchingAjos: false,
   }),
   actions: {
@@ -72,9 +72,8 @@ export const useGlobalsStore = defineStore("globals", {
     setPrefix() {
       window.prefix = "";
       const authPrefix = ls.get("auth.prefix");
-      window.prefix = '';
-      window.userRoot = '';
-  
+      window.prefix = "";
+      window.userRoot = "";
     },
     async changePassword(data) {
       const response = await useClient().http({
@@ -151,12 +150,12 @@ export const useGlobalsStore = defineStore("globals", {
     },
     routeTo(prefix) {
       if (!window.currentRoute.path.includes("signin")) {
-        router.push({ path: '/signin', replace: true });
+        router.push({ path: "/signin", replace: true });
         return true;
       }
       return false;
     },
-    async logout(root = false) {
+    async logout(root = false, isNotify = true) {
       try {
         if (root) {
           ls.clear();
@@ -168,11 +167,13 @@ export const useGlobalsStore = defineStore("globals", {
           this.routeTo();
         }
 
-        const notificationStore = useNotificationStore();
-        notificationStore.showNotification({
-          type: "success",
-          message: "Logged out successfully.",
-        });
+        if (isNotify) {
+          const notificationStore = useNotificationStore();
+          notificationStore.showNotification({
+            type: "success",
+            message: "Logged out successfully.",
+          });
+        }
       } catch (err) {
         console.log(err);
         const notificationStore = useNotificationStore();
@@ -321,9 +322,7 @@ export const useGlobalsStore = defineStore("globals", {
       // Create and append style element
       const style = document.createElement("style");
       document.head.appendChild(style);
-      style.sheet?.insertRule(
-        "body > div:last-child img { display: inline-block; }"
-      );
+      style.sheet?.insertRule("body > div:last-child img { display: inline-block; }");
 
       // Use a temporary wrapper to fit the content correctly
       const wrapper = document.createElement("div");
@@ -344,13 +343,7 @@ export const useGlobalsStore = defineStore("globals", {
 
       return true;
     },
-    async print(
-      id = null,
-      filename = "download",
-      orientation = "p",
-      w = 57,
-      h = 137
-    ) {
+    async print(id = null, filename = "download", orientation = "p", w = 57, h = 137) {
       if (id === null) {
         console.error("id cannot be null in print function");
         return false;
@@ -395,7 +388,6 @@ export const useGlobalsStore = defineStore("globals", {
       }
     },
 
- 
     async downloadInvoice(id) {
       try {
         this.downloadInvoiceLoading = true;
@@ -420,14 +412,14 @@ export const useGlobalsStore = defineStore("globals", {
     },
     async sendCode() {
       this.sendCodeLoading = true;
-      const res = await useClient().http({method:'post', path:'/resend_email_verification', data: {email: useUserStore().user.email}}) 
+      const res = await useClient().http({ method: "post", path: "/resend_email_verification", data: { email: useUserStore().user.email } });
       this.sendCodeLoading = false;
       const notificationStore = useNotificationStore();
-       notificationStore.showNotification({
-         type: "success",
-         message: "Email Sent successfully.",
-       });
-   },
+      notificationStore.showNotification({
+        type: "success",
+        message: "Email Sent successfully.",
+      });
+    },
     async verifyEmail(params) {
       const response = await useClient().http({
         method: "post",
@@ -475,17 +467,7 @@ export const useGlobalsStore = defineStore("globals", {
       }
       return false;
     },
-    ubtAlert({
-      text,
-      title,
-      cancelBtnText,
-      confirmBtnText,
-      icon,
-      loading = false,
-      callback = () => {},
-      clickEvent=()=>{},
-      imgpath = null,
-    }) {
+    ubtAlert({ text, title, cancelBtnText, confirmBtnText, icon, loading = false, callback = () => {}, clickEvent = () => {}, imgpath = null }) {
       return new Promise((resolve) => {
         this.alert = {
           show: true,
@@ -504,12 +486,13 @@ export const useGlobalsStore = defineStore("globals", {
       });
     },
     toTitleCase(str) {
-        return str?.split(' ')
-            ?.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            ?.join(' ');
+      return str
+        ?.split(" ")
+        ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        ?.join(" ");
     },
-    alertClickEvent(e){
-      if(this.alert.clickEvent){
+    alertClickEvent(e) {
+      if (this.alert.clickEvent) {
         this.alert.clickEvent(e);
       }
     },
@@ -517,27 +500,26 @@ export const useGlobalsStore = defineStore("globals", {
       if (this.alertPromiseResolve) {
         if (response) {
           this.alert.loading = true;
-          await this.alertPromiseResolve.callback(response)
+          await this.alertPromiseResolve.callback(response);
           this.alert.loading = false;
-        }else{
-          this.alertPromiseResolve.callback(response)
+        } else {
+          this.alertPromiseResolve.callback(response);
         }
         setTimeout(() => {
           //this.alertPromiseResolve?.resolve(response);
           this.alertPromiseResolve = null;
           this.alert.show = false;
-        }, 50)
+        }, 50);
       }
     },
     async fetchMyAjos() {
-
       this.fetchingAjos = true;
       const res = await useClient().http({
         path: "/ajos/my",
         method: "GET",
-      })
+      });
       this.fetchingAjos = false;
-      if(res){
+      if (res) {
         this.ajos = res;
         return res;
       }
@@ -547,17 +529,16 @@ export const useGlobalsStore = defineStore("globals", {
       const res = await useClient().http({
         path: "/ajos",
         method: "GET",
-      })
+      });
       this.fetchingAjos = false;
-      if(res){
+      if (res) {
         this.all_ajos = res;
         return res;
       }
     },
     formatNumber(number) {
-        return new Intl.NumberFormat('en-US').format(number);
-    }
-  
+      return new Intl.NumberFormat("en-US").format(number);
+    },
   },
 });
 

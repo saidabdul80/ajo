@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout>
+  <DefaultLayout :isContentHeightFull="!globals.ajos.length">
     <div class="tw-mb-7">
       <Notify message="Rhoda Ogunesan has invited you to join Ajo group." type="warning">
         <template #end>
@@ -7,7 +7,7 @@
         </template>
       </Notify>
     </div>
-    <div class="tw-flex tw-flex-col">
+    <div class="tw-flex tw-flex-col tw-h-full">
       <div class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
         <WalletBalanceCard
           @button-click="handleFundWallet"
@@ -32,18 +32,17 @@
         </div>
       </div>
 
-      <div class="tw-grid md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-4 tw-mt-4">
-        <AjoCard
-          v-for="data in globals.ajos"
-          :key="data.id"
-          :ajoId="data.id"
-          :ajoType="data.category ? data.category : ''"
-          :ajoName="data.name"
-          :ajoContributedAmount="parseFloat(data.total_contribution)"
-          :ajoTotalAmount="parseFloat(data.total_contribution_expected)"
-          :ajoTimeline="data.time_left"
-          :ajoLastUpate="data.last_contributed_time"
-          :images="['/images/avatar.png', '/images/avatar.png', '/images/avatar.png', '/images/avatar.png', '/images/avatar.png']" />
+      <div v-if="globals.ajos.length == 0" class="tw-flex tw-flex-col tw-justify-center tw-bg-white tw-items-center tw-h-full tw-py-8">
+        <div>
+          <img src="/images/groups.svg" alt="icon" />
+        </div>
+        <h5 class="tw-text-2xl tw-text-[#0F1419] tw-font-medium tw-pb-2">No Contributions yet</h5>
+
+        <p class="tw-max-w-[30ch] tw-text-center tw-text-[#333333]">You will find the contributions you have started here</p>
+      </div>
+
+      <div v-else class="tw-grid md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-4 tw-mt-4">
+        <AjoCard class="tw-mb-2" v-for="ajo in globals.ajos" :key="ajo.id" :ajo="ajo" />
       </div>
     </div>
   </DefaultLayout>
@@ -78,24 +77,22 @@ export default {
 
   data() {
     return {
-      headers: [
-        { key: "by", title: "Name" },
-        { key: "created_at", title: "Date" },
-        { key: "type", title: "Type" },
-        { key: "amount", title: "Amount" },
-        { key: "status", title: "Status" },
-      ],
-
-      statusOptions: ["All", "Type"],
       selectedStatus: "All",
-
+      statusOptions: ["All", "Type"],
       series: [
         {
           name: "Balance",
           data: [0, 1, 3, 2, 7, 4, 6],
         },
       ],
-      chartOptions: {
+      globals: useGlobalsStore(),
+      userStore: useUserStore(),
+    };
+  },
+
+  computed: {
+    chartOptions() {
+      return {
         colors: ["#546E7A", "#E91E63"],
         chart: {
           type: "area",
@@ -118,24 +115,11 @@ export default {
             stops: [0, 90, 100],
           },
         },
-        xaxis: {
-          labels: {
-            show: false,
-          },
-        },
-        yaxis: {
-          labels: {
-            show: false,
-          },
-        },
-        tooltip: {
-          enabled: true,
-        },
-      },
-      filters: {},
-      globals: useGlobalsStore(),
-      userStore: useUserStore(),
-    };
+        xaxis: { labels: { show: false } },
+        yaxis: { labels: { show: false } },
+        tooltip: { enabled: true },
+      };
+    },
   },
 
   methods: {
@@ -148,13 +132,15 @@ export default {
     },
 
     handlePillSelection(value) {
-      // TODO: Sort ajos
+      this.globals.ajos.sort((a, b) => {
+        if (value === "Newest") return b.id - a.id;
+        if (value === "Oldest") return a.id - b.id;
+      });
     },
   },
+
   created() {
     this.globals.fetchMyAjos();
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

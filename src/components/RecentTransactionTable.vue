@@ -21,6 +21,7 @@
 <script>
 import { useUserStore } from "@/stores/user";
 import { useClient } from "@/stores/client";
+import { computed, ref, onMounted, watch } from "vue";
 import DataTable from "@/components/Table/Table.vue";
 
 export default {
@@ -30,74 +31,86 @@ export default {
   props: {
     tableTitle: {
       type: String,
-      require: true,
+      required: true,
     },
   },
-  watch: {
-    "global.filters": {
-      handler: function (newFilters) {
-        let status = newFilters?.status == "All" ? "" : newFilters?.status;
-        this.filters = {
-          transaction_status: status || "",
-          sort: newFilters.sort || "",
-          transaction_type: this.type || "",
-          ...newFilters,
-          // transaction_number: newFilters.search||'',
-        };
-        this.getTrasactions(this.filters);
-      },
-      deep: true,
-    },
-  },
-  data() {
-    return {
-      transactions: null,
-      headers: [
-        { key: "reference", title: "Reference" },
-        { key: "created_at", title: "Date" },
-        { key: "type", title: "Type" },
-        { key: "amount", title: "Amount" },
-        { key: "status", title: "Status" },
-      ],
-      loadingTransactions: false,
-      userStore: useUserStore(),
-    };
-  },
-  created() {
-    this.getTrasactions(this.filters);
-  },
-  methods: {
-    getChipColor(status) {
+  setup() {
+    const transactions = ref(null);
+    const headers = ref([
+      { key: "reference", title: "Reference" },
+      { key: "created_at", title: "Date" },
+      { key: "type", title: "Type" },
+      { key: "amount", title: "Amount" },
+      { key: "status", title: "Status" },
+    ]);
+    const loadingTransactions = ref(false);
+    const userStore = useUserStore();
+    const filters = ref({});
+
+    const getChipColor = (status) => {
       const lowerStatus = status.toLowerCase();
       if (lowerStatus === "successful") {
-        return "#065F46"; // Green for completed
+        return "#065F46";
       } else if (lowerStatus === "pending") {
-        return "orange"; // Orange for pending
+        return "orange";
       } else if (lowerStatus === "failed") {
-        return "#991B1B"; // Red for failed
+        return "#991B1B";
       }
-      return "#ccc"; // Default color (e.g., gray)
-    },
-    async getTrasactions(data = null, path = null) {
-      this.loadingTransactions = true;
-      const response = await useClient().http({ method: "get", path: path ? path : "/transactions/wallet_funding", data, fullPath: path ? true : false });
-      this.loadingTransactions = false;
-      if (response) {
-        this.transactions = response;
-      }
-    },
-    handleRowClick(row) {
-      this.showdrawer = true;
-      this.transaction = row;
-    },
-    handlePageChangeR(path) {
+      return "#ccc";
+    };
 
-      this.getTrasactions(this.filters, path);
-    },
-    handlePageChangeS(path) {
-    
-      this.getTrasactions(this.filters, path);
-    },
+    const getTransactions = async (data = null, path = null) => {
+      loadingTransactions.value = true;
+      const response = await useClient().http({ method: "get", path: path ? path : "/transactions/wallet_funding", data, fullPath: path ? true : false });
+      loadingTransactions.value = false;
+      if (response) {
+        transactions.value = response;
+      }
+    };
+
+    const handleRowClick = (row) => {
+      // Assuming 'showdrawer' and 'transaction' are defined elsewhere
+      // showdrawer = true;
+      // transaction = row;
+    };
+
+    const handlePageChangeR = (path) => {
+      getTransactions(filters.value, path);
+    };
+
+    const handlePageChangeS = (path) => {
+      getTransactions(filters.value, path);
+    };
+
+    watch(
+      () => filters.value,
+      (newFilters) => {
+        let status = newFilters?.status === "All" ? "" : newFilters?.status;
+        filters.value = {
+          transaction_status: status || "",
+          sort: newFilters.sort || "",
+          transaction_type: userStore.type || "",
+          ...newFilters,
+        };
+        getTransactions(filters.value);
+      },
+      { deep: true }
+    );
+
+    onMounted(() => {
+      getTransactions(filters.value);
+    });
+
+    return {
+      transactions,
+      headers,
+      loadingTransactions,
+      getChipColor,
+      getTransactions,
+      handleRowClick,
+      handlePageChangeR,
+      handlePageChangeS,
+    };
   },
 };
 </script>

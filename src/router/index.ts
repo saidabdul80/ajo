@@ -84,6 +84,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/contributions/:id", // Dynamic route parameter for Ajo details
         name: "AjoDetail",
         component: () => import("@/views/ContributionDetails.vue"),
+        meta: { requiresAuth: true },
         props: true, // Pass route params as props
       },
       {

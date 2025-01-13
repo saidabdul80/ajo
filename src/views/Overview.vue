@@ -34,7 +34,10 @@
 </template>
 
 <script>
+import { reactive, computed } from "vue";
+import { useGlobalsStore } from "@/stores/globals";
 import { useUserStore } from "@/stores/user.js";
+import { useCurrentNotification } from "@/composable/useCurrentNotification";
 import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
 import Header from "@/components/Header.vue";
@@ -45,11 +48,7 @@ import RecentTransactionTable from "@/components/RecentTransactionTable.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import AccountSetup from "@/components/AccountSetup.vue";
 import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
-import ConfirmEmailDialog from "@/components/Dialog/ConfirmEmailDialog.vue";
-import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
-import UploadDialog from "@/components/Dialog/UploadDialog.vue";
-import { reactive, computed } from "vue";
-import { useGlobalsStore } from "@/stores/globals";
+
 export default {
   name: "Overview",
   components: {
@@ -62,12 +61,9 @@ export default {
     AccountSetup,
     Header,
     FundWalletDialog,
-    ConfirmEmailDialog,
-    UploadDialog,
   },
   setup() {
-    const userStore = useUserStore();
-    const user = computed(() => userStore.user);
+    const { currentNotification, user } = useCurrentNotification();
 
     const series = reactive([
       {
@@ -150,29 +146,6 @@ export default {
       },
     ]);
 
-    const notifications = reactive([
-      {
-        state: () => !user.value.is_verified_email,
-        message: "Verify your email address to explore Ajo by Cowris.",
-        label: "Verify Email",
-        dialog: ConfirmEmailDialog,
-      },
-      {
-        state: () => !user.value.is_verified_phone_number,
-        message: "Verify your phone number to explore Ajo by Cowris.",
-        label: "Verify Phone",
-        dialog: ConfirmPhoneDialog,
-      },
-      {
-        state: () => !documentRequirements.some((doc) => user.value[doc.key]),
-        message: "Upload your document to explore Ajo by Cowris.",
-        label: "Upload Document",
-        dialog: UploadDialog,
-      },
-    ]);
-
-    const currentNotification = computed(() => notifications.find((notification) => notification.state()));
-
     const handleVerification = (type) => {
       if (type.label == "Verify Email") {
         useGlobalsStore().sendCode();
@@ -196,7 +169,6 @@ export default {
       series,
       chartOptions,
       stepDefinitions,
-      notifications,
       currentNotification,
       handleVerification,
       handleFundWallet,

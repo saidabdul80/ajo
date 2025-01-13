@@ -40,14 +40,13 @@
                 <p class="tw-text-sm tw-text-[#333333]">Starting date</p>
                 <h5 class="tw-text-2xl tw-text-black">{{ formattedDate(ajo.start_date) }}</h5>
               </div>
-             
             </div>
             <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
               <div class="tw-space-2">
                 <p class="tw-text-sm tw-text-[#333333]">End date</p>
                 <h5 class="tw-text-2xl tw-text-black">{{ formattedDate(ajo.end_date) }}</h5>
               </div>
-           
+
               <div class="tw-space-2">
                 <p class="tw-text-sm tw-text-[#333333]">Overall contributed Amount</p>
 
@@ -95,7 +94,6 @@ import { useAjoStore } from "@/stores/ajo.js";
 import { useGlobalsStore } from "@/stores/globals.js";
 import { useUserStore } from "@/stores/user.js";
 import { helpers } from "@/helpers/utilities.js";
-import eventBus from "@/eventBus";
 import Button from "@/components/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import ParticipantsCard from "@/components/ParticipantsCard.vue";
@@ -103,6 +101,7 @@ import RecentTransactionTable from "@/components/RecentTransactionTable.vue";
 import ContributionProcess from "@/components/Dialog/ContributionProcess.vue";
 import { useNotificationStore } from "@/stores/notification";
 import { useClient } from "@/stores/client";
+
 export default {
   components: {
     DefaultLayout,
@@ -112,44 +111,49 @@ export default {
     ContributionProcess,
     helpers,
   },
-  methods: {
-    async handleContributionDialog() {
-      const res = await useClient().http({
+  setup() {
+    const route = useRoute();
+    const ajoStore = useAjoStore();
+    const globalStore = useGlobalsStore();
+    const userStore = useUserStore();
+    const notificationStore = useNotificationStore();
+    const client = useClient();
+
+    const ajo = ref(null);
+    const isMemeber = ref(null);
+    const isAjoOwner = ref(false);
+    const { formattedDate } = helpers;
+
+    // Fetch Ajo and set ownership
+    const fetchAjoDetails = async () => {
+      ajo.value = await ajoStore.fetchAjoById(route.params.id);
+      isAjoOwner.value = ajo.value?.user_id === userStore.user.id;
+    };
+
+    // Handle contribution dialog
+    const handleContributionDialog = async () => {
+      const res = await client.http({
         path: "/make/contribution",
         method: "POST",
         data: {
-          ajo_id: this.$route.params.id,
+          ajo_id: route.params.id,
         },
       });
+
       if (res) {
-        const notificationStore = useNotificationStore();
         notificationStore.showNotification({
           type: "success",
           message: "Contribution Done",
         });
       }
-      // eventBus.emit("open-dialog", {
-      //   default: ContributionProcess,
-      //   position: "right",
-      // });
-    },
-  },
-  setup() {
-    const isMemeber = ref(null);
-    const ajoStore = useAjoStore();
-    const route = useRoute();
-    const ajo = ref(null);
-    const isAjoOwner = ref(false);
-    const { formattedDate } = helpers;
-    const globalStore = useGlobalsStore();
-    const userStore = useUserStore();
+    };
 
+    // Get frequency
     const getFrequency = (startDate, endDate) => {
       const start = new Date(startDate);
       const end = new Date(endDate);
 
       const timeDiff = end - start;
-
       const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
       if (days > 365) {
@@ -163,22 +167,18 @@ export default {
       }
     };
 
-    onMounted(async () => {
-      ajo.value = await ajoStore.fetchAjoById(route.params.id);
-      isAjoOwner.value = false;
-      isAjoOwner.value = ajo.value.user_id == userStore.user.id;
-    });
+    onMounted(fetchAjoDetails);
 
     return {
       ajo,
       isMemeber,
-      globalStore,
-      formattedDate,
-      getFrequency,
       isAjoOwner,
+      formattedDate,
+      globalStore,
+      getFrequency,
+      handleContributionDialog,
     };
   },
-  mounted() {},
 };
 </script>
 

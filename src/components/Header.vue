@@ -6,11 +6,11 @@
       </ion-buttons>
       <ion-label color="dark" slot="start">
         <div class="tw-flex tw-items-center tw-gap-0 tw-cursor-pointer tw-select-none" @click="$router.push('/app/profile')">
-            <img :alt="'data.representative.name'" :src="`https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png`" style="width: 32px" />
-            <div class="tw-ml-2">
-              <h1 class="!tw-m-0 md:!tw-text-[15px] !tw-text-[13px] !tw-font-semibold tw-capitalize">{{ title }}</h1>
-              <p class="md:tw-text-xs tw-text-[11px] tw-mt-0">{{ description }}</p>
-            </div>
+          <img :alt="'data.representative.name'" :src="`https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png`" style="width: 32px" />
+          <div class="tw-ml-2">
+            <h1 class="!tw-m-0 md:!tw-text-[15px] !tw-text-[13px] !tw-font-semibold tw-capitalize">{{ title }}</h1>
+            <p class="md:tw-text-xs tw-text-[11px] tw-mt-0">{{ description }}</p>
+          </div>
         </div>
       </ion-label>
 
@@ -31,7 +31,9 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import { useUserStore } from "@/stores/user.js";
+import { useRoute } from "vue-router";
 
 import PButton from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
@@ -54,23 +56,20 @@ export default {
       type: String,
     },
   },
-  data() {
+  setup() {
+    const userStore = useUserStore();
+    const route = useRoute();
+    const currentRoutePath = computed(() => route.path);
+
+    const isValidLink = computed(() => {
+      return currentRoutePath.value.includes("start");
+    });
+
     return {
-      userStore: useUserStore(),
-      currentRoutePath: null,
+      userStore,
+      currentRoutePath,
+      isValidLink,
     };
-  },
-
-  mounted() {
-    this.currentRoutePath = this.$route.path;
-  },
-
-  computed: {
-    isValidLink() {
-      if (this.currentRoutePath && this.currentRoutePath.includes("start")) {
-        return true;
-      }
-    },
   },
 };
 </script>

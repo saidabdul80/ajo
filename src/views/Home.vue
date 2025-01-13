@@ -4,20 +4,31 @@
     <main id="container">
       <div class="tw-grid tw-gap-5 md:tw-px-20 tw-px-4" :class="lg ? 'tw-grid-cols-2' : ''">
         <AjoLandContent />
-        <div class="tw-grid tw-gap-2 tw-h-full md:tw-h-[90dvh] md:tw-overflow-hidden" :class="lg ? 'tw-grid-cols-2' : ''">
+        <div class="tw-grid tw-gap-2 tw-h-full xl:tw-h-[90dvh] md:tw-overflow-hidden" :class="lg ? 'tw-grid-cols-2' : ''">
           <div class="tw-overflow-y-hidden">
-            <vue3-marquee :gradient="true" :duration="110" :vertical="lg" pauseOnHover class="custom-marquee">
-              <div   v-for="ajo in topAjos" :key="ajo.id" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
-                <Card :ajo="ajo" class="tw-cursor-pointer" :style="{ width: lg ? '100%' : '95%' }" />
+            <vue3-marquee v-if="topAjos.length > 0" :gradient="true" :duration="110" :vertical="lg" pauseOnHover class="custom-marquee">
+              <div v-for="ajo in topAjos" :key="ajo.id" class="tw-mb-3 tw-w-full tw-h-[280px]" :class="lg ? '' : 'tw-px-2'">
+                <AjoCard :ajo="ajo" :isWidthFull="true" />
               </div>
             </vue3-marquee>
+            <div v-else class="tw-flex tw-flex-col tw-gap-3 tw-py-3">
+              <Skeleton width="100%" height="18rem"></Skeleton>
+              <Skeleton width="100%" height="18rem"></Skeleton>
+              <Skeleton class="tw-hidden xl:tw-block" width="100%" height="18rem"></Skeleton>
+            </div>
           </div>
           <div class="tw-overflow-y-hidden tw-w-full">
-            <vue3-marquee :duration="110" direction="reverse" :vertical="lg" pauseOnHover class="custom-marquee">
-              <div   v-for="ajo in bottomAjos" :key="'down-' + ajo.id" class="tw-mb-3 tw-w-full" :class="lg ? '' : 'tw-px-2'">
-                <Card :ajo="ajo" class="tw-cursor-pointer" :style="{ width: lg ? '100%' : '95%' }" />
+            <vue3-marquee v-if="topAjos.length > 0" :duration="110" :gradient="true" direction="reverse" :vertical="lg" pauseOnHover class="custom-marquee">
+              <div v-for="ajo in bottomAjos" :key="'down-' + ajo.id" class="tw-mb-3 tw-w-full tw-h-[280px]" :class="lg ? '' : 'tw-px-2'">
+                <AjoCard :ajo="ajo" :isWidthFull="true" />
               </div>
             </vue3-marquee>
+
+            <div v-else class="tw-hidden xl:tw-flex tw-flex-col tw-gap-3 tw-py-3">
+              <Skeleton width="100%" height="18rem"></Skeleton>
+              <Skeleton width="100%" height="18rem"></Skeleton>
+              <Skeleton width="100%" height="18rem"></Skeleton>
+            </div>
           </div>
         </div>
       </div>
@@ -48,7 +59,6 @@
 <script>
 import { IonContent } from "@ionic/vue";
 import AjoLandContent from "@/components/AjoLandContent.vue";
-import Card from "@/components/Card.vue";
 import BodyContent from "@/components/AboutAjo.vue";
 import Counter from "@/components/Counter.vue";
 import AjoGuide from "@/components/AjoGuide.vue";
@@ -56,19 +66,21 @@ import JoinAjoTradition from "@/components/joinAJoTradition.vue";
 import AjoFooter from "@/components/AjoFooter.vue";
 import Nav from "@/components/Nav.vue";
 import { Vue3Marquee } from "vue3-marquee";
-import { useClient } from "@/stores/client";
+import AjoCard from "@/components/AjoCard.vue";
+import Skeleton from "primevue/skeleton";
 export default {
   components: {
     Vue3Marquee,
     AjoLandContent,
     IonContent,
-    Card,
     Counter,
     BodyContent,
     AjoGuide,
     JoinAjoTradition,
     AjoFooter,
     Nav,
+    AjoCard,
+    Skeleton,
   },
   inheritAttrs: false,
   data() {
