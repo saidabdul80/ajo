@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout>
+  <DefaultLayout HeaderDescription="Manage your wallet here.">
     <div class="tw-flex tw-flex-col tw-space-y-10">
       <div class="tw-bg-white tw-border tw-border-[#DBDEE2CC] tw-rounded-[5px] tw-p-3 tw-h-[280px]">
         <div class="tw-flex tw-flex-col tw-justify-between tw-h-full tw-bg-[#C1B2F2] tw-w-full tw-rounded-[5px] tw-p-6">
@@ -162,7 +162,6 @@ export default {
       this.transaction = row;
     },
     handlePageChangeR(path) {
-     
       this.getTrasactions(this.filters, path);
     },
     handlePageChangeS(path) {

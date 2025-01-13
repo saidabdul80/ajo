@@ -1,6 +1,6 @@
 <template>
   <main class="tw-h-full tw-flex tw-flex-col">
-    <Header :title="computedHeaderTitle" :description="HeaderDescription">
+    <Header :title="computedHeaderTitle" :description="HeaderDescription" :profileImage="isProfileImage">
       <template #headerRightContent>
         <slot name="rightContent"></slot>
       </template>
@@ -15,7 +15,7 @@
 
 <script>
 import Header from "@/components/Header.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useUserStore } from "@/stores/user.js";
 
 export default {
@@ -37,17 +37,20 @@ export default {
   components: {
     Header,
   },
-  setup() {
+  setup(props) {
     const userStore = useUserStore();
-
-    const fullName = computed(() => `${userStore.user.first_name} ${userStore.user.last_name}`);
+    const isProfileImage = ref(true);
 
     const computedHeaderTitle = computed(() => {
-      return userStore.user.first_name ? fullName.value : "Default Header Title";
+      if (props.HeaderTitle) {
+        isProfileImage.value = false;
+        return props.HeaderTitle;
+      }
+      return `Hello, ${userStore.user.first_name}`;
     });
 
     return {
-      fullName,
+      isProfileImage,
       computedHeaderTitle,
     };
   },
