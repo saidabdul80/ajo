@@ -9,7 +9,11 @@
       <!-- Profile and Title Section -->
       <ion-label color="dark" slot="start">
         <div @click="profileImage && $router.push('/app/profile')" :class="[profileImage && 'tw-cursor-pointer', 'tw-flex tw-items-center tw-gap-0  tw-select-none']">
-          <img v-if="profileImage" :alt="`data.representative.name`" src="https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png" style="width: 32px" />
+          <img
+            v-if="profileImage"
+            :alt="`data.representative.name`"
+            :src="user.picture_url ? user.picture_url : 'https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png'"
+            style="width: 32px" />
           <div class="tw-ml-2">
             <h1 class="!tw-m-0 md:!tw-text-[15px] !tw-text-[13px] !tw-font-semibold tw-capitalize">{{ title }}</h1>
             <p class="md:tw-text-xs tw-text-[11px] tw-mt-0">{{ description }}</p>
@@ -31,8 +35,9 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useAuthStore } from "@/stores/auth.js";
 
 import Input from "@/components/Input.vue";
 import StartAjoButton from "./StartAjoButton.vue";
@@ -51,8 +56,10 @@ export default {
   setup() {
     const route = useRoute();
     const isValidLink = computed(() => !route.path.includes("start"));
+    const authStore = useAuthStore();
+    const user = computed(() => authStore.user);
 
-    return { isValidLink };
+    return { isValidLink, user };
   },
 };
 </script>

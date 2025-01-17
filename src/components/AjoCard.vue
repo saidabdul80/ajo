@@ -96,7 +96,6 @@ export default {
 
   setup(props) {
     const globalStore = useGlobalsStore();
-    const hasImageError = ref([]);
 
     const amountPercentage = computed(() => {
       if (props.ajo.total_contribution_expected === 0) {

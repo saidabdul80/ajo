@@ -1,5 +1,5 @@
 <template>
-  <div class="xl:tw-min-w-[170px]">
+  <div class="Xl:tw-max-w-[170px] tw-w-full">
     <PButton @click="navigateToStartAjo" icon="pi pi-plus" label="Start new Ajo" />
   </div>
 </template>

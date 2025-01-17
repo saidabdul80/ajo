@@ -8,7 +8,32 @@
       </TabList>
       <TabPanels class="tw-h-full !tw-pt-8">
         <TabPanel value="0">
+          <div>
+            <h3 class="tw-font-bold">Profile</h3>
+            <p>View and edit personal information including your name, phone number, and password</p>
+          </div>
           <form @submit.prevent="">
+            <div class="tw-relative tw-w-fit tw-flex tw-items-center tw-gap-3 tw-pt-2 tw-pb-5">
+              <!-- Avatar -->
+              <Avatar
+                :label="user?.picture_url || getInitials(user?.full_name)"
+                :image="user?.picture_url || null"
+                :alt="user?.full_name"
+                size="xlarge"
+                shape="circle"
+                :style="{
+                  backgroundColor: !user?.picture_url && getColorFromWord(getInitials(user?.full_name)),
+                  color: !user?.picture_url && '#ffffff',
+                }" />
+
+              <!-- Custom File Upload -->
+              <div class="tw-absolute tw-bottom-3 -tw-right-2">
+                <input type="file" id="fileInput" class="tw-hidden" @change="handleFileChange" accept="image/*" />
+                <label for="fileInput" class="tw-flex tw-items-center tw-justify-center tw-p-[8px] tw-rounded-full tw-bg-white tw-cursor-pointer">
+                  <i class="pi pi-pencil tw-font-bold" style="font-size: 16px"></i>
+                </label>
+              </div>
+            </div>
             <div class="tw-flex tw-flex-col xl:tw-max-w-[70%] md:tw-grid tw-grid-cols-2 tw-gap-6 lg:tw-gap-20">
               <div class="tw-space-y-6">
                 <div class="tw-flex tw-flex-col tw-gap-2">
@@ -100,6 +125,8 @@ import Input from "@/components/Input.vue";
 import ChangePasswordDialog from "@/components/Dialog/ChangePasswordDialog.vue";
 import Select from "primevue/select";
 import ToggleSwitch from "primevue/toggleswitch";
+import Avatar from "primevue/avatar";
+import FileUpload from "primevue/fileupload";
 
 export default {
   components: {
@@ -114,6 +141,8 @@ export default {
     ChangePasswordDialog,
     Select,
     ToggleSwitch,
+    Avatar,
+    FileUpload,
   },
 
   setup() {
@@ -148,6 +177,20 @@ export default {
         model: user.value.notify_support_tickets,
       },
     ]);
+
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        uploadFile(file);
+      }
+    };
+
+    const uploadFile = (file) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      console.log("Uploading file...", formData);
+    };
 
     const changePasswordDialog = () => {
       eventBus.emit("open-dialog", {
@@ -196,6 +239,34 @@ export default {
       }
     };
 
+    const getInitials = (fullName) => {
+      if (!fullName) return "";
+      const nameParts = fullName.trim().split(" ");
+      const firstName = nameParts[0].charAt(0).toUpperCase();
+      const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1].charAt(0).toUpperCase() : "";
+
+      return firstName + lastName;
+    };
+
+    // Convert word to ASCII sum
+    const getAsciiSum = (word) => {
+      return word.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    };
+
+    // Generate HSL color from the initials
+    const getColorFromWord = (word) => {
+      const asciiSum = getAsciiSum(word);
+
+      // Use a base color hue and adjust for more variation
+      const hue = (asciiSum * 137) % 360; // 137 is a prime number to spread out hues
+
+      // Use a higher saturation and varied lightness for deeper colors
+      const saturation = 70; // Increase saturation for vibrant colors
+      const lightness = 45 + (asciiSum % 20); // Vary lightness to add more depth
+
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    };
+
     return {
       ajoStore,
       user,
@@ -206,12 +277,30 @@ export default {
       handleUpdateBankDetails,
       validateForm,
       handleModelChange,
+      getInitials,
+      getColorFromWord,
+      handleFileChange,
     };
   },
 };
 </script>
 
 <style>
+.p-fileupload {
+  position: absolute;
+  background: none !important;
+  border: none !important;
+  bottom: 8px;
+  right: -8px;
+}
+
+.p-fileupload-header {
+  padding: 0 !important;
+}
+
+.p-fileupload-content {
+  display: none !important;
+}
 .p-tablist-content {
   overflow: hidden;
   border-radius: 5px 5px 0 0 !important;
