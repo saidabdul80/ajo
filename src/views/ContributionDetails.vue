@@ -143,7 +143,7 @@ export default {
       if (res) {
         notificationStore.showNotification({
           type: "success",
-          message: "Contribution Done",
+          message: res,
         });
       }
     };

@@ -252,10 +252,12 @@ ion-content {
   margin-right: 0.45rem !important;
 }
 
-.p-inputnumber-input {
+.p-inputnumber-input, .p-select {
   height: 48px !important;
-  padding-left: 30px !important;
   border-radius: 16px !important;
+}
+.p-inputnumber-input{
+  padding-left: 30px !important;
 }
 
 .vti__dropdown.open,
