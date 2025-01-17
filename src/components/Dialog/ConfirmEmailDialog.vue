@@ -93,7 +93,7 @@ export default {
 
     openPhoneVerification() {
       eventBus.emit("open-dialog", {
-        default: ConfirmPhoneDialo,
+        default: ConfirmPhoneDialog,
         position: "right",
       });
     },

@@ -6,7 +6,7 @@ import { useNotificationStore } from "../stores/notification";
 export const handleError = (err) => {
   const authStore = useAuthStore();
   const notificationStore = useNotificationStore();
-console.log(err,333333);
+
   if (!err.response) {
     // window.dispatchEvent(new CustomEvent('offNetwork'));
     notificationStore.showNotification({
@@ -41,6 +41,8 @@ console.log(err,333333);
       for (const i in errors) {
         showError(errors[i][0]);
       }
+    }else if(err.response.data?.message){
+      showToaster(err.response.data.message);
     }
   }
 };

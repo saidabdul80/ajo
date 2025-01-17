@@ -11,10 +11,14 @@
       </div>
     <Button :is-full-width="false" label="Wallet Balance" />
 
-    <div v-if="!transactionInitiated" class="tw-mt-10 tw-text-center">
-      <p class="tw-text-[#333333] tw-mb-4">
+    <div v-if="!transactionInitiated" class="tw-mt-10 ">
+      <p class="tw-text-[#333333] tw-mb-4 tw-text-center">
         To fund your wallet, click the button below to generate your transaction reference and bank details.
       </p>
+      <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Gateway</label>
+      <Select  v-model="selectedGateWay" class="tw-w-full tw-mb-2" placeholder="Select a Gateway" :options="gateways" optionLabel="name" optionValue="value" /> 
+      <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Amount</label>
+      <InputNumber v-model="amount" placeholder="Enter Amount" class="tw-mb-2" inputId="integeronly" fluid />
       <Button :loading="loading" @click="initiateTransaction" label="Initiate Transaction" />
     </div>
 
@@ -60,11 +64,16 @@ import Divider from "primevue/divider";
 import TextClipboard from "../TextClipboard.vue";
 import { useClient } from "@/stores/client";
 import {useUserStore} from "@/stores/user";
+import InputNumber from "primevue/inputnumber";
+import Select from "primevue/select";
 export default {
   components: {
     Button,
     Divider,
     TextClipboard,
+    Input,
+    Select,
+    InputNumber
   },
 
   data() {
@@ -74,6 +83,18 @@ export default {
       reference: "",
       transactionInitiated: false,
       userStore: useUserStore(),
+      selectedGateWay: "FIAT_MATCH",
+      gateways: [
+        // {
+        //   name: "CowrisPAY",
+        //   value: "COWRISPAY",
+        // },
+        {
+          name: "Fiat Match",
+          value: "FIAT_MATCH",
+        },
+      ],
+      amount:0,
     };
   },
 
@@ -86,13 +107,18 @@ export default {
 
     async initiateTransaction() {
       try {
+        
+        if(this.amount == 0){
+          this.$globals.ubtAlert({title:"Please enter an amount"});
+          return;
+        }
         this.loading = true;
         const response = await useClient().http({method:'post', path:"/transactions/initiate", data:{ 
-          gateway: "COWRISPAY",
+          gateway: this.selectedGateWay,
           type: "deposit",
           currency: "CAD",
           channel: "E_TRANSFER",
-          amount:0,
+          amount:this.amount,
         }
 
       });
