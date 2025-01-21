@@ -8,7 +8,7 @@
       </Notify>
     </div>
 
-    <div class="tw-flex tw-flex-col-reverse xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
+    <div class="tw-flex tw-flex-col xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full">
       <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full tw-pb-6 xl:tw-pb-0">
         <div class="tw-flex tw-gap-7 tw-items-center tw-flex-wrap xl:tw-flex-nowrap tw-mb-7">
           <WalletBalanceCard
@@ -27,7 +27,8 @@
       </div>
       <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
         <AccountSetup v-if="!areAllStepsCompleted" title="Complete account setup" description="Finish setting up your account to fully enjoy Ajo by Cowris." :steps="stepDefinitions" />
-        <AjoGroupList />
+
+        <AjoGroupList :contentHeight="!areAllStepsCompleted ? 'tw-max-h-[30vh]' : 'tw-max-h-[50vh] md:tw-max-h-[75vh]'" />
       </div>
     </div>
   </DefaultLayout>

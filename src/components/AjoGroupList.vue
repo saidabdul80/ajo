@@ -12,7 +12,7 @@
 
       <p class="tw-max-w-[30ch] tw-text-center tw-text-[#333333]">You will find the ajo groups you have joined here</p>
     </div>
-    <div v-else class="tw-max-w-full tw-text-[#333333] tw-max-h-[30vh] tw-overflow-y-auto">
+    <div v-else :class="['tw-max-w-full tw-text-[#333333] tw-overflow-y-auto', contentHeight]">
       <AjoCard class="tw-mb-2" v-for="ajo in globals.ajos" :key="ajo.id" :ajo="ajo" />
     </div>
   </div>
@@ -25,6 +25,11 @@ import AjoCard from "./AjoCard.vue";
 
 export default {
   name: "AjoGroupList",
+  props: {
+    contentHeight: {
+      type: String,
+    },
+  },
   data() {
     return {
       globals: useGlobalsStore(),
