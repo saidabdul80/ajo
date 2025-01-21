@@ -1,6 +1,6 @@
 <template>
   <Transition name="fade">
-    <div v-if="isDialogOpen" class="dialog-overlay" @click="closeDialog">
+    <div v-if="isDialogOpen" class="dialog-overlay">
       <div :class="['custom-dialog tw-max-w-[480px]', position, position === 'center' ? 'tw-w-[90%]' : 'tw-w-full', position === 'right' && 'slide-in']" @click.stop>
         <div class="tw-flex tw-justify-between tw-items-center tw-p-5 tw-border-b">
           <h4 v-if="title" class="tw-text-xl tw-text-black tw-text-left tw-w-full">
@@ -31,7 +31,7 @@ export default {
         default: null,
       },
       position: "center",
-      props:null,
+      props: null,
       title: "",
     };
   },
