@@ -85,6 +85,40 @@
       </div>
     </div>
   </DefaultLayout>
+  <div v-else class="tw-flex tw-flex-col tw-gap-6 tw-p-6">
+    <!-- Header Skeleton -->
+    <div class="tw-space-y-4">
+      <Skeleton height="4rem" width="30%" />
+      <Skeleton height="2rem" width="50%" />
+    </div>
+
+    <!-- Details Skeleton -->
+    <div class="tw-bg-white tw-p-6 tw-border tw-border-gray-300 tw-rounded-md tw-space-y-6">
+      <div class="tw-space-y-4">
+        <Skeleton height="1.5rem" width="40%" />
+        <Skeleton height="2rem" width="100%" />
+        <Skeleton height="2rem" width="70%" />
+      </div>
+      <div class="tw-grid tw-grid-cols-2 tw-gap-6">
+        <Skeleton height="4rem" width="100%" />
+        <Skeleton height="4rem" width="100%" />
+      </div>
+      <div class="tw-grid tw-grid-cols-2 tw-gap-6">
+        <Skeleton height="4rem" width="100%" />
+        <Skeleton height="4rem" width="100%" />
+      </div>
+    </div>
+
+    <!-- Participants Skeleton -->
+    <div class="tw-bg-white tw-p-6 tw-border tw-border-gray-300 tw-rounded-md">
+      <div class="tw-mb-4">
+        <Skeleton height="1.5rem" width="25%" />
+      </div>
+      <div class="tw-space-y-4">
+        <Skeleton v-for="i in 3" :key="i" height="4rem" width="100%" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -101,6 +135,7 @@ import RecentTransactionTable from "@/components/RecentTransactionTable.vue";
 import ContributionProcess from "@/components/Dialog/ContributionProcess.vue";
 import { useNotificationStore } from "@/stores/notification";
 import { useClient } from "@/stores/client";
+import Skeleton from "primevue/skeleton";
 
 export default {
   components: {
@@ -110,6 +145,7 @@ export default {
     Button,
     ContributionProcess,
     helpers,
+    Skeleton,
   },
   setup() {
     const route = useRoute();
