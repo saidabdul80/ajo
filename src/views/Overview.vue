@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
-        <AccountSetup title="Complete account setup" description="Finish setting up your account to fully enjoy Ajo by Cowris." :steps="stepDefinitions" />
+        <AccountSetup v-if="!areAllStepsCompleted" title="Complete account setup" description="Finish setting up your account to fully enjoy Ajo by Cowris." :steps="stepDefinitions" />
         <AjoGroupList />
       </div>
     </div>
@@ -145,6 +145,10 @@ export default {
       },
     ]);
 
+    const areAllStepsCompleted = computed(() => {
+      return stepDefinitions.every((step) => (typeof step.isCompleted === "function" ? step.isCompleted() : step.isCompleted));
+    });
+
     const handleVerification = (type) => {
       if (type.label == "Verify Email") {
         useGlobalsStore().sendCode();
@@ -171,6 +175,7 @@ export default {
       currentNotification,
       handleVerification,
       handleFundWallet,
+      areAllStepsCompleted,
     };
   },
 };
