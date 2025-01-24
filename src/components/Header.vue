@@ -5,15 +5,10 @@
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
-
       <!-- Profile and Title Section -->
       <ion-label color="dark" slot="start">
         <div @click="profileImage && $router.push('/app/profile')" :class="[profileImage && 'tw-cursor-pointer', 'tw-flex tw-items-center tw-gap-0  tw-select-none']">
-          <img
-            v-if="profileImage"
-            :alt="`data.representative.name`"
-            :src="user.picture_url ? user.picture_url : 'https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png'"
-            style="width: 32px" />
+          <img v-if="profileImage" alt="profile_picture" :src="user.picture_url ? user.picture_url : 'https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png'" style="width: 32px" />
           <div class="tw-ml-2">
             <h1 class="!tw-m-0 md:!tw-text-[15px] !tw-text-[13px] !tw-font-semibold tw-capitalize">{{ title }}</h1>
             <p class="md:tw-text-xs tw-text-[11px] tw-mt-0">{{ description }}</p>

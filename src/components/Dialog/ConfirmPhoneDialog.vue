@@ -1,7 +1,7 @@
 <template>
   <div :class="[currentStep !== 'verified' && 'md:tw-pt-28']">
     <!-- Confirm Phone -->
-    <div v-if="currentStep === 'confirm'" class="tw-space-y-2 tw-pb-12">
+    <div @submit.prevent v-if="currentStep === 'confirm'" class="tw-space-y-2 tw-pb-12">
       <h5 class="tw-text-[28px] tw-text-black">Confirm phone number</h5>
       <p class="tw-text-[#586283] tw-max-w-[40ch]">Please, confirm your phone number before verification. A code will be sent to confirm you own the number.</p>
       <div class="tw-space-y-8 tw-pt-4">
@@ -14,18 +14,26 @@
             <img src="/images/arrow-down.svg" alt="Custom Icon" />
           </template>
         </vue-tel-input>
-        <Button :loading="loading" label="Continue" size="medium" class="tw-w-full" @click="goToVerify" />
+        <Button :loading="loading['submitButton']" @click="() => goToVerify('submitButton')" type="submit" label="Continue" size="medium" class="tw-w-full" :disabled="loading['submitButton']" />
       </div>
     </div>
 
     <!-- Verify Phone -->
-    <form @submit.prevent="verifyPhone" v-if="currentStep === 'verify'" class="tw-space-y-2 tw-pb-12">
+    <form @submit.prevent v-if="currentStep === 'verify'" class="tw-space-y-2 tw-pb-12">
       <h5 class="tw-text-[28px] tw-text-black">Verify phone number</h5>
       <p class="tw-text-[#586283] tw-max-w-[40ch]">Add your phone number to complete account set-up. aWe sent a 6-digit code to {{ form.phone }}. Please enter the code to verify your phone number.</p>
-      <div class="tw-space-y-8 tw-pt-4">
-        <Input placeholder="Your 6-digit code" v-model="form.otp" size="medium" />
-        <Button :loading="loading" type="submit" label="Submit" size="medium" class="tw-w-full" />
-        <Button label="Resend code" size="medium" class="tw-w-full !tw-text-black" link />
+
+      <div class="tw-space-y-3 tw-pt-4">
+        <Input placeholder="Your 6-digit code" v-model="form.otp" size="medium" class="tw-mb-3" />
+        <Button @click="verifyPhone" :loading="loading['submitButton']" type="submit" label="Submit" size="medium" class="tw-w-full" :disabled="loading['submitButton']" />
+        <Button
+          @click="() => goToVerify('resendButton')"
+          :loading="loading['resendButton']"
+          label="Resend code"
+          size="medium"
+          class="tw-w-full !tw-text-black"
+          :outlined="true"
+          :disabled="loading['resendButton']" />
       </div>
     </form>
 
@@ -67,14 +75,32 @@ export default {
     const user = computed(() => userStore.user);
 
     const form = ref({
-      phone: user?.value?.phone_number || "",
+      phone: user?.value?.phone_number?.replaceAll(" ", "") || "",
       otp: "",
     });
 
-    const loading = ref(false);
+    const loading = ref({
+      submitButton: false,
+      resendButton: false,
+    });
+
     const globalStore = useGlobalsStore();
 
-    const goToVerify = async () => {
+    const sendOTP = async (type) => {
+      loading.value[type] = true;
+
+      const res = await useClient().http({
+        method: "post",
+        path: "/resend_phone_number_verification",
+        data: { phone_number: form.value.phone },
+      });
+
+      loading.value[type] = false;
+
+      return res;
+    };
+
+    const goToVerify = async (type) => {
       if (!form.value.phone || form.value.phone.length < 10) {
         const notificationStore = useNotificationStore();
         notificationStore.showNotification({
@@ -83,14 +109,7 @@ export default {
         });
         return;
       }
-      loading.value = true;
-
-      const res = await useClient().http({
-        method: "post",
-        path: "/resend_phone_number_verification",
-        data: { phone_number: form.value.phone?.replaceAll(" ", "") },
-      });
-      loading.value = false;
+      const res = await sendOTP(type);
 
       if (res) {
         currentStep.value = "verify";
@@ -111,13 +130,14 @@ export default {
         });
         return;
       }
-      loading.value = true;
+
+      loading.value["submitButton"] = true;
       const res = await useClient().http({
         method: "post",
         path: "/confirm_phone_number_verification",
-        data: { phone_number: form.value.phone?.replaceAll(" ", ""), otp: form.value.otp },
+        data: { phone_number: form.value.phone, otp: form.value.otp },
       });
-      loading.value = false;
+      loading.value["submitButton"] = false;
 
       if (res) {
         currentStep.value = "verified";
@@ -144,6 +164,7 @@ export default {
     return {
       currentStep,
       form,
+      user,
       loading,
       goToVerify,
       verifyPhone,

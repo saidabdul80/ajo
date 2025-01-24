@@ -18,7 +18,7 @@
               <Avatar
                 :label="user?.picture_url || getInitials(user?.full_name)"
                 :image="user?.picture_url || null"
-                :alt="user?.full_name"
+                alt="profile_picture"
                 size="xlarge"
                 shape="circle"
                 :style="{
@@ -28,7 +28,7 @@
 
               <!-- Custom File Upload -->
               <div class="tw-absolute tw-bottom-3 -tw-right-2">
-                <input type="file" id="fileInput" class="tw-hidden" @change="handleFileChange" accept="image/*" />
+                <input type="file" id="fileInput" class="tw-hidden" @change="uploadFile" accept="image/*" />
                 <label for="fileInput" class="tw-flex tw-items-center tw-justify-center tw-p-[8px] tw-rounded-full tw-bg-white tw-cursor-pointer">
                   <i class="pi pi-pencil tw-font-bold" style="font-size: 16px"></i>
                 </label>
@@ -111,9 +111,11 @@
 
 <script>
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import eventBus from "@/eventBus";
 import { useAuthStore } from "@/stores/auth.js";
 import { useAjoStore } from "@/stores/ajo.js";
+import { useClient } from "@/stores/client";
 import Button from "@/components/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import Tabs from "primevue/tabs";
@@ -177,19 +179,31 @@ export default {
         model: user.value.notify_support_tickets,
       },
     ]);
+    const router = useRouter();
 
-    const handleFileChange = (event) => {
+    const uploadFile = async (event) => {
       const file = event.target.files[0];
-      if (file) {
-        uploadFile(file);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("id", user.value.id);
+        formData.append("type", "profile_picture");
+
+        await useClient().http({
+          method: "post",
+          path: "/upload_documents",
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        setTimeout(() => {
+          router.go();
+        }, 1000);
+      } catch (error) {
+        console.error("Error uploading file:", error);
       }
-    };
-
-    const uploadFile = (file) => {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      console.log("Uploading file...", formData);
     };
 
     const changePasswordDialog = () => {
@@ -279,7 +293,7 @@ export default {
       handleModelChange,
       getInitials,
       getColorFromWord,
-      handleFileChange,
+      uploadFile,
     };
   },
 };

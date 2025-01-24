@@ -8,9 +8,9 @@
         <div class="tw-flex tw-flex-col tw-gap-4">
           <div class="tw-flex tw-flex-col tw-items-start tw-gap-5" v-for="document in filteredDocumentTypes" :key="document.value">
             <div>
-              <RadioButton  v-model="uploadDocument" :inputId="document.name" name="document" :value="document.value" variant="filled" />
+              <RadioButton v-model="uploadDocument" :inputId="document.name" name="document" :value="document.value" variant="filled" />
               <label :for="document.name" class="tw-ml-2">{{ document.name }}</label>
-              <a v-if="user?.[document.type+'_url']" target="_blank" class="tw-text-[blue]/60 tw-ms-3 hover:tw-underline" :href="user?.[document.type+'_url']">View</a>
+              <a v-if="user?.[document.type + '_url']" target="_blank" class="tw-text-[blue]/60 tw-ms-3 hover:tw-underline" :href="user?.[document.type + '_url']">View</a>
             </div>
 
             <Input v-if="document.value === 7 && uploadDocument === 7" placeholder="Please, specify here..." v-model="customDocumentName" />
@@ -26,7 +26,7 @@
       <p class="tw-text-[#586283] tw-max-w-[40ch]">Upload your document here.</p>
       <div class="tw-space-y-8 tw-py-10">
         <FileUpload v-model="file" />
-        <Button :loading="loading" label="Continue" size="medium" class="tw-w-full" @click="verifyDocument" />
+        <Button :loading="loading" label="Continue" size="medium" class="tw-w-full" @click="verifyDocument" :disabled="loading" />
       </div>
     </div>
 
@@ -52,7 +52,6 @@ import FileUpload from "@/components/FileUpload.vue";
 import RadioButton from "primevue/radiobutton";
 import { useClient } from "@/stores/client";
 import { useUserStore } from "@/stores/user.js";
-import { useGlobalsStore } from "@/stores/globals";
 export default {
   components: {
     Button,
@@ -63,22 +62,22 @@ export default {
 
   data() {
     return {
-      loading:false,
+      loading: false,
       user: useUserStore().user,
       currentStep: "confirm",
       uploadDocument: "",
       customDocumentName: "",
       userCountry: "Nigeria",
-      file:null,
-      fileType:null,
+      file: null,
+      fileType: null,
       uploadDocumentTypes: [
-        {type: 'nin_slip',  name: "National Identification Number (NIN) Slip", value: 1, countries: ["Nigeria"] },
-        {type: 'international_passport',  name: "International Passport", value: 2, countries: ["Canada", "Nigeria"] },
-        {type: 'utility_bills',  name: "Utility Bills", value: 3, countries: ["Nigeria"] },
-        {type: 'drivers_license',  name: "Driver's License", value: 4, countries: ["Canada"] },
-        {type: 'permanent_residence_card',  name: "Permanent Residence Card", value: 5, countries: ["Canada"] },
-        {type: 'proof_of_address',  name: "Proof of Address", value: 6, countries: ["Canada"] },
-        {type: 'others',  name: "Others", value: 7, countries: ["Canada"] },
+        { type: "nin_slip", name: "National Identification Number (NIN) Slip", value: 1, countries: ["Nigeria"] },
+        { type: "international_passport", name: "International Passport", value: 2, countries: ["Canada", "Nigeria"] },
+        { type: "utility_bills", name: "Utility Bills", value: 3, countries: ["Nigeria"] },
+        { type: "drivers_license", name: "Driver's License", value: 4, countries: ["Canada"] },
+        { type: "permanent_residence_card", name: "Permanent Residence Card", value: 5, countries: ["Canada"] },
+        { type: "proof_of_address", name: "Proof of Address", value: 6, countries: ["Canada"] },
+        { type: "others", name: "Others", value: 7, countries: ["Canada"] },
       ],
     };
   },
@@ -105,7 +104,7 @@ export default {
     },
 
     async verifyDocument() {
-      if(!this.file){
+      if (!this.file) {
         alert("Please upload a document.");
         return;
       }
@@ -114,12 +113,12 @@ export default {
       formData.append("id", useUserStore().user.id);
       formData.append("type", this.fileType);
       this.loading = true;
-      const res = await useClient().http({method:'post', path:'/upload_documents', data: formData})
+      const res = await useClient().http({ method: "post", path: "/upload_documents", data: formData });
       this.loading = false;
       setTimeout(() => {
-        this.$router.go()
+        this.$router.go();
       }, 1000);
-      if(res){
+      if (res) {
         this.currentStep = "verified";
       }
       this.currentStep = "verified";

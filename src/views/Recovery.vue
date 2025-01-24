@@ -3,27 +3,15 @@
     <template1>
       <template #content>
         <ion-content color="white">
-          <div
-            class="tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-20 md:tw-py-0">
+          <div class="tw-flex tw-flex-col tw-w-full tw-items-center md:tw-justify-center tw-h-full tw-pt-20 md:tw-py-0">
             <div class="lg:tw-w-[50%] sm:tw-w-[70%] tw-w-[90%]">
-              <H1
-                class="md:tw-text-left tw-text-center"
-                text="Recover account" />
-              <p
-                class="tw-pt-4 tw-pb-12 tw-text-center md:tw-text-left tw-text-lg tw-text-[#586283] tw-font-normal">
-                Please, enter your email address used for registration. A code
-                will be sent to verify you own the account.
+              <H1 class="md:tw-text-left tw-text-center" text="Recover account" />
+              <p class="tw-pt-4 tw-pb-12 tw-text-center md:tw-text-left tw-text-lg tw-text-[#586283] tw-font-normal">
+                Please, enter your email address used for registration. A code will be sent to verify you own the account.
               </p>
-              <Input
-                class="tw-mb-8"
-                placeholder="Email Address"
-                v-model="form.email" />
+              <Input class="tw-mb-8" placeholder="Email Address" v-model="form.email" />
 
-              <Button
-                @click="$globals.to('/verify')"
-                label="Continue"
-                size="large"
-                class="tw-w-full" />
+              <Button @click="$globals.to('/verify')" label="Continue" size="large" class="tw-w-full" />
             </div>
           </div>
         </ion-content>
