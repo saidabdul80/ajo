@@ -48,20 +48,15 @@
               </div>
 
               <div class="tw-space-2">
-                <p class="tw-text-sm tw-text-[#333333]">Overall contributed Amount</p>
+                <p class="tw-text-sm tw-text-[#333333]">My total contributed Amount</p>
 
                 <h5 class="tw-text-2xl tw-text-black">{{ globalStore.formatNumber(ajo.total_contribution) }}</h5>
               </div>
             </div>
+
             <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
               <div class="tw-space-2">
-                <p class="tw-text-sm tw-text-[#333333]">My total contributed Amount</p>
-                <h5 class="tw-text-2xl tw-text-black">{{ globalStore.formatNumber(ajo.my_detail?.contributed) }}</h5>
-              </div>
-            </div>
-            <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
-              <div class="tw-space-2">
-                <p class="tw-text-sm tw-text-[#333333]">Number of Missed contributions</p>
+                <p class="tw-text-sm tw-text-[#333333]">Number of Weeks</p>
                 <h5 class="tw-text-2xl tw-text-black">{{ ajo.my_detail?.missed }}</h5>
               </div>
             </div>
@@ -85,6 +80,7 @@
       </div>
     </div>
   </DefaultLayout>
+
   <div v-else class="tw-flex tw-flex-col tw-gap-6 tw-p-6">
     <!-- Header Skeleton -->
     <div class="tw-space-y-4">

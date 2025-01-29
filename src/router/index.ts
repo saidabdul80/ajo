@@ -33,17 +33,11 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
-    path: "/verify",
-    name: "Verify",
-    component: () => import("@/views/VerifyEmail.vue"),
-    meta: { requiresAuth: false },
-  },
-
-  {
-    path: "/newpassword",
+    path: "/newpassword/:email",
     name: "NewPassword",
     component: () => import("@/views/CreatNewPassword.vue"),
     meta: { requiresAuth: false },
+    props: true,
   },
 
   {

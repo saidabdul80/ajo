@@ -545,6 +545,67 @@ export const useGlobalsStore = defineStore("globals", {
         maximumFractionDigits: 2,
       }).format(number);
     },
+
+    async resetPassword(email) {
+      const notificationStore = useNotificationStore();
+
+      if (!email) {
+        notificationStore.showNotification({
+          type: "error",
+          message: "Provide an email a valid email",
+        });
+
+        return null;
+      }
+
+      try {
+        const response = await useClient().http({
+          method: "post",
+          path: "/reset_password",
+          data: { username: email },
+        });
+
+        if (response) {
+          notificationStore.showNotification({
+            type: "success",
+            message: "OTP sent to your email.",
+          });
+
+          return response;
+        }
+      } catch (error) {
+        notificationStore.showNotification({
+          type: "error",
+          message: error || "An error occurred.",
+        });
+      }
+    },
+
+    async setPassword({ otpCode, username, password, password_confirmation }) {
+      const notificationStore = useNotificationStore();
+
+      try {
+        const response = await useClient().http({
+          method: "post",
+          path: " /confirm_reset_password",
+          data: { otpCode: otpCode, username: username, password: password, password_confirmation: password_confirmation },
+        });
+
+        if (response) {
+          notificationStore.showNotification({
+            type: "success",
+            message: "Password updated successfully",
+          });
+
+          return response;
+        }
+      } catch (error) {
+        notificationStore.showNotification({
+          type: "error",
+          message: error || "An error occurred.",
+        });
+      }
+    },
   },
 });
 
