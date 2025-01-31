@@ -16,8 +16,8 @@
             <div class="tw-relative tw-w-fit tw-flex tw-items-center tw-gap-3 tw-pt-2 tw-pb-5">
               <!-- Avatar -->
               <Avatar
-                :label="user?.picture_url || getInitials(user?.full_name)"
-                :image="user?.picture_url || null"
+                :label="user?.picture_url?'':getInitials(user?.full_name)"
+                :image="user?.picture_url"
                 alt="profile_picture"
                 size="xlarge"
                 shape="circle"
@@ -25,7 +25,7 @@
                   backgroundColor: !user?.picture_url && getColorFromWord(getInitials(user?.full_name)),
                   color: !user?.picture_url && '#ffffff',
                 }" />
-
+              
               <!-- Custom File Upload -->
               <div class="tw-absolute tw-bottom-3 -tw-right-2">
                 <input type="file" id="fileInput" class="tw-hidden" @change="uploadFile" accept="image/*" />

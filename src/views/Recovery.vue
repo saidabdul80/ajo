@@ -50,7 +50,7 @@ export default {
         const response = await globals.resetPassword(email.value);
 
         if (response) {
-          router.push(`/newpassword/${email}`);
+          router.push(`/newpassword/${email.value}`);
         }
       } finally {
         isLoading.value = false;
