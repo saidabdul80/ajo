@@ -15,6 +15,9 @@
         </v-chip>
       </span>
     </template>
+    <template v-slot:td-action="{ row }">
+      <Button v-if="row.status=='PENDING'" size="small" :loading="loading" @click="requery(row)" label="Requery" />
+    </template>
   </DataTable>
 </template>
 
@@ -23,10 +26,12 @@ import { useUserStore } from "@/stores/user";
 import { useClient } from "@/stores/client";
 import { ref, onMounted, watch } from "vue";
 import DataTable from "@/components/Table/Table.vue";
+import Button from "./Button.vue";
 
 export default {
   components: {
     DataTable,
+    Button
   },
   props: {
     tableTitle: {
@@ -36,16 +41,19 @@ export default {
   },
   setup() {
     const transactions = ref(null);
+    const loading = ref(false);
     const headers = ref([
       { key: "reference", title: "Reference" },
       { key: "created_at", title: "Date" },
       { key: "type", title: "Type" },
       { key: "amount", title: "Amount" },
       { key: "status", title: "Status" },
+      { key: "action", title: "Action" },
     ]);
     const loadingTransactions = ref(false);
     const userStore = useUserStore();
     const filters = ref({});
+    const currentPath = ref(null);
 
     const getChipColor = (status) => {
       const lowerStatus = status.toLowerCase();
@@ -68,6 +76,15 @@ export default {
       }
     };
 
+    const requery = async (row) => {
+      row.loading=   true;
+      const response = await useClient().http({ method: "post", path: "/transactions/requery/"+row.reference });
+      row.loading=   false;
+      if (response) {
+        getTransactions(filters.value, currentPath.value);
+      }
+    };
+
     const handleRowClick = (row) => {
       // Assuming 'showdrawer' and 'transaction' are defined elsewhere
       // showdrawer = true;
@@ -75,10 +92,12 @@ export default {
     };
 
     const handlePageChangeR = (path) => {
+      currentPath.value = path;
       getTransactions(filters.value, path);
     };
 
     const handlePageChangeS = (path) => {
+      currentPath.value = path;
       getTransactions(filters.value, path);
     };
 
@@ -110,6 +129,7 @@ export default {
       handleRowClick,
       handlePageChangeR,
       handlePageChangeS,
+      requery
     };
   },
 };
