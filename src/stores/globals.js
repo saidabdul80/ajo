@@ -587,8 +587,8 @@ export const useGlobalsStore = defineStore("globals", {
       try {
         const response = await useClient().http({
           method: "post",
-          path: " /confirm_reset_password",
-          data: { otpCode: otpCode, username: username, password: password, password_confirmation: password_confirmation },
+          path: "/confirm_reset_password",
+          data: { otp: otpCode, username: username, password: password, password_confirmation: password_confirmation },
         });
 
         if (response) {
