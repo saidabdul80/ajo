@@ -69,7 +69,7 @@ export default {
         method: "get",
         path: "/verify_email",
         data: {
-          email: form.email,
+          email: form.value.email,
           token: form.value.otp,
         },
       });
