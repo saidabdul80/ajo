@@ -11,6 +11,10 @@
       <p class="tw-text-[#333333] tw-mb-4 tw-text-center">To fund your wallet, click the button below to generate your transaction reference and bank details.</p>
       <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Gateway</label>
       <Select v-model="selectedGateWay" class="tw-w-full tw-mb-2" placeholder="Select a Gateway" :options="gateways" optionLabel="name" optionValue="value" />
+      <div v-if="selectedGateWay === 'COWRISPAY'">
+        <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Sender Email</label>
+        <Input v-model="senderEmail" class="tw-w-full tw-mb-2" placeholder="Sender Email" />
+      </div>
       <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Amount</label>
       <InputNumber v-model="amount" placeholder="Enter Amount" class="tw-mb-2" inputId="integeronly" fluid />
       <Button :loading="loading" @click="initiateTransaction" label="Initiate Transaction" />
@@ -69,11 +73,12 @@ export default {
       transactionInitiated: false,
       userStore: useUserStore(),
       selectedGateWay: "FIAT_MATCH",
+      senderEmail:null,
       gateways: [
-        // {
-        //   name: "CowrisPAY",
-        //   value: "COWRISPAY",
-        // },
+        {
+          name: "CowrisPAY",
+          value: "COWRISPAY",
+        },
         {
           name: "Fiat Match",
           value: "FIAT_MATCH",
@@ -94,6 +99,10 @@ export default {
           this.$globals.ubtAlert({ title: "Please enter an amount" });
           return;
         }
+        if(this.selectedGateWay === 'COWRISPAY' && !this.senderEmail){
+          this.$globals.ubtAlert({ title: "Please enter a sender email" });
+          return;
+        }
         this.loading = true;
         const response = await useClient().http({
           method: "post",
@@ -104,16 +113,17 @@ export default {
             currency: "CAD",
             channel: "E_TRANSFER",
             amount: this.amount,
+            sender_email: this.senderEmail,
           },
         });
         this.loading = false;
         if (response) {
           this.fundingDetails = {
-            accountNumber: response.number,
-            bankName: response.bank_name,
-            accountName: response.name,
+            accountNumber: response.banke_details.number,
+            bankName: response.banke_details.bank_name,
+            accountName: response.banke_details.name,
           };
-          this.reference = response.reference;
+          this.reference = response.code;
           this.transactionInitiated = true;
         }
       } catch (error) {
