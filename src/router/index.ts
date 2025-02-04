@@ -12,6 +12,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: false },
   },
   {
+    path: "/terms-conditions",
+    component: () => import("@/views/T&C.vue"),
+    meta: { requiresAuth: false },
+  },
+  {
     path: "/ajosummary/:id",
     name: "Ajo Summary",
     component: () => import("@/views/AjoSummary.vue"),

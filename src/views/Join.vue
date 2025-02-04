@@ -33,7 +33,7 @@
                 </div>
                 <p class="tw-text-base -tw-mt-1 tw-block tw-text-gray-500 tw-text-balance">
                   I have read and agreed to the
-                  <a class="tw-underline tw-cursor-pointer tw-text-gray-800">Terms & Conditions</a>
+                  <a href="/terms-conditions" class="tw-underline tw-cursor-pointer tw-text-gray-800">Terms & Conditions</a>
                   and
                   <a class="tw-underline tw-cursor-pointer tw-text-gray-800">KYC Policy</a>
                   and confirm that I am opening this account for my own personal use, and not for use by a third party.

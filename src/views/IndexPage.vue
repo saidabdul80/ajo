@@ -16,7 +16,6 @@
                 lines="none"
                 :detail="false"
                 class="hydrated tw-w-[75%] tw-mx-auto tw-block tw-my-3 tw-rounded-xl tw-me-10">
-              
                 <ion-label class="!tw-flex tw-gap-4 !tw-text-base tw-items-center">
                   <span :class="isActive(p) ? p.mdIcon + '-white' : p.mdIcon"></span>
                   {{ p.title }}
