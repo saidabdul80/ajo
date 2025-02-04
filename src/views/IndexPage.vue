@@ -4,7 +4,11 @@
       <ion-menu content-id="main-content" type="overlay" class="lg:tw-w-[200px] tw-w-full">
         <ion-content>
           <ion-list id="inbox-list" style="padding-top: 0px !important" class="tw-h-full tw-flex tw-flex-col">
-            <ion-list-header><img width="68%" class="tw-mt-2" src="@/assets/images/logo-name.svg" /></ion-list-header>
+            <ion-list-header>
+              <a href="/" class="tw-w-[68%]">
+                <img class="tw-mt-2" src="@/assets/images/logo-name.svg" alt="brand-logo" />
+              </a>
+            </ion-list-header>
             <ion-note></ion-note>
 
             <ion-menu-toggle :auto-hide="false" v-for="(p, i) in appPages" :key="i">
