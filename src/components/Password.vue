@@ -1,5 +1,5 @@
 <template>
-  <Password class="tw-h-[48px] !tw-text-sm" toggleMask>
+  <Password class="tw-h-[48px] !tw-text-sm" toggleMask aria-label="Password">
     <template #header>
       <div class="font-semibold text-xm mb-4">Pick a password</div>
     </template>

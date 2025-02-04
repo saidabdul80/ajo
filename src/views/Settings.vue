@@ -12,6 +12,7 @@
             <h3 class="tw-font-bold">Profile</h3>
             <p>View and edit personal information including your name, phone number, and password</p>
           </div>
+
           <form @submit.prevent="">
             <div class="tw-relative tw-w-fit tw-flex tw-items-center tw-gap-3 tw-pt-2 tw-pb-5">
               <!-- Avatar -->
