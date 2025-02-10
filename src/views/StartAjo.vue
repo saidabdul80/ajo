@@ -1,124 +1,156 @@
 <template>
-  <DefaultLayout HeaderTitle="Start New Ajo" HeaderDescription="Experience the power of group savings.">
+  <DefaultLayout :HeaderTitle="id ? 'Start New Ajo' : 'Update Ajo'" HeaderDescription="Experience the power of group savings.">
     <div class="tw-basis-full">
-      <div class="tw-pb-3 tw-max-w-20">
-        <Button label="Back" :outlined="true" size="small" @click="previousStep" icon="pi pi-angle-left" />
-      </div>
-      <div class="tw-flex tw-flex-col-reverse tw-justify-end xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full tw-h-full">
-        <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full">
-          <form class="tw-bg-white tw-h-full tw-p-6 tw-flex tw-flex-col">
-            <h2 class="tw-text-[22px] tw-text-black">
-              Step {{ currentStep }}:
-              {{ currentStepTitle[currentStep]["name"] }}
-            </h2>
-            <p v-if="currentStepTitle[currentStep]['subTitle']" class="tw-text-[#333333] tw-pt-1">
-              {{ currentStepTitle[currentStep]["subTitle"] }}
-            </p>
-
-            <div v-if="currentStep === 1">
-              <div class="tw-space-y-8 tw-pt-8">
-                <Input placeholder="Group Name" size="medium" v-model="intialValues.name" :errorMessage="globalStore.nameRules.name" />
-
-                <Select
-                  v-model="intialValues.category"
-                  :options="categories"
-                  :errorMessage="globalStore.nameRules.category"
-                  placeholder="Select a Category"
-                  class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
-
-                <Input placeholder="Goal of Contribution / Description" size="medium" v-model="intialValues.description" :errorMessage="globalStore.nameRules.description" />
-
-                <div class="tw-relative">
-                  <img class="tw-inline-block tw-absolute tw-z-40 tw-w-3 tw-h-3 tw-top-1/2 -tw-translate-y-1/2 tw-left-3" :src="`/images/${getCurrencyName}.svg`" alt="currency-icon" />
-
-                  <InputNumber v-model="intialValues.amount" placeholder="Contribution Per Person" inputId="integeronly" fluid />
-                </div>
-                <Select
-                  v-model="selectedFrequency"
-                  :options="frequencyOptions"
-                  optionLabel="name"
-                  :option-value="null"
-                  @change="onFrequencyChange"
-                  :errorMessage="globalStore.nameRules.frequency"
-                  placeholder="Select Contribution Frequency"
-                  class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
-
-                <PDate @change="onAjoDateChange" :view="dateView" width="100%" />
-              </div>
-            </div>
-
-            <div v-if="currentStep === 2">
-              <div class="tw-space-y-8 tw-pt-8">
-                <div class="tw-relative">
-                  <Input placeholder="Enter email address of participant" v-model="newEmail" @keydown.enter.prevent="addEmail" class="!tw-pr-28" />
-                  <div class="tw-inline-block tw-absolute tw-top-1/2 -tw-translate-y-1/2 tw-right-2">
-                    <Button label="Add email" size="small" @click.stop="addEmail" :is-full-width="false" :disabled="!isValidEmail(newEmail)" />
-                  </div>
-                </div>
-
-                <div v-if="participantsEmail.length > 1">
-                  <ul class="tw-list-disc" @drop="onDrop($event)">
-                    <li
-                      v-for="(email, index) in participantsEmail"
-                      :key="index"
-                      class="tw-flex tw-justify-between"
-                      :class="index == 0 && 'tw-mb-2'"
-                      draggable="true"
-                      @dragstart="onDrag(email, index)"
-                      @drop="onDrop(index)"
-                      @dragover.prevent>
-                      <div class="tw-inline-flex tw-items-center tw-gap-3">
-                        <span class="tw-flex tw-justify-center tw-items-center leading-none tw-w-8 tw-h-8 tw-rounded-full tw-text-white tw-text-xl tw-bg-[#36454F]">{{ index + 1 }}</span>
-                        <span class="tw-text-lg">{{ email }}</span>
-                      </div>
-                      <Button v-if="index != 0" label="Remove" @click="removeEmail(email)" class="!tw-text-[#D80027]" icon="pi pi-times" iconPos="right" :is-full-width="false" color="link" />
-                    </li>
-                  </ul>
-
-                  <div class="tw-inline-flex tw-gap-3 tw-bg-[#FFF7E9] tw-p-5 tw-rounded-lg tw-border tw-border-[#E0C9A5] tw-mt-5">
-                    <i class="pi pi-exclamation-circle tw-text-[#F0B149]"></i>
-                    <div class="tw-text-sm">
-                      <p class="tw-text-black tw-font-semibold tw-leading-none tw-pb-2">Withdrawal slot is as numbered - You can drag to adjust.</p>
-                      <p class="tw-text-[#333333]">
-                        Participants will be be able to withdraw their contribution in the order of number assigned above. You can adjust the order by dragging the numbers to fit what you want.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="tw-inline-flex tw-items-center tw-gap-8 tw-pt-8">
-                    <p class="tw-text-lg tw-text-[#333333] tw-font-medium">Do you want to make this Ajo group public?</p>
-                    <div class="tw-flex tw-items-center tw-gap-3">
-                      <RadioButton v-model="intialValues.is_public" inputId="ajoState1" name="No" value="No" />
-                      <label for="ajoState1" class="ml-2">No</label>
-                      <RadioButton v-model="intialValues.is_public" inputId="ajoState2" name="No" value="Yes" />
-                      <label for="ajoState2" class="ml-2">Yes</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div v-if="currentStep === 3">
-              <div class="tw-space-y-8 tw-pt-8">
-                <Input size="medium" placeholder="Search for rule" icon="pi pi-search" v-model="searchString" @input="searchRules" />
-
-                <div v-if="filteredRules.length > 0" class="tw-space-y-6">
-                  <p v-for="(rule, index) in filteredRules" :key="index" class="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-text-gray-500">
-                    <Checkbox v-model="intialValues.ajo_rules" :value="rule.value" :inputId="rule.name" />
-                    <label :for="rule.name" class="ml-2 tw-text-base tw-text-black">
-                      {{ rule.label }}
-                    </label>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="tw-pt-8">
-              <Button :loading="loading" label="Continue" @click="nextStep" class="tw-w-full tw-mt-auto" :disabled="!isFormValid" />
-            </div>
-          </form>
+      <div v-if="preloader" class="tw-flex tw-flex-col tw-gap-6 tw-p-6">
+        <!-- Details Skeleton -->
+        <div class="tw-bg-white tw-p-6 tw-border tw-border-gray-300 tw-rounded-md tw-space-y-6">
+          <div class="tw-space-y-4">
+            <Skeleton height="1.5rem" width="40%" />
+            <Skeleton height="2rem" width="100%" />
+            <Skeleton height="2rem" width="70%" />
+          </div>
+          <div class="tw-grid tw-grid-cols-2 tw-gap-6">
+            <Skeleton height="4rem" width="100%" />
+            <Skeleton height="4rem" width="100%" />
+          </div>
+          <div class="tw-grid tw-grid-cols-2 tw-gap-6">
+            <Skeleton height="4rem" width="100%" />
+            <Skeleton height="4rem" width="100%" />
+          </div>
         </div>
-        <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
-          <AccountSetup title="Follow these 3 simple steps." description="Cowris will make the Ajo creation experience smooth and easy for you." :steps="steps" />
+
+        <!-- Participants Skeleton -->
+        <div class="tw-bg-white tw-p-6 tw-border tw-border-gray-300 tw-rounded-md">
+          <div class="tw-mb-4">
+            <Skeleton height="1.5rem" width="25%" />
+          </div>
+          <div class="tw-space-y-4">
+            <Skeleton v-for="i in 3" :key="i" height="4rem" width="100%" />
+          </div>
+        </div>
+      </div>
+
+      <div v-else>
+        <div class="tw-pb-3 tw-max-w-20">
+          <Button label="Back" :outlined="true" size="small" @click="previousStep" icon="pi pi-angle-left" />
+        </div>
+        <div class="tw-flex tw-flex-col-reverse tw-justify-end xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full tw-h-full">
+          <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full">
+            <form class="tw-bg-white tw-h-full tw-p-6 tw-flex tw-flex-col">
+              <h2 class="tw-text-[22px] tw-text-black">
+                Step {{ currentStep }}:
+                {{ currentStepTitle[currentStep]["name"] }}
+              </h2>
+              <p v-if="currentStepTitle[currentStep]['subTitle']" class="tw-text-[#333333] tw-pt-1">
+                {{ currentStepTitle[currentStep]["subTitle"] }}
+              </p>
+
+              <div v-if="currentStep === 1">
+                <div class="tw-space-y-8 tw-pt-8">
+                  <Input placeholder="Group Name" size="medium" v-model="intialValues.name" :errorMessage="globalStore.nameRules.name" />
+
+                  <Select
+                    v-model="intialValues.category"
+                    :options="categories"
+                    :errorMessage="globalStore.nameRules.category"
+                    placeholder="Select a Category"
+                    class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
+
+                  <Input placeholder="Goal of Contribution / Description" size="medium" v-model="intialValues.description" :errorMessage="globalStore.nameRules.description" />
+
+                  <div class="tw-relative">
+                    <img class="tw-inline-block tw-absolute tw-z-40 tw-w-3 tw-h-3 tw-top-1/2 -tw-translate-y-1/2 tw-left-3" :src="`/images/${getCurrencyName}.svg`" alt="currency-icon" />
+
+                    <InputNumber v-model="intialValues.amount" placeholder="Contribution Per Person" inputId="minmaxfraction" fluid />
+                  </div>
+                  <Select
+                    v-model="selectedFrequency"
+                    :options="frequencyOptions"
+                    optionLabel="name"
+                    :option-value="null"
+                    @change="onFrequencyChange"
+                    :errorMessage="globalStore.nameRules.frequency"
+                    placeholder="Select Contribution Frequency"
+                    class="tw-w-full tw-h-[48px] !tw-rounded-2xl tw-font-light" />
+
+                  <PDate @change="onAjoDateChange" :view="dateView" width="100%" :endDate="new Date(intialValues.end_date)" :startDate="new Date(intialValues.start_date)" />
+                </div>
+              </div>
+
+              <div v-if="currentStep === 2">
+                <div class="tw-space-y-8 tw-pt-8">
+                  <div class="tw-relative">
+                    <Input placeholder="Enter email address of participant" v-model="newEmail" @keydown.enter.prevent="addEmail" class="!tw-pr-28" />
+                    <div class="tw-inline-block tw-absolute tw-top-1/2 -tw-translate-y-1/2 tw-right-2">
+                      <Button label="Add email" size="small" @click.stop="addEmail" :is-full-width="false" :disabled="!isValidEmail(newEmail)" />
+                    </div>
+                  </div>
+
+                  <div v-if="participantsEmail.length > 0">
+                    <ul class="tw-list-disc" @drop="onDrop($event)">
+                      <li
+                        v-for="(email, index) in participantsEmail"
+                        :key="index"
+                        class="tw-flex tw-justify-between"
+                        :class="index == 0 && 'tw-mb-2'"
+                        draggable="true"
+                        @dragstart="onDrag(email, index)"
+                        @drop="onDrop(index)"
+                        @dragover.prevent>
+                        <div class="tw-inline-flex tw-items-center tw-gap-3">
+                          <span class="tw-flex tw-justify-center tw-items-center leading-none tw-w-8 tw-h-8 tw-rounded-full tw-text-white tw-text-xl tw-bg-[#36454F]">{{ index + 1 }}</span>
+                          <span class="tw-text-lg">{{ email }}</span>
+                        </div>
+                        <Button v-if="index != 0" label="Remove" @click="removeEmail(email)" class="!tw-text-[#D80027]" icon="pi pi-times" iconPos="right" :is-full-width="false" color="link" />
+                      </li>
+                    </ul>
+
+                    <div class="tw-inline-flex tw-gap-3 tw-bg-[#FFF7E9] tw-p-5 tw-rounded-lg tw-border tw-border-[#E0C9A5] tw-mt-5">
+                      <i class="pi pi-exclamation-circle tw-text-[#F0B149]"></i>
+                      <div class="tw-text-sm">
+                        <p class="tw-text-black tw-font-semibold tw-leading-none tw-pb-2">Withdrawal slot is as numbered - You can drag to adjust.</p>
+                        <p class="tw-text-[#333333]">
+                          Participants will be be able to withdraw their contribution in the order of number assigned above. You can adjust the order by dragging the numbers to fit what you want.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="tw-inline-flex tw-items-center tw-gap-8 tw-pt-8">
+                      <p class="tw-text-lg tw-text-[#333333] tw-font-medium">Do you want to make this Ajo group public?</p>
+                      <div class="tw-flex tw-items-center tw-gap-3">
+                        <RadioButton v-model="intialValues.is_public" inputId="ajoState1" name="No" value="No" />
+                        <label for="ajoState1" class="ml-2">No</label>
+                        <RadioButton v-model="intialValues.is_public" inputId="ajoState2" name="No" value="Yes" />
+                        <label for="ajoState2" class="ml-2">Yes</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="currentStep === 3">
+                <div class="tw-space-y-8 tw-pt-8">
+                  <Input size="medium" placeholder="Search for rule" icon="pi pi-search" v-model="searchString" @input="searchRules" />
+
+                  <div v-if="filteredRules.length > 0" class="tw-space-y-6">
+                    <p v-for="(rule, index) in filteredRules" :key="index" class="tw-flex tw-items-center tw-gap-2 tw-text-sm tw-text-gray-500">
+                      <Checkbox v-model="intialValues.ajo_rules" :value="rule.value" :inputId="rule.name" />
+                      <label :for="rule.name" class="ml-2 tw-text-base tw-text-black">
+                        {{ rule.label }}
+                      </label>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="tw-pt-8">
+                <Button v-if="id" :loading="loading" label="Update" @click="updateData" class="tw-w-full tw-mt-auto" :disabled="!isFormValid || loading" />
+                <Button v-else :loading="loading" label="Continue" @click="nextStep" class="tw-w-full tw-mt-auto" :disabled="!isFormValid" />
+              </div>
+            </form>
+          </div>
+          <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
+            <AccountSetup title="Follow these 3 simple steps." description="Cowris will make the Ajo creation experience smooth and easy for you." :steps="steps" />
+          </div>
         </div>
       </div>
     </div>
@@ -127,6 +159,7 @@
 
 <script>
 import { ref, reactive, computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { useUserStore } from "@/stores/user.js";
 import { useAjoStore } from "@/stores/ajo.js";
 import { useGlobalsStore } from "@/stores/globals.js";
@@ -144,6 +177,7 @@ import PDate from "@/components/PDate.vue";
 import AjoGroupDialog from "@/components/Dialog/AjoGroupDialog.vue";
 import RadioButton from "primevue/radiobutton";
 import InputNumber from "primevue/inputnumber";
+import Skeleton from "primevue/skeleton";
 
 export default {
   name: "StartAjo",
@@ -159,16 +193,20 @@ export default {
     PDate,
     RadioButton,
     InputNumber,
+    Skeleton,
   },
 
   setup() {
     const userStore = useUserStore();
     const ajoStore = useAjoStore();
     const globalStore = useGlobalsStore();
+    const route = useRoute();
+    const id = route.params.id;
 
     const currentStep = ref(1);
     const newEmail = ref("");
     const loading = ref(false);
+    const preloader = ref(id ? true : false);
     const searchString = ref("");
     const draggedItem = ref(null);
     const draggedIndex = ref(null);
@@ -188,7 +226,7 @@ export default {
       category: "",
       description: "",
       amount: null,
-      frequency: null,
+      frequency: "",
       start_date: "",
       end_date: "",
       ajo_rules: [],
@@ -201,9 +239,9 @@ export default {
     const contributionFrequencies = ref(null);
 
     const steps = reactive([
-      { text: "Fill in basic details", isCompleted: false },
-      { text: "Manage participants", isCompleted: false },
-      { text: "Set rules", isCompleted: false },
+      { text: "Fill in basic details", isCompleted: id ? true : false },
+      { text: "Manage participants", isCompleted: id ? true : false },
+      { text: "Set rules", isCompleted: id ? true : false },
     ]);
 
     const currentStepTitle = {
@@ -227,7 +265,7 @@ export default {
         return intialValues.name && intialValues.category && intialValues.description && intialValues.amount && intialValues.frequency && intialValues.start_date && intialValues.end_date;
       }
       if (currentStep.value === 2) {
-        return participantsEmail.value.length > 1;
+        return participantsEmail.value.length > 0;
       }
       return intialValues.ajo_rules.length > 0;
     });
@@ -314,19 +352,6 @@ export default {
       }
     };
 
-    const setAjoRules = async (ajoId) => {
-      if (ajoId) {
-        for (const rule of intialValues.ajo_rules) {
-          try {
-            const data = { ajo_id: ajoId, value: rule };
-            await ajoStore.createAjoRules(data);
-          } catch (error) {
-            throw new Error("Failed to set Ajo rules.", error);
-          }
-        }
-      }
-    };
-
     const openDialog = () => {
       eventBus.emit("open-dialog", {
         default: AjoGroupDialog,
@@ -370,20 +395,71 @@ export default {
       return currency ? currency.name : "Unknown currency";
     });
 
+    const fetchAjoDetails = async () => {
+      const ajo = await ajoStore.fetchAjoById(id);
+      const { name, category, description, amount, frequency, frequency_name, start_date, end_date, ajo_members } = ajo;
+
+      intialValues.name = name;
+      intialValues.category = category ? category : categories[0];
+      intialValues.description = description;
+      intialValues.amount = parseInt(amount);
+      selectedFrequency.value = contributionFrequencies.value[frequency_name];
+      intialValues.start_date = start_date;
+      intialValues.end_date = end_date;
+      intialValues.frequency = frequency;
+      ajo_members.forEach((member) => {
+        if (member.email != user.value.email) {
+          participantsEmail.value.push(member.email);
+        }
+      });
+    };
+
+    const updateData = async () => {
+      if (isFormValid.value && currentStep.value <= 2) {
+        try {
+          intialValues.members = participantsEmail.value;
+          loading.value = true;
+          const res = await ajoStore.updateAjo(user.value.id, intialValues);
+
+          if (res) {
+            steps[currentStep.value - 1].isCompleted = true;
+            currentStep.value += 1;
+          }
+          loading.value = false;
+        } catch (error) {
+          console.error("Error updating Ajo group:", error);
+          loading.value = false;
+        }
+      }
+    };
+
     onMounted(async () => {
       intialValues.rules = await ajoStore.fetchAjoRules();
       filteredRules.value = intialValues.rules;
 
       contributionFrequencies.value = await ajoStore.fetchAjoFrequencies();
+      if (id) {
+        preloader.value = true;
+        try {
+          await fetchAjoDetails();
+        } catch (err) {
+          preloader.value = false;
+          route.push("/contributions");
+        } finally {
+          preloader.value = false;
+        }
+      }
     });
 
     return {
+      id,
       user,
       ajoStore,
       globalStore,
       currentStep,
       newEmail,
       loading,
+      preloader,
       searchString,
       draggedItem,
       draggedIndex,
@@ -406,13 +482,13 @@ export default {
       removeEmail,
       isValidEmail,
       nextStep,
-      setAjoRules,
       openDialog,
       searchRules,
       onDrag,
       onDrop,
       getCurrencyName,
       previousStep,
+      updateData,
       currentStepTitle,
     };
   },

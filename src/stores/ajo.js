@@ -18,6 +18,7 @@ export const useAjoStore = defineStore("ajoStore", {
 
     async makeRequest(method, path, data = null) {
       const notificationStore = useNotificationStore();
+
       try {
         this.loading = true;
         const response = await useClient().http({ method, path, data });
@@ -31,6 +32,10 @@ export const useAjoStore = defineStore("ajoStore", {
 
     createAjo(data) {
       return this.makeRequest("post", "/ajos", data);
+    },
+
+    updateAjo(userID, data) {
+      return this.makeRequest("put", `/ajos/${userID}`, data);
     },
 
     fetchAllAjo() {

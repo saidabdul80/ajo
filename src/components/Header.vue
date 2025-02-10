@@ -8,7 +8,12 @@
       <!-- Profile and Title Section -->
       <ion-label color="dark" slot="start">
         <div @click="profileImage && $router.push('/app/settings')" :class="[profileImage && 'tw-cursor-pointer', 'tw-flex tw-items-center tw-gap-0  tw-select-none']">
-          <img v-if="profileImage" alt="profile_picture" :src="user.picture_url ? user.picture_url : 'https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png'" style="width: 32px" />
+          <img
+            v-if="profileImage"
+            alt="profile_picture"
+            :src="user.picture_url ? user.picture_url : 'https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png'"
+            class="tw-rounded-full tw-w-12 tw-h-12" />
+
           <div class="tw-ml-2">
             <h1 class="!tw-m-0 md:!tw-text-[15px] !tw-text-[13px] !tw-font-semibold tw-capitalize">{{ title }}</h1>
             <p class="md:tw-text-xs tw-text-[11px] tw-mt-0">{{ description }}</p>
@@ -30,7 +35,7 @@
 </template>
 
 <script>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth.js";
 

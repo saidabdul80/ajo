@@ -75,10 +75,11 @@ const routes: Array<RouteRecordRaw> = [
         meta: { requiresAuth: true },
       },
       {
-        path: "start",
+        path: "start/:id?",
         name: "start",
         component: () => import("@/views/StartAjo.vue"),
         meta: { requiresAuth: true },
+        props: true,
       },
       {
         path: "contributions",

@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { ref, computed, useTemplateRef } from "vue";
+import { ref, computed, useTemplateRef, onMounted } from "vue";
 import InputText from "primevue/inputtext";
 import Select from "primevue/select";
 import DatePicker from "primevue/datepicker";
@@ -110,11 +110,17 @@ export default {
       type: String,
       default: "medium",
     },
+    startDate: {
+      type: Date,
+    },
+    endDate: {
+      type: Date,
+    },
   },
   emits: ["change"],
   setup(props, { emit }) {
-    const startDate = ref(null);
-    const endDate = ref(null);
+    const startDate = ref();
+    const endDate = ref();
     const isDropdownVisible = ref(false);
     const global = useGlobalsStore();
     const displayValue = ref(null);
@@ -202,7 +208,7 @@ export default {
       }
     };
 
-    const onEndDateChange = (date) => {
+    const onEndDateChange = () => {
       if (startDate.value) {
         let start = "";
         let end = "";
@@ -221,14 +227,18 @@ export default {
           end = new Date(endDate.value);
         }
 
-        start = formatDate(start, true);
-        end = formatDate(end, true);
+        dateDisplay(start, end);
+      }
+    };
 
-        emit("change", [start, end]);
+    const dateDisplay = (startDate, endDate) => {
+      const start = formatDate(startDate, true);
+      const end = formatDate(endDate, true);
 
-        start = formatDate(start, false);
-        end = formatDate(end, false);
-        displayValue.value = `${start} ⇢ ${end}`;
+      emit("change", [start, end]);
+      displayValue.value = `${start} ⇢ ${end}`;
+
+      if (dpSelect.value) {
         dpSelect.value.hide();
       }
     };
@@ -239,6 +249,14 @@ export default {
         isDropdownVisible.value = false;
       }
     };
+
+    onMounted(() => {
+      if (props.startDate != "Invalid Date" && props.endDate != "Invalid Date") {
+        startDate.value = props.startDate;
+        endDate.value = props.endDate;
+        dateDisplay(props.startDate, props.endDate);
+      }
+    });
 
     return {
       startDate,

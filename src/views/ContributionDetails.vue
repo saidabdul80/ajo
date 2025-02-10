@@ -10,7 +10,11 @@
     <div class="tw-flex tw-flex-col-reverse xl:tw-grid tw-grid-cols-3 tw-gap-6">
       <div class="tw-col-span-2 tw-space-y-7">
         <div class="tw-bg-white tw-p-6 tw-border tw-border-[#E8EBEF] tw-space-y-6">
-          <div class="tw-space-y-3">
+          <div class="tw-relative tw-space-y-3">
+            <button v-if="isFutureDate" @click="navigateToStartAjo" type="button" class="tw-flex tw-justify-center tw-items-center tw-gap-2 tw-absolute tw-right-0 tw-top-3">
+              <i class="pi pi-file-edit"></i>
+              <span>Edit Ajo</span>
+            </button>
             <h4 class="tw-flex tw-items-center tw-gap-2 tw-text-xl tw-text-[#0F1419]">
               <img class="tw-inline-block" src="/images/wallet.svg" alt="icon" />
               <span class="tw-capitalize">{{ ajo.name }}</span>
@@ -118,7 +122,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useAjoStore } from "@/stores/ajo.js";
 import { useGlobalsStore } from "@/stores/globals.js";
@@ -199,6 +203,17 @@ export default {
       }
     };
 
+    const navigateToStartAjo = () => {
+      globalStore.to(`/app/start/${route.params.id}`);
+    };
+
+    const isFutureDate = computed(() => {
+      const inputDate = new Date(ajo.value.start_date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return inputDate >= today;
+    });
+
     onMounted(fetchAjoDetails);
 
     return {
@@ -209,6 +224,8 @@ export default {
       globalStore,
       getFrequency,
       handleContributionDialog,
+      navigateToStartAjo,
+      isFutureDate,
     };
   },
 };
