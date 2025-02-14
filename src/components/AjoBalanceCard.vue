@@ -93,11 +93,9 @@ export default {
   },
   watch: {
     "$globals.ajos": function (newVal) {
-      console.log(newVal, 3223);
       setTimeout(() => {
         this.slider = new Slider(".ubt-slider");
         this.selectedAjo = this.ajos[this.slider.getCurrentIndex()];
-        console.log(this.slider);
       }, 1000);
     },
   },

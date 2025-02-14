@@ -34,8 +34,8 @@ export const useAjoStore = defineStore("ajoStore", {
       return this.makeRequest("post", "/ajos", data);
     },
 
-    updateAjo(userID, data) {
-      return this.makeRequest("put", `/ajos/${userID}`, data);
+    updateAjo(id, data) {
+      return this.makeRequest("put", `/ajos/${id}`, data);
     },
 
     fetchAllAjo() {
@@ -50,16 +50,24 @@ export const useAjoStore = defineStore("ajoStore", {
       return this.makeRequest("get", "/frequencies");
     },
 
-    inviteAjoParticipant(data) {
-      return this.makeRequest("post", "/ajo-invites/request", data);
-    },
-
     fetchAjoRules() {
       return this.makeRequest("get", "/rules");
     },
 
     createAjoRules(data) {
       return this.makeRequest("post", "/ajo-rules", data);
+    },
+
+    addAjoParticipants(data) {
+      return this.makeRequest("post", "/ajo-members", data);
+    },
+
+    addDeleteParticipant(emailID) {
+      return this.makeRequest("delete", `/ajo-members/${emailID}`);
+    },
+
+    deleteAjo(ajoID) {
+      return this.makeRequest("delete", `/ajos/${ajoID}`);
     },
 
     async updateBankDetails(id, data) {

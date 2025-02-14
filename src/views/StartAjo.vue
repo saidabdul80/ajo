@@ -34,6 +34,7 @@
         <div class="tw-pb-3 tw-max-w-20">
           <Button label="Back" :outlined="true" size="small" @click="previousStep" icon="pi pi-angle-left" />
         </div>
+
         <div class="tw-flex tw-flex-col-reverse tw-justify-end xl:tw-grid xl:tw-grid-cols-6 tw-gap-8 tw-basis-full tw-h-full">
           <div class="xl:tw-col-span-4 tw-flex tw-flex-col xl:tw-h-full">
             <form class="tw-bg-white tw-h-full tw-p-6 tw-flex tw-flex-col">
@@ -88,15 +89,7 @@
 
                   <div v-if="participantsEmail.length > 0">
                     <ul class="tw-list-disc" @drop="onDrop($event)">
-                      <li
-                        v-for="(email, index) in participantsEmail"
-                        :key="index"
-                        class="tw-flex tw-justify-between"
-                        :class="index == 0 && 'tw-mb-2'"
-                        draggable="true"
-                        @dragstart="onDrag(email, index)"
-                        @drop="onDrop(index)"
-                        @dragover.prevent>
+                      <li v-for="(email, index) in participantsEmail" :key="index" class="tw-flex tw-justify-between" :class="index == 0 && 'tw-mb-2'">
                         <div class="tw-inline-flex tw-items-center tw-gap-3">
                           <span class="tw-flex tw-justify-center tw-items-center leading-none tw-w-8 tw-h-8 tw-rounded-full tw-text-white tw-text-xl tw-bg-[#36454F]">{{ index + 1 }}</span>
                           <span class="tw-text-lg">{{ email }}</span>
@@ -105,7 +98,7 @@
                       </li>
                     </ul>
 
-                    <div class="tw-inline-flex tw-gap-3 tw-bg-[#FFF7E9] tw-p-5 tw-rounded-lg tw-border tw-border-[#E0C9A5] tw-mt-5">
+                    <!-- <div class="tw-inline-flex tw-gap-3 tw-bg-[#FFF7E9] tw-p-5 tw-rounded-lg tw-border tw-border-[#E0C9A5] tw-mt-5">
                       <i class="pi pi-exclamation-circle tw-text-[#F0B149]"></i>
                       <div class="tw-text-sm">
                         <p class="tw-text-black tw-font-semibold tw-leading-none tw-pb-2">Withdrawal slot is as numbered - You can drag to adjust.</p>
@@ -113,14 +106,14 @@
                           Participants will be be able to withdraw their contribution in the order of number assigned above. You can adjust the order by dragging the numbers to fit what you want.
                         </p>
                       </div>
-                    </div>
+                    </div> -->
 
                     <div class="tw-inline-flex tw-items-center tw-gap-8 tw-pt-8">
                       <p class="tw-text-lg tw-text-[#333333] tw-font-medium">Do you want to make this Ajo group public?</p>
                       <div class="tw-flex tw-items-center tw-gap-3">
-                        <RadioButton v-model="intialValues.is_public" inputId="ajoState1" name="No" value="No" />
+                        <RadioButton v-model="intialValues.is_public" inputId="ajoState1" name="false" :value="false" />
                         <label for="ajoState1" class="ml-2">No</label>
-                        <RadioButton v-model="intialValues.is_public" inputId="ajoState2" name="No" value="Yes" />
+                        <RadioButton v-model="intialValues.is_public" inputId="ajoState2" name="true" :value="true" />
                         <label for="ajoState2" class="ml-2">Yes</label>
                       </div>
                     </div>
@@ -159,7 +152,7 @@
 
 <script>
 import { ref, reactive, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user.js";
 import { useAjoStore } from "@/stores/ajo.js";
 import { useGlobalsStore } from "@/stores/globals.js";
@@ -201,6 +194,7 @@ export default {
     const ajoStore = useAjoStore();
     const globalStore = useGlobalsStore();
     const route = useRoute();
+    const router = useRouter();
     const id = route.params.id;
 
     const currentStep = ref(1);
@@ -257,8 +251,12 @@ export default {
     };
 
     const otherParticipants = ref([]);
+    const currentParticipants = ref([]);
 
-    const participantsEmail = computed(() => [user.value.email, ...otherParticipants.value]);
+    const participantsEmail = computed(() => {
+      const allEmails = [user.value.email, ...otherParticipants.value, ...currentParticipants.value.map((item) => item.email)];
+      return [...new Set(allEmails)];
+    });
 
     const isFormValid = computed(() => {
       if (currentStep.value === 1) {
@@ -308,14 +306,26 @@ export default {
     };
 
     const addEmail = () => {
-      if (isValidEmail(newEmail.value) && !otherParticipants.value.includes(newEmail.value)) {
-        otherParticipants.value.push(newEmail.value);
+      const emailToAdd = newEmail.value.trim().toLowerCase();
+
+      if (isValidEmail(emailToAdd) && !participantsEmail.value.includes(emailToAdd) && emailToAdd !== user.value.email) {
+        otherParticipants.value.push(emailToAdd);
         newEmail.value = "";
       }
     };
 
-    const removeEmail = (email) => {
-      otherParticipants.value = otherParticipants.value.filter((item) => item !== email);
+    const removeEmail = async (email) => {
+      if (email === user.value.email) return;
+
+      otherParticipants.value = otherParticipants.value.filter((item) => (typeof item === "string" ? item.toLowerCase() : item.email.toLowerCase()) !== email.toLowerCase());
+
+      if (id) {
+        const emailDetails = currentParticipants.value.find((item) => item.email.toLowerCase() === email.toLowerCase());
+        if (emailDetails) {
+          await ajoStore.addDeleteParticipant(emailDetails.id);
+        }
+      }
+      currentParticipants.value = currentParticipants.value.filter((item) => item.email.toLowerCase() !== email.toLowerCase());
     };
 
     const isValidEmail = (email) => {
@@ -366,30 +376,6 @@ export default {
       filteredRules.value = intialValues.rules.filter((rule) => rule.label.toLowerCase().startsWith(lowerSearch));
     };
 
-    const onDrag = (email, index) => {
-      if (index > 0) {
-        draggedItem.value = email;
-        draggedIndex.value = index - 1;
-      } else {
-        draggedItem.value = null;
-        draggedIndex.value = null;
-      }
-    };
-
-    const onDrop = (dropIndex) => {
-      const adjustedDropIndex = dropIndex - 1;
-
-      if (draggedIndex.value !== null && adjustedDropIndex >= 0 && adjustedDropIndex !== draggedIndex.value) {
-        const reorderedParticipants = [...otherParticipants.value];
-        const [draggedParticipant] = reorderedParticipants.splice(draggedIndex.value, 1);
-        reorderedParticipants.splice(adjustedDropIndex, 0, draggedParticipant);
-        otherParticipants.value = reorderedParticipants;
-      }
-
-      draggedItem.value = null;
-      draggedIndex.value = null;
-    };
-
     const getCurrencyName = computed(() => {
       const currency = currencySymbol.find((item) => item.code === user.value.my_wallet.currency);
       return currency ? currency.name : "Unknown currency";
@@ -397,8 +383,8 @@ export default {
 
     const fetchAjoDetails = async () => {
       const ajo = await ajoStore.fetchAjoById(id);
-      const { name, category, description, amount, frequency, frequency_name, start_date, end_date, ajo_members } = ajo;
 
+      const { name, category, description, amount, frequency, frequency_name, start_date, end_date, ajo_members, is_public } = ajo;
       intialValues.name = name;
       intialValues.category = category ? category : categories[0];
       intialValues.description = description;
@@ -407,24 +393,46 @@ export default {
       intialValues.start_date = start_date;
       intialValues.end_date = end_date;
       intialValues.frequency = frequency;
+      intialValues.is_public = is_public ? true : false;
       ajo_members.forEach((member) => {
         if (member.email != user.value.email) {
-          participantsEmail.value.push(member.email);
+          currentParticipants.value.push({ email: member.email, id: member.id });
         }
       });
     };
 
     const updateData = async () => {
-      if (isFormValid.value && currentStep.value <= 2) {
+      if (isFormValid.value && currentStep.value <= 3) {
         try {
-          intialValues.members = participantsEmail.value;
           loading.value = true;
-          const res = await ajoStore.updateAjo(user.value.id, intialValues);
 
-          if (res) {
+          // First update the Ajo
+          const ajoUpdateRes = await ajoStore.updateAjo(id, intialValues);
+          if (!ajoUpdateRes) {
+            throw new Error("Failed to update Ajo");
+          }
+
+          // Then add participants if they exist
+          if (otherParticipants.value.length > 0) {
+            const participantsRes = await ajoStore.addAjoParticipants({
+              ajo_id: id,
+              members: [...otherParticipants.value],
+            });
+            if (participantsRes) {
+              otherParticipants.value = [];
+            } else {
+              throw new Error("Failed to add participants");
+            }
+          }
+
+          // Only if both operations above succeeded, update the steps
+          if (currentStep.value < 3) {
             steps[currentStep.value - 1].isCompleted = true;
             currentStep.value += 1;
+          } else {
+            router.push("/app/contributions");
           }
+
           loading.value = false;
         } catch (error) {
           console.error("Error updating Ajo group:", error);
@@ -444,7 +452,7 @@ export default {
           await fetchAjoDetails();
         } catch (err) {
           preloader.value = false;
-          route.push("/contributions");
+          router.push("/app/contributions");
         } finally {
           preloader.value = false;
         }
@@ -484,8 +492,6 @@ export default {
       nextStep,
       openDialog,
       searchRules,
-      onDrag,
-      onDrop,
       getCurrencyName,
       previousStep,
       updateData,

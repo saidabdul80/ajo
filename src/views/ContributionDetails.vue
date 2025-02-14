@@ -2,8 +2,8 @@
   <DefaultLayout v-if="ajo" :HeaderTitle="ajo.name" :HeaderDescription="`Starting on ${formattedDate(ajo.start_date)}`">
     <template #rightContent>
       <div class="tw-flex tw-item-center tw-gap-2">
-        <Button @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
-        <Button label="Leave Ajo" color="danger" class="tw-shrink-0 !tw-w-fit" />
+        <Button v-if="!isFutureDate" @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
+        <Button v-else @click="handleLeaveDeleteAjo" label="Leave Ajo" color="danger" class="tw-shrink-0 !tw-w-fit" />
       </div>
     </template>
 
@@ -11,7 +11,7 @@
       <div class="tw-col-span-2 tw-space-y-7">
         <div class="tw-bg-white tw-p-6 tw-border tw-border-[#E8EBEF] tw-space-y-6">
           <div class="tw-relative tw-space-y-3">
-            <button v-if="isFutureDate" @click="navigateToStartAjo" type="button" class="tw-flex tw-justify-center tw-items-center tw-gap-2 tw-absolute tw-right-0 tw-top-3">
+            <button v-if="isFutureDate" @click="navigateToStartAjo" type="button" class="tw-flex tw-justify-center tw-items-center tw-gap-2 tw-absolute tw-right-0 tw-top-3 tw-cursor-pointer">
               <i class="pi pi-file-edit"></i>
               <span>Edit Ajo</span>
             </button>
@@ -123,7 +123,7 @@
 
 <script>
 import { computed, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useAjoStore } from "@/stores/ajo.js";
 import { useGlobalsStore } from "@/stores/globals.js";
 import { useUserStore } from "@/stores/user.js";
@@ -154,6 +154,8 @@ export default {
     const userStore = useUserStore();
     const notificationStore = useNotificationStore();
     const client = useClient();
+    const user = computed(() => userStore.user);
+    const router = useRouter();
 
     const ajo = ref(null);
     const isMemeber = ref(null);
@@ -163,7 +165,8 @@ export default {
     // Fetch Ajo and set ownership
     const fetchAjoDetails = async () => {
       ajo.value = await ajoStore.fetchAjoById(route.params.id);
-      isAjoOwner.value = ajo.value?.user_id === userStore.user.id;
+
+      isAjoOwner.value = ajo.value?.user_id === user.id;
     };
 
     // Handle contribution dialog
@@ -175,12 +178,22 @@ export default {
           ajo_id: route.params.id,
         },
       });
-
       if (res) {
         notificationStore.showNotification({
           type: "success",
           message: res,
         });
+      }
+    };
+
+    const handleLeaveDeleteAjo = async () => {
+      if (user.value.id === ajo.value.user_id) {
+        try {
+          await ajoStore.deleteAjo(route.params.id);
+          router.push("/app/contributions");
+        } catch (err) {
+          console.log(err);
+        }
       }
     };
 
@@ -226,6 +239,7 @@ export default {
       handleContributionDialog,
       navigateToStartAjo,
       isFutureDate,
+      handleLeaveDeleteAjo,
     };
   },
 };
