@@ -7,6 +7,8 @@
       </div>
     </template>
 
+    {{ ajo }}
+
     <div class="tw-flex tw-flex-col-reverse xl:tw-grid tw-grid-cols-3 tw-gap-6">
       <div class="tw-col-span-2 tw-space-y-7">
         <div class="tw-bg-white tw-p-6 tw-border tw-border-[#E8EBEF] tw-space-y-6">
@@ -162,14 +164,12 @@ export default {
     const isAjoOwner = ref(false);
     const { formattedDate } = helpers;
 
-    // Fetch Ajo and set ownership
     const fetchAjoDetails = async () => {
       ajo.value = await ajoStore.fetchAjoById(route.params.id);
 
       isAjoOwner.value = ajo.value?.user_id === user.id;
     };
 
-    // Handle contribution dialog
     const handleContributionDialog = async () => {
       const res = await client.http({
         path: "/make/contribution",
