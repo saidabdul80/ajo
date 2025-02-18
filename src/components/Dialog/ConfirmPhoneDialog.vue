@@ -21,11 +21,11 @@
     <!-- Verify Phone -->
     <form @submit.prevent v-if="currentStep === 'verify'" class="tw-space-y-2 tw-pb-12">
       <h5 class="tw-text-[28px] tw-text-black">Verify phone number</h5>
-      <p class="tw-text-[#586283] tw-max-w-[40ch]">Add your phone number to complete account set-up. aWe sent a 6-digit code to {{ form.phone }}. Please enter the code to verify your phone number.</p>
+      <p class="tw-text-[#586283] tw-max-w-[40ch]">We sent a 6-digit code to {{ form.phone }}. Please enter the code to verify your phone number.</p>
 
       <div class="tw-space-y-3 tw-pt-4">
         <Input placeholder="Your 6-digit code" v-model="form.otp" size="medium" class="tw-mb-3" />
-        <Button @click="verifyPhone" :loading="loading['submitButton']" type="submit" label="Submit" size="medium" class="tw-w-full" :disabled="loading['submitButton']" />
+        <Button @click="verifyPhone" :loading="loading['submitButton']" type="submit" label="Submit" size="medium" class="tw-w-full" :disabled="loading['submitButton'] || !form.otp" />
         <Button
           @click="() => goToVerify('resendButton')"
           :loading="loading['resendButton']"
@@ -101,14 +101,6 @@ export default {
     };
 
     const goToVerify = async (type) => {
-      if (!form.value.phone || form.value.phone.length < 10) {
-        const notificationStore = useNotificationStore();
-        notificationStore.showNotification({
-          type: "error",
-          message: "Please enter Phone number or length too short",
-        });
-        return;
-      }
       const res = await sendOTP(type);
 
       if (res) {

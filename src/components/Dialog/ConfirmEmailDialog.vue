@@ -6,7 +6,7 @@
       <p class="tw-text-[#586283] tw-max-w-[40ch]">We sent a 6-digit code to {{ form.email }}. Please enter the code to verify your email address.</p>
       <div class="tw-space-y-3 tw-pt-4">
         <Input placeholder="Your 6-digit code" v-model="form.otp" size="medium" class="tw-mb-3" />
-        <Button :loading="loading" @click="completeVerification" type="submit" label="Submit" size="medium" class="tw-w-full" :disabled="loading" />
+        <Button :loading="loading" @click="completeVerification" type="submit" label="Submit" size="medium" class="tw-w-full" :disabled="loading || !form.otp" />
         <Button
           @click="globals.sendCode()"
           :loading="globals?.sendCodeLoading"
