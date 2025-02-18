@@ -60,7 +60,7 @@
 
             <div class="tw-flex tw-flex-col tw-gap-3 sm:tw-grid tw-grid-cols-2 sm:tw-items-center tw-justify-between">
               <div class="tw-space-2">
-                <p class="tw-text-sm tw-text-[#333333]">Number of Weeks</p>
+                <p class="tw-text-sm tw-text-[#333333]">Maturity Period</p>
                 <h5 class="tw-text-2xl tw-text-black">{{ ajo.my_detail?.missed }}</h5>
               </div>
             </div>

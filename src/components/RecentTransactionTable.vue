@@ -16,7 +16,7 @@
       </span>
     </template>
     <template v-slot:td-action="{ row }">
-      <Button v-if="row.status=='PENDING'" size="small" :loading="loading" @click="requery(row)" label="Requery" />
+      <Button v-if="row.status == 'PENDING'" size="small" :loading="loading" @click="requery(row)" label="Requery" />
     </template>
   </DataTable>
 </template>
@@ -31,7 +31,7 @@ import Button from "./Button.vue";
 export default {
   components: {
     DataTable,
-    Button
+    Button,
   },
   props: {
     tableTitle: {
@@ -77,9 +77,9 @@ export default {
     };
 
     const requery = async (row) => {
-      row.loading=   true;
-      const response = await useClient().http({ method: "post", path: "/transactions/requery/"+row.reference });
-      row.loading=   false;
+      row.loading = true;
+      const response = await useClient().http({ method: "post", path: "/transactions/requery/" + row.reference });
+      row.loading = false;
       if (response) {
         getTransactions(filters.value, currentPath.value);
       }
@@ -129,7 +129,7 @@ export default {
       handleRowClick,
       handlePageChangeR,
       handlePageChangeS,
-      requery
+      requery,
     };
   },
 };
