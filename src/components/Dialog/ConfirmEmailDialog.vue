@@ -8,13 +8,13 @@
         <Input placeholder="Your 6-digit code" v-model="form.otp" size="medium" class="tw-mb-3" />
         <Button :loading="loading" @click="completeVerification" type="submit" label="Submit" size="medium" class="tw-w-full" :disabled="loading || !form.otp" />
         <Button
-          @click="globals.sendCode()"
-          :loading="globals?.sendCodeLoading"
-          label="Resend code"
+          @click="resendOTP"
+          :loading="isCounting"
+          :label="isCounting ? `Resend code (${timeLeft})` : 'Resend Code'"
           size="medium"
           class="tw-w-full !tw-text-black"
           :outlined="true"
-          :disabled="globals?.sendCodeLoading" />
+          :disabled="isCounting" />
       </div>
     </form>
 
@@ -43,6 +43,8 @@ import ConfirmPhoneDialog from "@/components/Dialog/ConfirmPhoneDialog.vue";
 import { useClient } from "@/stores/client";
 import { useUserStore } from "@/stores/user.js";
 import { useGlobalsStore } from "@/stores/globals";
+import useCountdown from "@/composable/useCountDown.js";
+import { useNotificationStore } from "@/stores/notification";
 
 export default {
   components: {
@@ -56,12 +58,27 @@ export default {
     const clientStore = useClient();
     const loading = ref(false);
     const user = computed(() => useUserStore().user);
+    const { timeLeft, isCounting, startCountdown } = useCountdown(30);
+    const notificationStore = useNotificationStore();
 
     const currentStep = ref("verify");
     const form = ref({
       email: user.value.email || "",
       otp: "",
     });
+
+    const resendOTP = async () => {
+      const res = await useClient().http({ method: "post", path: "/resend_email_verification", data: { email: form.value.email } });
+
+      if (res) {
+        notificationStore.showNotification({
+          type: "success",
+          message: "Email Sent successfully.",
+        });
+
+        startCountdown();
+      }
+    };
 
     const completeVerification = async () => {
       loading.value = true;
@@ -92,17 +109,19 @@ export default {
     };
 
     onMounted(() => {
-      globals.sendCode();
+      resendOTP();
     });
 
     return {
       currentStep,
       form,
       loading,
-      globals,
+      resendOTP,
       completeVerification,
       closeDialog,
       openPhoneVerification,
+      isCounting,
+      timeLeft,
     };
   },
 };

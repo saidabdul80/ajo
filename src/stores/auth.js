@@ -1,7 +1,5 @@
-import axios from "axios";
 import { defineStore } from "pinia";
 import { useNotificationStore } from "@/stores/notification";
-import { useAjoStore } from "./ajo";
 
 import { useLocalStorage } from "@vueuse/core";
 import { useClient } from "@/stores/client";
@@ -136,9 +134,9 @@ export const useAuthStore = defineStore("auth-store", {
       try {
         const token = ls.get("auth.token");
         if (token) {
-          //useClient().http({method:'post',path:'/auth/logout',data:{},fullPath:false});
           ls.remove("auth.token");
           ls.remove("user");
+
           const notificationStore = useNotificationStore();
           notificationStore.showNotification({
             type: "success",
@@ -146,6 +144,11 @@ export const useAuthStore = defineStore("auth-store", {
           });
 
           router.push("/");
+
+          // Reload the page after a short delay to ensure the notification is shown
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         }
       } catch (err) {
         const notificationStore = useNotificationStore();

@@ -14,7 +14,7 @@
             <img src="/images/arrow-down.svg" alt="Custom Icon" />
           </template>
         </vue-tel-input>
-        <Button :loading="loading['submitButton']" @click="() => goToVerify('submitButton')" type="submit" label="Continue" size="medium" class="tw-w-full" :disabled="loading['submitButton']" />
+        <Button :loading="isCounting" @click="resendOTP" type="submit" label="Continue" size="medium" class="tw-w-full" :disabled="isCounting" />
       </div>
     </div>
 
@@ -25,15 +25,15 @@
 
       <div class="tw-space-y-3 tw-pt-4">
         <Input placeholder="Your 6-digit code" v-model="form.otp" size="medium" class="tw-mb-3" />
-        <Button @click="verifyPhone" :loading="loading['submitButton']" type="submit" label="Submit" size="medium" class="tw-w-full" :disabled="loading['submitButton'] || !form.otp" />
+        <Button @click="verifyPhone" :loading="loading" type="submit" label="Submit" size="medium" class="tw-w-full" :disabled="loading || !form.otp" />
         <Button
-          @click="() => goToVerify('resendButton')"
-          :loading="loading['resendButton']"
-          label="Resend code"
+          @click="resendOTP"
+          :loading="isCounting"
+          :label="isCounting ? `Resend (${timeLeft})` : 'Resend'"
           size="medium"
           class="tw-w-full !tw-text-black"
           :outlined="true"
-          :disabled="loading['resendButton']" />
+          :disabled="isCounting" />
       </div>
     </form>
 
@@ -62,6 +62,7 @@ import UploadDialog from "@/components/Dialog/UploadDialog.vue";
 import { useClient } from "@/stores/client";
 import { useNotificationStore } from "@/stores/notification";
 import { useGlobalsStore } from "@/stores/globals";
+import useCountdown from "@/composable/useCountDown.js";
 
 export default {
   components: {
@@ -71,39 +72,33 @@ export default {
   },
   setup() {
     const currentStep = ref("confirm");
+    const globalStore = useGlobalsStore();
     const userStore = useUserStore();
     const user = computed(() => userStore.user);
+    const { timeLeft, isCounting, startCountdown } = useCountdown(30);
 
     const form = ref({
       phone: user?.value?.phone_number?.replaceAll(" ", "") || "",
       otp: "",
     });
 
-    const loading = ref({
-      submitButton: false,
-      resendButton: false,
-    });
+    const loading = ref(false);
 
-    const globalStore = useGlobalsStore();
-
-    const sendOTP = async (type) => {
-      loading.value[type] = true;
-
+    const sendOTP = async () => {
       const res = await useClient().http({
         method: "post",
         path: "/resend_phone_number_verification",
         data: { phone_number: form.value.phone },
       });
 
-      loading.value[type] = false;
-
       return res;
     };
 
-    const goToVerify = async (type) => {
-      const res = await sendOTP(type);
+    const resendOTP = async () => {
+      const res = await sendOTP();
 
       if (res) {
+        startCountdown();
         currentStep.value = "verify";
         const notificationStore = useNotificationStore();
         notificationStore.showNotification({
@@ -123,13 +118,11 @@ export default {
         return;
       }
 
-      loading.value["submitButton"] = true;
       const res = await useClient().http({
         method: "post",
         path: "/confirm_phone_number_verification",
         data: { phone_number: form.value.phone, otp: form.value.otp },
       });
-      loading.value["submitButton"] = false;
 
       if (res) {
         currentStep.value = "verified";
@@ -158,10 +151,12 @@ export default {
       form,
       user,
       loading,
-      goToVerify,
+      resendOTP,
       verifyPhone,
       openDialogWithContent,
       openUploadVerification,
+      timeLeft,
+      isCounting,
     };
   },
 };

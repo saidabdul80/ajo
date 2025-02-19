@@ -410,35 +410,7 @@ export const useGlobalsStore = defineStore("globals", {
         console.error("Error downloading invoice pdf:", error);
       }
     },
-    async sendCode(email) {
-      this.sendCodeLoading = true;
-      const res = await useClient().http({ method: "post", path: "/resend_email_verification", data: { email: email ? email : useUserStore().user.email } });
-      this.sendCodeLoading = false;
 
-      if (res) {
-        const notificationStore = useNotificationStore();
-        notificationStore.showNotification({
-          type: "success",
-          message: "Email Sent successfully.",
-        });
-      }
-    },
-    async verifyEmail(params) {
-      const response = await useClient().http({
-        method: "post",
-        path: "/verify/email",
-        data: params,
-      });
-      if (response) {
-        const notificationStore = useNotificationStore();
-        notificationStore.showNotification({
-          type: "success",
-          message: "Verified successfully.",
-        });
-        return true;
-      }
-      return false;
-    },
     async requery(reference) {
       const response = await useClient().http({
         method: "post",

@@ -20,21 +20,23 @@ export default {
     Button,
   },
 
-  data() {
-    return {
-      user: useAuthStore(),
-    };
-  },
+  setup() {
+    const user = useAuthStore();
 
-  methods: {
-    closeDialog() {
+    const closeDialog = () => {
       eventBus.emit("close-dialog");
-    },
+    };
 
-    logout() {
-      this.closeDialog();
-      this.user.logout();
-    },
+    const logout = () => {
+      closeDialog();
+      user.logout();
+    };
+
+    return {
+      user,
+      logout,
+      closeDialog,
+    };
   },
 };
 </script>

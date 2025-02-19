@@ -151,9 +151,6 @@ export default {
     });
 
     const handleVerification = (type) => {
-      if (type.label == "Verify Email") {
-        useGlobalsStore().sendCode();
-      }
       eventBus.emit("open-dialog", {
         default: type.dialog,
         position: "right",
