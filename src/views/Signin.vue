@@ -12,7 +12,7 @@
               </span>
               <Input class="tw-mb-5" placeholder="Email Address" v-model="initialValues.email" />
 
-              <Password :feedback="false" toggleMask class="tw-mb-8" placeholder="Password" v-model="initialValues.password" />
+              <Password :feedback="false" class="tw-mb-8" placeholder="Password" v-model="initialValues.password" />
 
               <div class="tw-flex tw-w-full tw-justify-between md:tw-gap-1 tw-mb-8">
                 <div class="tw-flex tw-gap-3 tw-items-center">

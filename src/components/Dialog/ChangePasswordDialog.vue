@@ -3,9 +3,9 @@
     <h5 class="tw-text-[28px] tw-text-black">Change password</h5>
     <p class="tw-text-[#586283] tw-max-w-[40ch]">Enter your current and new password.</p>
     <div class="tw-space-y-7 tw-pt-4">
-      <Input placeholder="Current password" type="password" v-model="form.currentPassword" />
-      <Input placeholder="New password" type="password" v-model="form.newPassword" />
-      <Input placeholder="New password again" type="password" v-model="form.confirmNewPassword" />
+      <Password :feedback="false" placeholder="Current password" v-model="form.currentPassword" />
+      <Password :feedback="true" placeholder="New password" v-model="form.newPassword" />
+      <Password :feedback="false" placeholder="New password again" v-model="form.confirmNewPassword" />
       <Button type="submit" label="Update password" size="medium" class="tw-w-full" />
     </div>
   </form>
@@ -28,11 +28,13 @@
 import eventBus from "@/eventBus";
 import Button from "@/components/Button.vue";
 import Input from "@/components/Input.vue";
+import Password from "@/components/Password.vue";
 
 export default {
   components: {
     Button,
     Input,
+    Password,
   },
 
   data() {
