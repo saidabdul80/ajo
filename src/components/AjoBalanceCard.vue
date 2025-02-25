@@ -87,16 +87,18 @@ export default {
     },
     getCurrentIndex() {
       this.selectedAjo = this.ajos[this.slider.getCurrentIndex()];
-
-      //return this.slider.getCurrentIndex();
     },
   },
+
   watch: {
-    "$globals.ajos": function (newVal) {
-      setTimeout(() => {
-        this.slider = new Slider(".ubt-slider");
-        this.selectedAjo = this.ajos[this.slider.getCurrentIndex()];
-      }, 1000);
+    ajos: {
+      handler(newAjos) {
+        setTimeout(() => {
+          this.slider = new Slider(".ubt-slider");
+          this.getCurrentIndex();
+        }, 1000);
+      },
+      immediate: true,
     },
   },
   created() {},

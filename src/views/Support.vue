@@ -24,13 +24,13 @@
             <AccordionContent>
               <div v-for="(item, index) in section.items" :key="index" class="tw-flex tw-items-center tw-justify-between">
                 <div class="tw-flex tw-items-center tw-gap-2">
-                  <img :src="item.imageUrl" class="tw-inline-block" :alt="item.name || 'contact icon'" />
+                  <img :src="item.imageUrl" class="tw-inline-block" :alt="item.name || 'contact icon'" width="24px" />
                   <p class="tw-text-base tw-text-[#000000]">{{ item.name || item.value }}</p>
                 </div>
 
                 <div v-if="item.link">
                   <a :href="item.link" target="_blank">
-                    <img src="/images/arrow-up-right.svg" class="tw-inline-block" alt="arrow" />
+                    <img src="/images/arrow-up-right.svg" class="tw-inline-block" alt="arrow" width="24px" />
                   </a>
                 </div>
 
@@ -102,11 +102,11 @@ export default {
         title: "Phone calls",
         items: [
           {
-            imageUrl: "/images/telegram.svg",
+            imageUrl: "/images/phone-call.png",
             value: "(+234)9032063405",
           },
           {
-            imageUrl: "/images/telegram.svg",
+            imageUrl: "/images/phone-call.png",
             value: "(+234)9032039414",
           },
         ],
@@ -115,7 +115,7 @@ export default {
         title: "Email Support",
         items: [
           {
-            imageUrl: "/images/whatsapp.svg",
+            imageUrl: "/images/email.png",
             value: "cowristect@cowris.tech",
           },
         ],
@@ -125,13 +125,13 @@ export default {
         items: [
           {
             name: "Facebook",
-            imageUrl: "/images/whatsapp.svg",
-            link: "https://facebook.com",
+            imageUrl: "/images/facebook.png",
+            link: "https://www.facebook.com/Cowris.Technologies.Limited?mibextid=LQQJ4d",
           },
           {
             name: "Twitter",
-            imageUrl: "/images/whatsapp.svg",
-            link: "https://twitter.com",
+            imageUrl: "/images/twitter.png",
+            link: "https://twitter.com/SendCowris",
           },
         ],
       },

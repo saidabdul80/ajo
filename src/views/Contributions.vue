@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout :isContentHeightFull="!globals.ajos.length">
+  <DefaultLayout :isContentHeightFull="!ajos.length">
     <div class="tw-mb-7">
       <Notify message="Rhoda Ogunesan has invited you to join Ajo group." type="warning">
         <template #end>
@@ -17,7 +17,7 @@
           buttonLabel="Fund Wallet"
           :chartOptions="chartOptions"
           :series="series" />
-        <AjoBalanceCard :ajos="globals.ajos" title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
+        <AjoBalanceCard :ajos="sortedAjos" title="Total contribution" balance="&#x20A6; 0.00" :chartOptions="chartOptions" :series="series" background-color="#C1B2F2" />
       </div>
 
       <div class="tw-flex tw-flex-col tw-gap-3 md:tw-flex-row md:tw-items-center tw-justify-between tw-bg-white tw-p-6 tw-border tw-border-[#DBDEE2CC]">
@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <div v-if="globals.ajos.length == 0" class="tw-flex tw-flex-col tw-justify-center tw-bg-white tw-items-center tw-h-full tw-py-8">
+      <div v-if="ajos.length == 0" class="tw-flex tw-flex-col tw-justify-center tw-bg-white tw-items-center tw-h-full tw-py-8">
         <div>
           <img src="/images/groups.svg" alt="icon" />
         </div>
@@ -42,13 +42,14 @@
       </div>
 
       <div v-else class="tw-grid md:tw-grid-cols-2 xl:tw-grid-cols-3 tw-gap-4 tw-mt-4">
-        <AjoCard class="tw-mb-2" v-for="ajo in globals.ajos" :key="ajo.id" :ajo="ajo" />
+        <AjoCard class="tw-mb-2" v-for="ajo in sortedAjos" :key="ajo.id" :ajo="ajo" />
       </div>
     </div>
   </DefaultLayout>
 </template>
 
 <script>
+import { ref, computed, onMounted, defineComponent, watch } from "vue";
 import AjoCard from "@/components/AjoCard.vue";
 import Button from "@/components/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
@@ -62,7 +63,7 @@ import FundWalletDialog from "@/components/Dialog/FundWalletDialog.vue";
 import Select from "primevue/select";
 import Pills from "@/components/Pills.vue";
 
-export default {
+export default defineComponent({
   components: {
     DefaultLayout,
     Notify,
@@ -74,73 +75,86 @@ export default {
     Select,
     Pills,
   },
+  setup() {
+    const globals = useGlobalsStore();
+    const userStore = useUserStore();
 
-  data() {
-    return {
-      selectedStatus: "All",
-      statusOptions: ["All", "Type"],
-      series: [
-        {
-          name: "Balance",
-          data: [0, 1, 3, 2, 7, 4, 6],
-        },
-      ],
-      globals: useGlobalsStore(),
-      userStore: useUserStore(),
-    };
-  },
+    const selectedStatus = ref("All");
+    const statusOptions = ref(["All", "Type"]);
+    const ajos = ref([]);
+    const sortedAjos = ref([]);
 
-  computed: {
-    chartOptions() {
-      return {
-        colors: ["#546E7A", "#E91E63"],
-        chart: {
-          type: "area",
-          height: "auto",
-          background: "transparent",
-          sparkline: {
-            enabled: true,
-          },
-        },
-        stroke: {
-          curve: "smooth",
-        },
-        fill: {
-          type: "gradient",
-          colors: ["#ccc"],
-          gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.4,
-            opacityTo: 0.5,
-            stops: [0, 90, 100],
-          },
-        },
-        xaxis: { labels: { show: false } },
-        yaxis: { labels: { show: false } },
-        tooltip: { enabled: true },
-      };
-    },
-  },
+    const series = ref([
+      {
+        name: "Balance",
+        data: [0, 1, 3, 2, 7, 4, 6],
+      },
+    ]);
 
-  methods: {
-    handleFundWallet() {
+    const chartOptions = computed(() => ({
+      colors: ["#546E7A", "#E91E63"],
+      chart: {
+        type: "area",
+        height: "auto",
+        background: "transparent",
+        sparkline: {
+          enabled: true,
+        },
+      },
+      stroke: {
+        curve: "smooth",
+      },
+      fill: {
+        type: "gradient",
+        colors: ["#ccc"],
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.4,
+          opacityTo: 0.5,
+          stops: [0, 90, 100],
+        },
+      },
+      xaxis: { labels: { show: false } },
+      yaxis: { labels: { show: false } },
+      tooltip: { enabled: true },
+    }));
+
+    const handleFundWallet = () => {
       eventBus.emit("open-dialog", {
         default: FundWalletDialog,
         title: "Fund wallet",
         position: "right",
       });
-    },
+    };
 
-    handlePillSelection(value) {
-      this.globals.ajos.sort((a, b) => {
+    const handlePillSelection = (value) => {
+      sortedAjos.value = [...ajos.value].sort((a, b) => {
         if (value === "Newest") return b.id - a.id;
         if (value === "Oldest") return a.id - b.id;
       });
-    },
-  },
+    };
 
-  created() {
-    this.globals.fetchMyAjos();
+    onMounted(async () => {
+      ajos.value = await globals.fetchMyAjos();
+      sortedAjos.value = [...ajos.value];
+    });
+
+    watch(ajos, (newAjos) => {
+      sortedAjos.value = [...newAjos];
+    });
+
+    return {
+      ajos,
+      sortedAjos,
+      globals,
+      userStore,
+      selectedStatus,
+      statusOptions,
+      series,
+      chartOptions,
+      handleFundWallet,
+      handlePillSelection,
+    };
   },
-};
+});
 </script>
