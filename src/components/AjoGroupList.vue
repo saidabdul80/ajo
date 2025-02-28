@@ -2,7 +2,7 @@
   <div class="tw-flex tw-flex-col tw-basis-full">
     <div class="tw-flex tw-justify-between tw-bg-white tw-items-center tw-mb-3 tw-px-6 tw-py-6 tw-text-[#0F1419] tw-border-b">
       <h4 class="tw-font-medium tw-text-xl">Ajo Groups</h4>
-      <span @click="$globals.to('contributions')" class="tw-font-bold tw-text-lg tw-cursor-pointer">See all</span>
+      <span @click="globals.to('contributions')" class="tw-font-bold tw-text-lg tw-cursor-pointer">See all</span>
     </div>
     <div v-if="globals.ajos.length == 0" class="tw-flex tw-flex-col tw-justify-center tw-bg-white tw-items-center tw-h-full tw-py-8">
       <div>
@@ -19,28 +19,30 @@
 </template>
 
 <script>
+import { onMounted } from "vue";
 import { useGlobalsStore } from "@/stores/globals";
-
 import AjoCard from "./AjoCard.vue";
 
 export default {
   name: "AjoGroupList",
+  components: {
+    AjoCard,
+  },
   props: {
     contentHeight: {
       type: String,
     },
   },
-  data() {
+  setup() {
+    const globals = useGlobalsStore();
+
+    onMounted(async () => {
+      await globals.fetchMyAjos();
+    });
+
     return {
-      globals: useGlobalsStore(),
+      globals,
     };
-  },
-  created() {
-    this.$globals.fetchMyAjos();
-  },
-  methods: {},
-  components: {
-    AjoCard,
   },
 };
 </script>

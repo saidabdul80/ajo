@@ -4,13 +4,13 @@
 
     <p class="tw-text-base tw-text-[#333333]">Participants will be able to withdraw their contributions in the order of the number assigned below. You can request to swap slots.</p>
 
-    <ul class="tw-space-y-6 tw-pt-4">
+    <ul class="tw-space-y-6 tw-pt-4 tw-overflow-y-auto tw-max-h-[400px]">
       <li v-for="(participant, index) in participants" :key="participant.id" class="tw-flex tw-items-center tw-gap-3">
         <p
           :id="`slot-${index}`"
-          @click="assignSlot(participant)"
-          :class="participant.new_slot ? 'bgR' : 'bgP'"
-          class="tw-w-8 tw-h-8 tw-cursor-pointer hover:tw-bg-black tw-shrink-0 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-text-white tw-font-medium">
+          @click="isAjoOwner && assignSlot(participant)"
+          :class="[participant.new_slot ? 'bgR' : 'bgP', isAjoOwner && 'tw-cursor-pointer hover:tw-bg-black']"
+          class="tw-w-8 tw-h-8 tw-shrink-0 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-text-white tw-font-medium">
           {{ participant.slot == null ? "?" : participant.slot }}
         </p>
         <p class="tw-text-base tw-text-[#000000] tw-flex tw-relative">
@@ -42,6 +42,7 @@ import Button from "@/components/Button.vue";
 import SwapSlotDialog from "@/components/Dialog/SwapSlotDialog.vue";
 import { useNotificationStore } from "@/stores/notification";
 import { useClient } from "@/stores/client";
+import { useUserStore } from "@/stores/user.js";
 
 export default {
   components: {
@@ -64,6 +65,7 @@ export default {
     return {
       selectedParticipant: null,
       driverObj: null,
+      userStore: useUserStore(),
     };
   },
   methods: {
@@ -76,6 +78,7 @@ export default {
           btn: "Assign",
           participant: participant,
           slotNumber: this.selectedParticipant.slot,
+          totalSlots: this.participants.length,
         },
         position: "right",
       });
@@ -84,7 +87,7 @@ export default {
       this.selectedParticipant = participant;
 
       this.$globals.ubtAlert({
-        text: `Are you sure you want to accept this slot? 
+        text: `Are you sure you want to accept this slot?
           <div class="tw-mt-10">
             <button id="acceptBtn" class="tw-bg-green-600 tw-text-white tw-w-[45%] tw-px-4 tw-py-2 tw-rounded-md tw-font-bold tw-mr-2 hover:tw-bg-green-700" >Accept</button>
             </div>
@@ -129,7 +132,7 @@ export default {
         console.error("Error assigning slot:", error);
       }
     },
-    async requestSlot(slot) {
+    async requestSlot(slot, callback) {
       try {
         const res = await useClient().http({
           method: "post",
@@ -146,19 +149,31 @@ export default {
             message: "Requested successfully.",
           });
           this.$globals.pageReset++;
+
+          if (callback) callback(true);
+        } else {
+          if (callback) callback(false);
         }
       } catch (error) {}
     },
     handleSwapSlot() {
+      const userID = this.userStore.user.id;
+      const currentParticipant = this.participants.find((participants) => participants.user_id === userID);
+
       eventBus.emit("open-dialog", {
         default: SwapSlotDialog,
         position: "right",
+        props: {
+          participant: currentParticipant,
+          slotNumber: currentParticipant.slot,
+          totalSlots: this.participants.length,
+        },
       });
     },
   },
   mounted() {
     const steps = [];
-    if (this.participants[0].slot < 1) {
+    if (this.participants[0].slot < 1 && this.isAjoOwner) {
       steps.push({
         element: "#slot-0",
         popover: {
@@ -196,11 +211,15 @@ export default {
     }, 1000);
 
     eventBus.on("selected", this.proceedToAssign);
-    eventBus.on("requested", this.requestSlot);
+    eventBus.on("requested", ({ slot, callback }) => {
+      this.requestSlot(slot, callback);
+    });
   },
   beforeUnmount() {
     eventBus.off("selected", this.proceedToAssign);
-    eventBus.off("requested", this.requestSlot);
+    eventBus.off("requested", ({ slot, callback }) => {
+      this.requestSlot(slot, callback);
+    });
   },
 };
 </script>

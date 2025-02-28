@@ -176,7 +176,6 @@ export default {
     },
     filteredData() {
       if (!this.paginationData?.data) return [];
-      console.log(this.paginationData?.data);
       return this.selectedStatus === "All" ? this.paginationData.data : this.paginationData.data.filter((item) => item.status.toLowerCase() === this.selectedStatus);
     },
   },

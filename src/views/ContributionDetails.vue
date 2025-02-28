@@ -163,9 +163,13 @@ export default {
     const { formattedDate } = helpers;
 
     const fetchAjoDetails = async () => {
-      ajo.value = await ajoStore.fetchAjoById(route.params.id);
-
-      isAjoOwner.value = ajo.value?.user_id === user.id;
+      const res = await ajoStore.fetchAjoById(route.params.id);
+      if (res) {
+        ajo.value = res;
+        isAjoOwner.value = ajo.value?.user_id === user.value.id;
+      } else {
+        router.push("/app/contributions");
+      }
     };
 
     const handleContributionDialog = async () => {
@@ -176,9 +180,10 @@ export default {
           ajo_id: route.params.id,
         },
       });
+
       if (res) {
         notificationStore.showNotification({
-          type: "success",
+          type: "error",
           message: res,
         });
       }
@@ -187,8 +192,11 @@ export default {
     const handleLeaveDeleteAjo = async () => {
       if (user.value.id === ajo.value.user_id) {
         try {
-          await ajoStore.deleteAjo(route.params.id);
-          router.push("/app/contributions");
+          const res = await ajoStore.deleteAjo(route.params.id);
+
+          if (res) {
+            router.push("/app/contributions");
+          }
         } catch (err) {
           console.log(err);
         }

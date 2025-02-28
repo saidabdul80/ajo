@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout :HeaderTitle="id ? 'Start New Ajo' : 'Update Ajo'" HeaderDescription="Experience the power of group savings.">
+  <DefaultLayout :HeaderTitle="id ? 'Update Ajo' : 'Start New Ajo'" HeaderDescription="Experience the power of group savings.">
     <div class="tw-basis-full">
       <div v-if="preloader" class="tw-flex tw-flex-col tw-gap-6 tw-p-6">
         <!-- Details Skeleton -->
@@ -446,6 +446,7 @@ export default {
       filteredRules.value = intialValues.rules;
 
       contributionFrequencies.value = await ajoStore.fetchAjoFrequencies();
+
       if (id) {
         preloader.value = true;
         try {

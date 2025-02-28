@@ -36,7 +36,6 @@
 
 <script>
 import { reactive, computed } from "vue";
-import { useGlobalsStore } from "@/stores/globals";
 import { useCurrentNotification } from "@/composable/useCurrentNotification";
 import eventBus from "@/eventBus";
 import PButton from "@/components/Button.vue";
