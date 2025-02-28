@@ -12,8 +12,8 @@
       <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Gateway</label>
       <Select v-model="selectedGateWay" class="tw-w-full tw-mb-2" placeholder="Select a Gateway" :options="gateways" optionLabel="name" optionValue="value" />
       <div v-if="selectedGateWay === 'COWRISPAY'">
-        <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Sender Email</label>
-        <Input v-model="senderEmail" class="tw-w-full tw-mb-2" placeholder="Sender Email" />
+        <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Payment Email</label>
+        <Input v-model="senderEmail" class="tw-w-full tw-mb-2" placeholder="Payment Email" />
       </div>
       <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Amount</label>
       <InputNumber v-model="amount" placeholder="Enter Amount" class="tw-mb-2" inputId="integeronly" fluid />
@@ -24,7 +24,6 @@
       <div class="tw-mt-10 tw-mb-6">
         <Divider />
       </div>
-
       <div>
         <h4 class="tw-text-lg tw-text-black tw-font-semibold">Cowris Account Details</h4>
         <p class="tw-text-[#333333]">Send money to the account details below. Once the money transfer is successful, it will reflect on your wallet balance.</p>
