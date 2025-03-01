@@ -139,7 +139,7 @@ export default {
           path: "/request_ajo_slot",
           data: {
             ajo_id: this.ajoId,
-            slot: slot,
+            slot_request: slot,
           },
         });
         if (res) {
