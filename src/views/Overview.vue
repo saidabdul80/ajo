@@ -28,7 +28,7 @@
       <div class="xl:tw-col-span-2 tw-flex tw-flex-col tw-w-full tw-space-y-5">
         <AccountSetup v-if="!areAllStepsCompleted" title="Complete account setup" description="Finish setting up your account to fully enjoy Ajo by Cowris." :steps="stepDefinitions" />
 
-        <AjoGroupList :contentHeight="!areAllStepsCompleted ? 'tw-max-h-[30vh]' : 'tw-max-h-[50vh] md:tw-max-h-[75vh]'" />
+        <AjoGroupList :contentHeight="!areAllStepsCompleted ? 'tw-max-h-[30vh]' : 'tw-max-h-[50vh] md:tw-max-h-[72vh]'" />
       </div>
     </div>
   </DefaultLayout>

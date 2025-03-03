@@ -142,13 +142,7 @@ export const useAuthStore = defineStore("auth-store", {
             type: "success",
             message: "Logged out successfully.",
           });
-
           router.push("/");
-
-          // Reload the page after a short delay to ensure the notification is shown
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
         }
       } catch (err) {
         const notificationStore = useNotificationStore();

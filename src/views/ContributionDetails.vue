@@ -2,7 +2,7 @@
   <DefaultLayout v-if="ajo" :HeaderTitle="ajo.name" :HeaderDescription="`Starting on ${formattedDate(ajo.start_date)}`">
     <template #rightContent>
       <div class="tw-flex tw-item-center tw-gap-2">
-        <Button v-if="!isFutureDate" @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
+        <Button v-if="hasContributionStarted" @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
         <Button v-else @click="handleLeaveDeleteAjo" label="Leave Ajo" color="danger" class="tw-shrink-0 !tw-w-fit" />
       </div>
     </template>
@@ -11,7 +11,11 @@
       <div class="tw-col-span-2 tw-space-y-7">
         <div class="tw-bg-white tw-p-6 tw-border tw-border-[#E8EBEF] tw-space-y-6">
           <div class="tw-relative tw-space-y-3">
-            <button v-if="isFutureDate" @click="navigateToStartAjo" type="button" class="tw-flex tw-justify-center tw-items-center tw-gap-2 tw-absolute tw-right-0 tw-top-3 tw-cursor-pointer">
+            <button
+              v-if="!hasContributionStarted"
+              @click="navigateToStartAjo"
+              type="button"
+              class="tw-flex tw-justify-center tw-items-center tw-gap-2 tw-absolute tw-right-0 tw-top-3 tw-cursor-pointer">
               <i class="pi pi-file-edit"></i>
               <span>Edit Ajo</span>
             </button>
@@ -226,11 +230,8 @@ export default {
       globalStore.to(`/app/start/${route.params.id}`);
     };
 
-    const isFutureDate = computed(() => {
-      const inputDate = new Date(ajo.value.start_date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return inputDate >= today;
+    const hasContributionStarted = computed(() => {
+      return !!parseInt(ajo.value.total_contribution);
     });
 
     onMounted(fetchAjoDetails);
@@ -244,7 +245,7 @@ export default {
       getFrequency,
       handleContributionDialog,
       navigateToStartAjo,
-      isFutureDate,
+      hasContributionStarted,
       handleLeaveDeleteAjo,
     };
   },
