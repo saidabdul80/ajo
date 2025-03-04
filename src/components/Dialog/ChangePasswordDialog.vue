@@ -133,6 +133,8 @@ export default {
           otp: form.otp,
         };
 
+        console.log(data);
+
         const response = await useClient().http({
           method: "post",
           path: "/confirm_change_password",

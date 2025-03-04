@@ -9,11 +9,7 @@
     </button>
 
     <p v-if="copySuccess" class="tw-w-8 tw-h-8">
-      <img
-        src="/images/double-tick.svg"
-        class="tw-inline-block"
-        alt="copy"
-        width="100%" />
+      <img src="/images/double-tick.svg" class="tw-inline-block" alt="copy" width="100%" />
     </p>
   </div>
 </template>

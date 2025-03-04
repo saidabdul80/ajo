@@ -49,9 +49,12 @@
           <AccordionPanel v-for="(item, idx) in faqLists" :key="item.title" :value="idx">
             <AccordionHeader>{{ item.title }}</AccordionHeader>
             <AccordionContent>
-              <p class="tw-text-[#333333]">
+              <p v-if="item.paragraph" class="tw-text-[#333333]">
                 {{ item.paragraph }}
               </p>
+              <ul v-if="item.outiline" class="tw-list-disc tw-pl-6">
+                <li v-for="(point, index) in item.outiline" :key="index" class="tw-text-[#333333]">{{ point }}</li>
+              </ul>
             </AccordionContent>
           </AccordionPanel>
         </Accordion>
@@ -87,14 +90,9 @@ export default {
         title: "Chatting platforms",
         items: [
           {
-            name: "WhatsApp",
+            name: "WhatsApp - +1(289)3120954",
             imageUrl: "/images/whatsapp.svg",
-            link: "https://google.com",
-          },
-          {
-            name: "Telegram",
-            imageUrl: "/images/telegram.svg",
-            link: "https://google.com",
+            link: "https://wa.me/+12893120954",
           },
         ],
       },
@@ -103,11 +101,19 @@ export default {
         items: [
           {
             imageUrl: "/images/phone-call.png",
-            value: "(+234)9032063405",
+            value: "333 444",
           },
           {
             imageUrl: "/images/phone-call.png",
-            value: "(+234)9032039414",
+            value: "0803 444 5555",
+          },
+          {
+            imageUrl: "/images/phone-call.png",
+            value: "443 338 221",
+          },
+          {
+            imageUrl: "/images/phone-call.png",
+            value: "229 555 444",
           },
         ],
       },
@@ -145,23 +151,42 @@ export default {
       },
       {
         title: "How do I join an Ajo group?",
-        paragraph:
-          "An Ajo is a traditional rotating savings and credit association where participants contribute a fixed amount of money periodically, and one member withdraws the lump sum in each round, taking turns until everyone has received their payout.",
+        paragraph: " To join an Ajo group on Cowris:",
+        outiline: [
+          "Log in to Ajo by Cowris.",
+          "Browse available Ajo groups or get an invite from an admin.",
+          "Review the group details, including contribution amount, frequency, and rules.",
+          "Click 'Join Group' and confirm your participation.",
+          "Ensure your Cowris wallet has sufficient funds for contributions",
+        ],
       },
       {
         title: "What is slot swapping?",
-        paragraph:
-          "An Ajo is a traditional rotating savings and credit association where participants contribute a fixed amount of money periodically, and one member withdraws the lump sum in each round, taking turns until everyone has received their payout.",
+        paragraph: "Slot swapping allows participants in an Ajo group to exchange their cash-out position with another member.",
+        outiline: [
+          "If you prefer to receive your payout earlier or later, you can request a swap with another participant.",
+          "The other participant can accept or decline your request.",
+          "Once a swap is confirmed, both participants receive notifications, and the new payout order is updated.",
+        ],
       },
       {
         title: "What happens if I miss a contribution?",
-        paragraph:
-          "An Ajo is a traditional rotating savings and credit association where participants contribute a fixed amount of money periodically, and one member withdraws the lump sum in each round, taking turns until everyone has received their payout.",
+        paragraph: "If you miss a scheduled contribution:",
+        outiline: [
+          "You will receive a reminder notification to make the payment.",
+          "The admin may delay the group payout until all contributions are received.",
+          "If you fail to contribute multiple times, you may be removed from the group based on the admin’s rules.",
+          "Your previous contributions remain in the group, but you may lose eligibility for future payouts",
+          "Ones you wallet if funded previously missed contributions will be deducted",
+        ],
       },
       {
         title: "When can I withdraw my savings?",
-        paragraph:
-          "An Ajo is a traditional rotating savings and credit association where participants contribute a fixed amount of money periodically, and one member withdraws the lump sum in each round, taking turns until everyone has received their payout.",
+        outiline: [
+          "Your savings are automatically disbursed based on your assigned slot in the Ajo cycle.",
+          "If you choose not to withdraw, you can leave the funds in your Cowris wallet and earn interest.",
+          "After the full Ajo cycle is completed, all participants have received their payouts, and the group may start a new round",
+        ],
       },
     ];
 
@@ -195,7 +220,7 @@ export default {
 .p-accordioncontent-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .p-accordioncontent-content,
