@@ -41,6 +41,7 @@ import Input from "@/components/Input.vue";
 import Password from "@/components/Password.vue";
 import { useNotificationStore } from "@/stores/notification";
 import { useClient } from "@/stores/client";
+import { useAuthStore } from "@/stores/auth.js";
 
 export default {
   components: {
@@ -54,6 +55,7 @@ export default {
     const notificationStore = useNotificationStore();
     const isLoading = ref(false);
     const isVerifying = ref(false);
+    const user = useAuthStore();
 
     const form = reactive({
       currentPassword: "",
@@ -133,8 +135,6 @@ export default {
           otp: form.otp,
         };
 
-        console.log(data);
-
         const response = await useClient().http({
           method: "post",
           path: "/confirm_change_password",
@@ -156,8 +156,7 @@ export default {
 
     const handleLogin = () => {
       eventBus.emit("close-dialog");
-      // Optionally redirect to login page
-      // router.push('/login');
+      user.logout();
     };
 
     return {

@@ -2,8 +2,10 @@
   <DefaultLayout v-if="ajo" :HeaderTitle="ajo.name" :HeaderDescription="`Starting on ${formattedDate(ajo.start_date)}`">
     <template #rightContent>
       <div class="tw-flex tw-item-center tw-gap-2">
-        <Button v-if="hasContributionStarted" @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
-        <Button v-else @click="handleLeaveDeleteAjo" label="Leave Ajo" color="danger" class="tw-shrink-0 !tw-w-fit" />
+        <!-- <Button v-if="isPastDate" @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
+        <Button v-else @click="handleLeaveDeleteAjo" label="Leave Ajo" color="danger" class="tw-shrink-0 !tw-w-fit" /> -->
+        <Button @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
+        <Button @click="handleLeaveDeleteAjo" label="Leave Ajo" color="danger" class="tw-shrink-0 !tw-w-fit" />
       </div>
     </template>
 
@@ -129,6 +131,7 @@
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAjoStore } from "@/stores/ajo.js";
+import eventBus from "@/eventBus";
 import { useGlobalsStore } from "@/stores/globals.js";
 import { useUserStore } from "@/stores/user.js";
 import { helpers } from "@/helpers/utilities.js";
@@ -140,6 +143,7 @@ import ContributionProcess from "@/components/Dialog/ContributionProcess.vue";
 import { useNotificationStore } from "@/stores/notification";
 import { useClient } from "@/stores/client";
 import Skeleton from "primevue/skeleton";
+import LogoutDialog from "@/components/Dialog/LogoutDialog.vue";
 
 export default {
   components: {
@@ -194,17 +198,21 @@ export default {
     };
 
     const handleLeaveDeleteAjo = async () => {
-      if (user.value.id === ajo.value.user_id) {
-        try {
-          const res = await ajoStore.deleteAjo(route.params.id);
+      eventBus.emit("open-dialog", {
+        default: LogoutDialog,
+        position: "center",
+      });
+      // if (user.value.id === ajo.value.user_id) {
+      //   try {
+      //     const res = await ajoStore.deleteAjo(route.params.id);
 
-          if (res) {
-            router.push("/app/contributions");
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
+      //     if (res) {
+      //       router.push("/app/contributions");
+      //     }
+      //   } catch (err) {
+      //     console.log(err);
+      //   }
+      // }
     };
 
     // Get frequency
@@ -234,6 +242,10 @@ export default {
       return !!parseInt(ajo.value.total_contribution);
     });
 
+    const isPastDate = computed(() => {
+      return new Date(ajo.value.start_date) < new Date();
+    });
+
     onMounted(fetchAjoDetails);
 
     return {
@@ -247,6 +259,7 @@ export default {
       navigateToStartAjo,
       hasContributionStarted,
       handleLeaveDeleteAjo,
+      isPastDate,
     };
   },
 };
