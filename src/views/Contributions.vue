@@ -135,7 +135,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      ajos.value = globals.fetchMyAjos();
+      ajos.value = await globals.fetchMyAjos();
       sortedAjos.value = [...ajos.value];
     });
 
