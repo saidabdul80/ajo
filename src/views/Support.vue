@@ -7,7 +7,9 @@
           <p class="md:tw-text-lg tw-max-w-[100ch] tw-font-thin tw-mb-[42px]">
             For quick help, you can go through our Frequently Asked Questions (FAQs). We also have customer representatives across various platforms who are always ready and happy to attend to you.
           </p>
-          <Button label="Start chatting on Cowris" :isFullWidth="false" color="secondary" :outlined="true" class="!tw-text-white hover:!tw-text-black" />
+          <a href="https://wa.me/+12893120954" target="_blank">
+            <Button label="Start chatting on Cowris" :isFullWidth="false" color="secondary" :outlined="true" class="!tw-text-white hover:!tw-text-black" />
+          </a>
         </div>
 
         <div class="tw-shrink-0">
