@@ -2,10 +2,8 @@
   <DefaultLayout v-if="ajo" :HeaderTitle="ajo.name" :HeaderDescription="`Starting on ${formattedDate(ajo.start_date)}`">
     <template #rightContent>
       <div class="tw-flex tw-item-center tw-gap-2">
-        <!-- <Button v-if="isPastDate" @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
-        <Button v-else @click="handleLeaveDeleteAjo" label="Leave Ajo" color="danger" class="tw-shrink-0 !tw-w-fit" /> -->
-        <Button @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
-        <Button @click="handleLeaveDeleteAjo" label="Leave Ajo" color="danger" class="tw-shrink-0 !tw-w-fit" />
+        <Button v-if="isPastDate" @click="handleContributionDialog" label="Make Contribution" class="tw-shrink-0 !tw-w-fit" />
+        <Button v-else @click="handleLeaveDeleteAjo" label="Leave Ajo" color="danger" class="tw-shrink-0 !tw-w-fit" />
       </div>
     </template>
 
@@ -82,7 +80,7 @@
           </div>
         </div>
         <div>
-          <RecentTransactionTable tableTitle="Group activities" />
+          <RecentTransactionTable tableTitle="Group activities" ref="recentTransactionTableRef" />
         </div>
       </div>
       <div class="tw-col-span-1">
@@ -128,7 +126,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAjoStore } from "@/stores/ajo.js";
 import eventBus from "@/eventBus";
@@ -143,7 +141,7 @@ import ContributionProcess from "@/components/Dialog/ContributionProcess.vue";
 import { useNotificationStore } from "@/stores/notification";
 import { useClient } from "@/stores/client";
 import Skeleton from "primevue/skeleton";
-import LogoutDialog from "@/components/Dialog/LogoutDialog.vue";
+import DeleteAjoDialog from "@/components/Dialog/DeleteAjoDialog.vue";
 
 export default {
   components: {
@@ -164,6 +162,7 @@ export default {
     const client = useClient();
     const user = computed(() => userStore.user);
     const router = useRouter();
+    const recentTransactionTableRef = ref(null);
 
     const ajo = ref(null);
     const isMemeber = ref(null);
@@ -188,31 +187,24 @@ export default {
           ajo_id: route.params.id,
         },
       });
-
       if (res) {
         notificationStore.showNotification({
-          type: "error",
+          type: "success",
           message: res,
         });
+        recentTransactionTableRef.value.getTransactions();
       }
     };
 
     const handleLeaveDeleteAjo = async () => {
       eventBus.emit("open-dialog", {
-        default: LogoutDialog,
+        default: DeleteAjoDialog,
         position: "center",
+        props: {
+          user: user.value,
+          ajo: ajo.value,
+        },
       });
-      // if (user.value.id === ajo.value.user_id) {
-      //   try {
-      //     const res = await ajoStore.deleteAjo(route.params.id);
-
-      //     if (res) {
-      //       router.push("/app/contributions");
-      //     }
-      //   } catch (err) {
-      //     console.log(err);
-      //   }
-      // }
     };
 
     // Get frequency
@@ -246,7 +238,7 @@ export default {
       return new Date(ajo.value.start_date) < new Date();
     });
 
-    onMounted(fetchAjoDetails);
+    fetchAjoDetails();
 
     return {
       ajo,
@@ -260,6 +252,7 @@ export default {
       hasContributionStarted,
       handleLeaveDeleteAjo,
       isPastDate,
+      recentTransactionTableRef,
     };
   },
 };

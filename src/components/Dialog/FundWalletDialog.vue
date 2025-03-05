@@ -17,7 +17,7 @@
       </div>
       <label class="tw-text-sm tw-w-full !tw-text-left tw-text-[#333333]">Amount</label>
       <InputNumber v-model="amount" placeholder="Enter Amount" class="tw-mb-2" inputId="integeronly" fluid />
-      <Button :loading="loading" @click="initiateTransaction" label="Initiate Transaction" />
+      <Button :loading="loading" @click="initiateTransaction" label="Initiate Transaction" :disabled="loading" />
     </div>
 
     <div v-if="transactionInitiated" class="tw-w-full">
@@ -72,7 +72,7 @@ export default {
       transactionInitiated: false,
       userStore: useUserStore(),
       selectedGateWay: "FIAT_MATCH",
-      senderEmail:null,
+      senderEmail: null,
       gateways: [
         {
           name: "CowrisPAY",
@@ -98,7 +98,7 @@ export default {
           this.$globals.ubtAlert({ title: "Please enter an amount" });
           return;
         }
-        if(this.selectedGateWay === 'COWRISPAY' && !this.senderEmail){
+        if (this.selectedGateWay === "COWRISPAY" && !this.senderEmail) {
           this.$globals.ubtAlert({ title: "Please enter a sender email" });
           return;
         }
@@ -127,7 +127,6 @@ export default {
         }
       } catch (error) {
         console.error("Error initiating transaction:", error);
-        alert("Failed to initiate transaction. Please try again.");
       }
     },
 

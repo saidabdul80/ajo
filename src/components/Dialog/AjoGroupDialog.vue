@@ -31,7 +31,7 @@ export default {
     closeDialog() {
       eventBus.emit("close-dialog");
 
-      router.push("/app/overview");
+      router.push("/app/contribution");
     },
   },
 };

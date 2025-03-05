@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
 import { useGlobalsStore } from "@/stores/globals";
 import AjoCard from "./AjoCard.vue";
 
@@ -36,9 +35,7 @@ export default {
   setup() {
     const globals = useGlobalsStore();
 
-    onMounted(async () => {
-      await globals.fetchMyAjos();
-    });
+    globals.fetchMyAjos();
 
     return {
       globals,

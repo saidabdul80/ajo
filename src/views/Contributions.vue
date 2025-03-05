@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout :isContentHeightFull="!ajos.length">
+  <DefaultLayout>
     <div class="tw-mb-7">
       <Notify message="Rhoda Ogunesan has invited you to join Ajo group." type="warning">
         <template #end>
@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <div v-if="ajos.length == 0" class="tw-flex tw-flex-col tw-justify-center tw-bg-white tw-items-center tw-h-full tw-py-8">
+      <div v-if="ajos.length == 0" class="tw-flex tw-flex-col tw-justify-center tw-bg-white tw-items-center tw-h-[500px] tw-py-8">
         <div>
           <img src="/images/groups.svg" alt="icon" />
         </div>
@@ -135,7 +135,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      ajos.value = await globals.fetchMyAjos();
+      ajos.value = globals.fetchMyAjos();
       sortedAjos.value = [...ajos.value];
     });
 

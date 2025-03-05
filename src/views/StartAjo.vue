@@ -137,7 +137,7 @@
               </div>
               <div class="tw-pt-8">
                 <Button v-if="id" :loading="loading" label="Update" @click="updateData" class="tw-w-full tw-mt-auto" :disabled="!isFormValid || loading" />
-                <Button v-else :loading="loading" label="Continue" @click="nextStep" class="tw-w-full tw-mt-auto" :disabled="!isFormValid" />
+                <Button v-else :loading="loading" label="Continue" @click="nextStep" class="tw-w-full tw-mt-auto" :disabled="!isFormValid || loading" />
               </div>
             </form>
           </div>

@@ -21,7 +21,7 @@ export default {
   },
 
   setup() {
-    const user = useAuthStore();
+    const authStore = useAuthStore();
 
     const closeDialog = () => {
       eventBus.emit("close-dialog");
@@ -29,11 +29,10 @@ export default {
 
     const logout = () => {
       closeDialog();
-      user.logout();
+      authStore.logout();
     };
 
     return {
-      user,
       logout,
       closeDialog,
     };

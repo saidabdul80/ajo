@@ -41,7 +41,6 @@ export default {
   },
   setup() {
     const transactions = ref(null);
-    const loading = ref(false);
     const headers = ref([
       { key: "reference", title: "Reference" },
       { key: "created_at", title: "Date" },
