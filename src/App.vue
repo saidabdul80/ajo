@@ -13,15 +13,14 @@
     <NotificationRoot />
     <CustomDialog />
     <Alert
-    :text="$globals.alert?.text"
-    :icon="$globals.alert?.icon"
-    :title="$globals.alert?.title"
-    :confirmBtnText="$globals.alert?.confirmBtnText"
-    :cancelBtnText="$globals.alert?.cancelBtnText"
-    v-model="$globals.alert.show"
-    :loading="$globals.alert.loading"
-    :img-path="$globals.alert.imgpath"
-  />
+      :text="$globals.alert?.text"
+      :icon="$globals.alert?.icon"
+      :title="$globals.alert?.title"
+      :confirmBtnText="$globals.alert?.confirmBtnText"
+      :cancelBtnText="$globals.alert?.cancelBtnText"
+      v-model="$globals.alert.show"
+      :loading="$globals.alert.loading"
+      :img-path="$globals.alert.imgpath" />
   </ion-app>
 </template>
 
@@ -46,7 +45,7 @@ export default defineComponent({
     IonContent,
     IonRouterOutlet,
     CustomDialog,
-    Alert
+    Alert,
   },
   setup() {
     const route = useRoute();
@@ -68,9 +67,6 @@ export default defineComponent({
     };
   },
   methods: {
-    isActive(page) {
-      return this.route.name === page.name;
-    },
     afterEnter() {
       window.scrollTo(0, 0);
     },

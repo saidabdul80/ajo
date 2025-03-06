@@ -23,12 +23,11 @@
 
       <!-- Right Side Content (conditionally displayed) -->
       <ion-label slot="end" v-if="isValidLink">
-        <div class="tw-hidden min-[992px]:tw-flex tw-items-center tw-gap-10">
-          <slot name="headerRightContent">
-            <Input size="medium" placeholder="Search for group..." icon="pi pi-search" />
+        <slot name="headerRightContent">
+          <div class="tw-hidden min-[992px]:tw-flex tw-items-center tw-gap-10">
             <StartAjoButton />
-          </slot>
-        </div>
+          </div>
+        </slot>
       </ion-label>
     </ion-toolbar>
   </ion-header>

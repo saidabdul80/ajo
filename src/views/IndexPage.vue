@@ -62,7 +62,7 @@
             <ion-title></ion-title>
             <ion-label slot="end">
               <div
-                class="tw-hidden min-[992px]:tw-flex tw-items-center tw-gap-10">
+                class=" tw-items-center tw-gap-10">
                 <div class="xl:tw-w-[400px]">
                   <Input
                     size="medium"
@@ -91,7 +91,7 @@
   </ion-content>
 </template>
 
-<script lang="ts">
+<script>
 import eventBus from "@/eventBus";
 import {
   IonPage,
