@@ -117,11 +117,21 @@ export default {
         });
         this.loading = false;
         if (response) {
-          this.fundingDetails = {
-            accountNumber: response.banke_details.number,
-            bankName: response.banke_details.bank_name,
-            accountName: response.banke_details.name,
-          };
+
+          if(this.selectedGateWay == 'COWRISPAY'){
+            this.fundingDetails = {
+              "E-transfer email": response.banke_details.number,
+              "Payment method": "E Transfer",
+              "Account Name": "Cowris Pay",
+              "Security Answer": "?",
+            };
+          }else{
+            this.fundingDetails = {
+              accountNumber: response.banke_details.number,
+              bankName: response.banke_details.bank_name,
+              accountName: response.banke_details.name,
+            };
+        }
           this.reference = response.code;
           this.transactionInitiated = true;
         }
